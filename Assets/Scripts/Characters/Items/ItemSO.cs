@@ -1,0 +1,12 @@
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "Item", menuName = "Scriptable Objects/Item")]
+public class ItemSO : ScriptableObject
+{
+    public string itemName;
+    public string itemDescription;
+    public Texture2D itemIcon;
+    public GameObject prefab;
+
+    public bool isStackable;
+}

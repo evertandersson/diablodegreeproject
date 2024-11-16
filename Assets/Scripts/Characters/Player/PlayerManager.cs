@@ -1,0 +1,232 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+public enum PlayerState
+{
+    Idle,
+    Attack,
+    Inventory
+}
+
+public class PlayerManager : Character
+{
+    private static PlayerManager _instance;
+
+    //Components and fields
+    private PlayerAnimator playerAnimator;
+    private PlayerInput playerInput;
+    private ProjectileSpawner projectileSpawner;
+
+    private PlayerState currentPlayerState;
+
+    [SerializeField]
+    private SlotManager slotManager;
+
+    Animator animator;
+
+    private ActionItemSO currentAction;
+
+    private bool isAttacking;
+    private bool canAttack;
+
+    [SerializeField]
+    float attackTimer;
+
+    #region Properties
+
+    public static PlayerManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                Debug.LogError("PlayerManager instance is null.");
+            }
+            return _instance;
+        }
+    }
+
+    public PlayerState CurrentPlayerState
+    {
+        get => currentPlayerState;
+        set
+        {
+            if (currentPlayerState == value) return; // Avoid redundant updates
+
+            currentPlayerState = value;
+
+            // Execute behavior based on the new state
+            switch (value)
+            {
+                case PlayerState.Idle:
+                    CanAttack = true;
+                    break;
+
+                case PlayerState.Attack:
+                    break;
+
+                case PlayerState.Inventory:
+                    CanAttack = false;
+                    break;
+
+                // Handle other states as needed
+                default:
+                    CanAttack = false;
+                    break;
+            }
+        }
+    }
+
+
+
+    public ActionItemSO CurrentAction
+    {
+        get => currentAction;
+        set
+        {
+            if (currentAction == value) return; // No need to reassign if the value hasn't changed
+
+            ActionItemSO previousAction = currentAction;
+            currentAction = value;
+
+            // Reset the attack timer if the action changes
+            if (previousAction != currentAction)
+            {
+                attackTimer = 0;
+            }
+        }
+    }
+
+    public bool IsAttacking
+    {
+        get => isAttacking;
+        private set
+        {
+            isAttacking = value;
+            if (value == true)
+            {
+                currentPlayerState = PlayerState.Attack;
+            }
+        }
+    }
+
+    public bool CanAttack
+    {
+        get => canAttack;
+        set
+        {
+            canAttack = value;
+        }
+    }
+
+    #endregion
+
+    PlayerManager()
+    {
+        maxHealth = 50;
+    }
+
+    private void Awake()
+    {
+        // Singleton setup
+        if (_instance != null && _instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        _instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
+    private void Start()
+    {
+        playerAnimator = GetComponent<PlayerAnimator>();
+        playerInput = GetComponent<PlayerInput>();
+        projectileSpawner = GetComponentInChildren<ProjectileSpawner>();
+
+        slotManager = GetComponentInChildren<SlotManager>();
+
+        //Set up the slots in SlotManager in case the player already has attacks available
+        slotManager.SetUpSlots();
+
+        UpdateActionSlots();
+        
+        animator = GetComponentInChildren<Animator>();
+    }
+
+    private void Update()
+    {
+        HandleAttackDelay();
+        slotManager.HandleCooldowns();
+        playerAnimator.HandleAnimations(IsAttacking);
+
+        if (IsAttacking)
+        {
+            playerInput.HandleAttackRotation();
+        }
+    }
+
+
+    public override void Attack(int attackIndex)
+    {
+        if (CanAttack)
+        {
+            // Check if the index is valid
+            if (attackIndex >= 0 && attackIndex < slotManager.actionSlots.Length)
+            {
+                // Get the item from the corresponding action slot
+                ActionItemSO actionItem = slotManager.actionSlots[attackIndex].item as ActionItemSO;
+
+                if (actionItem != null && actionItem.timerCooldown >= actionItem.cooldown)
+                {
+                    CurrentAction = actionItem;
+
+                    if (actionItem is AttackTypeSO attackTypeAction)
+                    {
+                        attackTypeAction.PerformAction(animator);
+                        IsAttacking = true;
+                        projectileSpawner.projectile = attackTypeAction.projectile;
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("Not a valid index");
+            }
+        }
+    }
+
+
+    public void UpdateActionSlots()
+    {
+        slotManager.SetUpSlots(); // Refresh UI slots
+    }
+
+
+    private void HandleAttackDelay()
+    {
+        if (IsAttacking && currentAction != null)
+        {
+            if (currentAction is AttackTypeSO attackTypeAction)
+            {
+                if (attackTimer <= attackTypeAction.attackDelay)
+                {
+                    attackTimer += Time.deltaTime;
+                }
+                else
+                {
+                    attackTimer = 0;
+                    currentAction = null;
+                    IsAttacking = false;
+                    currentPlayerState = PlayerState.Idle;
+                }
+            }
+        }
+    }
+
+    protected override void Die()
+    {
+        throw new System.NotImplementedException();
+    }
+}
