@@ -2,7 +2,10 @@ using UnityEngine;
 
 public abstract class Character : MonoBehaviour
 {
+    [SerializeField]
     protected int health;
+
+    [SerializeField]
     protected int maxHealth = 20;
 
     #region Properties
@@ -16,7 +19,7 @@ public abstract class Character : MonoBehaviour
         health = maxHealth;
     }
 
-    protected virtual void TakeDamage(int damage)
+    public virtual void TakeDamage(int damage)
     {
         health -= damage;
         if (health <= 0)

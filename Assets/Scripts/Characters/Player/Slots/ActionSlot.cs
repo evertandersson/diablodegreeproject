@@ -8,8 +8,9 @@ public class ActionSlot : InventorySlot, IBeginDragHandler, IDragHandler, IEndDr
     public TextMeshProUGUI indexText;
     public Image cooldownImage;
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         artwork.raycastTarget = true;
         amountText.raycastTarget = true;
         cooldownImage.raycastTarget = true;

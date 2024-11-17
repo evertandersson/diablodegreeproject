@@ -26,11 +26,14 @@ public class PlayerManager : Character
 
     private ActionItemSO currentAction;
 
+    [SerializeField]
+    private HealthBar healthBar;
+
     private bool isAttacking;
     private bool canAttack;
 
     [SerializeField]
-    float attackTimer;
+    private float attackTimer;
 
     #region Properties
 
@@ -121,10 +124,6 @@ public class PlayerManager : Character
 
     #endregion
 
-    PlayerManager()
-    {
-        maxHealth = 50;
-    }
 
     private void Awake()
     {
@@ -153,6 +152,10 @@ public class PlayerManager : Character
         UpdateActionSlots();
         
         animator = GetComponentInChildren<Animator>();
+
+        //Health setup
+        health = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
     }
 
     private void Update()
@@ -165,6 +168,12 @@ public class PlayerManager : Character
         {
             playerInput.HandleAttackRotation();
         }
+    }
+
+    public override void TakeDamage(int damage)
+    {
+        base.TakeDamage(damage);
+        healthBar.SetHealth(health);
     }
 
 
@@ -227,6 +236,6 @@ public class PlayerManager : Character
 
     protected override void Die()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Player is dead");
     }
 }
