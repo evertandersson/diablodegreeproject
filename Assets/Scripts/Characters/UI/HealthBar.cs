@@ -8,7 +8,7 @@ public class HealthBar : MonoBehaviour
     private Vector3 originalScale;
     private Coroutine scaleCoroutine;
 
-    void Start()
+    void Awake()
     {
         slider = GetComponent<Slider>();
         originalScale = transform.localScale;

@@ -14,9 +14,9 @@ public class Enemy : Character
     [SerializeField]
     private State state;
 
-    NavMeshAgent agent;
+    private NavMeshAgent agent;
 
-    Animator animator;
+    private Animator animator;
 
     [SerializeField]
     private Vector3 targetPosition;
@@ -37,6 +37,9 @@ public class Enemy : Character
 
     private void Update()
     {
+        float speed = agent.velocity.magnitude / agent.speed;
+        animator.SetFloat("RunSpeed", speed);
+
         switch (state)
         {
             case State.Idle:

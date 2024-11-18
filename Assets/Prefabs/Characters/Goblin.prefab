@@ -6171,8 +6171,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.1653905, y: 0.0000009536743, z: -4.794982}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6514132437884618174}
   - {fileID: 503699332000362598}
@@ -6189,7 +6189,7 @@ Animator:
   m_GameObject: {fileID: 1682753497815864180}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 247c80268b595f74aad500096f912a45, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1cfa4505d792eec4697e86fcbbabb8de, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -6215,6 +6215,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 0
   maxHealth: 20
+  state: 0
+  targetPosition: {x: 0, y: 0, z: 0}
 --- !u!195 &8388076702170604132
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -6225,7 +6227,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 8
+  m_Speed: 6
   m_Acceleration: 20
   avoidancePriority: 50
   m_AngularSpeed: 1000

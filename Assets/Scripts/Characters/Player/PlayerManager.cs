@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlayerState
-{
-    Idle,
-    Attack,
-    Inventory
-}
-
 public class PlayerManager : Character
 {
+    public enum State
+    {
+        Idle,
+        Attack,
+        Inventory
+    }
+
     private static PlayerManager _instance;
 
     //Components and fields
@@ -17,7 +17,7 @@ public class PlayerManager : Character
     private PlayerInput playerInput;
     private ProjectileSpawner projectileSpawner;
 
-    private PlayerState currentPlayerState;
+    private State currentPlayerState;
 
     [SerializeField]
     private SlotManager slotManager;
@@ -49,7 +49,7 @@ public class PlayerManager : Character
         }
     }
 
-    public PlayerState CurrentPlayerState
+    public State CurrentPlayerState
     {
         get => currentPlayerState;
         set
@@ -61,14 +61,14 @@ public class PlayerManager : Character
             // Execute behavior based on the new state
             switch (value)
             {
-                case PlayerState.Idle:
+                case State.Idle:
                     CanAttack = true;
                     break;
 
-                case PlayerState.Attack:
+                case State.Attack:
                     break;
 
-                case PlayerState.Inventory:
+                case State.Inventory:
                     CanAttack = false;
                     break;
 
@@ -108,7 +108,7 @@ public class PlayerManager : Character
             isAttacking = value;
             if (value == true)
             {
-                currentPlayerState = PlayerState.Attack;
+                currentPlayerState = State.Attack;
             }
         }
     }
@@ -228,7 +228,7 @@ public class PlayerManager : Character
                     attackTimer = 0;
                     currentAction = null;
                     IsAttacking = false;
-                    currentPlayerState = PlayerState.Idle;
+                    currentPlayerState = State.Idle;
                 }
             }
         }

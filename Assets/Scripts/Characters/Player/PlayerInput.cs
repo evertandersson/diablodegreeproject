@@ -68,7 +68,7 @@ public class PlayerInput : MonoBehaviour
     private void Move(InputAction.CallbackContext context)
     {
         // Move the player based on mouse input position
-        if (PlayerManager.Instance.CurrentPlayerState != PlayerState.Inventory)
+        if (PlayerManager.Instance.CurrentPlayerState != PlayerManager.State.Inventory)
             playerMovement.SetDestination(mouseInput.mouseInputPosition);
     }
 
@@ -93,7 +93,7 @@ public class PlayerInput : MonoBehaviour
             inventoryCanvasGroup.alpha = 1;
             inventoryCanvasGroup.interactable = true;
             inventoryCanvasGroup.blocksRaycasts = true;
-            PlayerManager.Instance.CurrentPlayerState = PlayerState.Inventory;
+            PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Inventory;
         }
         else
         {
@@ -101,7 +101,7 @@ public class PlayerInput : MonoBehaviour
             inventoryCanvasGroup.alpha = 0;
             inventoryCanvasGroup.interactable = false;
             inventoryCanvasGroup.blocksRaycasts = false;
-            PlayerManager.Instance.CurrentPlayerState = PlayerState.Idle;
+            PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Idle;
         }
     }
 }
