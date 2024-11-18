@@ -14,7 +14,7 @@ public abstract class Character : MonoBehaviour
 
     #endregion
 
-    private void Start()
+    protected virtual void Start()
     {
         health = maxHealth;
     }

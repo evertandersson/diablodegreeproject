@@ -138,7 +138,7 @@ public class PlayerManager : Character
         DontDestroyOnLoad(gameObject);
     }
 
-    private void Start()
+    protected override void Start()
     {
         playerAnimator = GetComponent<PlayerAnimator>();
         playerInput = GetComponent<PlayerInput>();
@@ -154,7 +154,7 @@ public class PlayerManager : Character
         animator = GetComponentInChildren<Animator>();
 
         //Health setup
-        health = maxHealth;
+        base.Start();
         healthBar.SetMaxHealth(maxHealth);
     }
 
