@@ -1,3 +1,4 @@
+using Game;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,6 +17,8 @@ public class PlayerInput : MonoBehaviour
     InputAction move;
     InputAction[] attacks;  // Array to store all attack actions
     InputAction openInventory;
+
+    Inventory inventory;
 
     private void Awake()
     {
@@ -87,20 +90,16 @@ public class PlayerInput : MonoBehaviour
 
     private void OpenInventory(InputAction.CallbackContext context)
     {
-        if (inventoryCanvasGroup.alpha == 0)
+        if (PlayerManager.Instance.CurrentPlayerState != PlayerManager.State.Inventory)
         {
             // Show inventory
-            inventoryCanvasGroup.alpha = 1;
-            inventoryCanvasGroup.interactable = true;
-            inventoryCanvasGroup.blocksRaycasts = true;
+            inventory = Popup.Create<Inventory>();
             PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Inventory;
         }
         else
         {
             // Hide inventory
-            inventoryCanvasGroup.alpha = 0;
-            inventoryCanvasGroup.interactable = false;
-            inventoryCanvasGroup.blocksRaycasts = false;
+            inventory.OnCancel();
             PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Idle;
         }
     }

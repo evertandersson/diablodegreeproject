@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Game;
 
-public class Inventory : MonoBehaviour
+public class Inventory : Popup
 {
     [SerializeField]
     List<InventorySlot> inventory = new List<InventorySlot>();
@@ -13,6 +14,7 @@ public class Inventory : MonoBehaviour
     {
         SetUpInventory();   
     }
+
 
     private void SetUpInventory()
     {
@@ -49,7 +51,4 @@ public class Inventory : MonoBehaviour
         Debug.Log("Inventory full");
         return false; // Inventory is full
     }
-
-
-
 }

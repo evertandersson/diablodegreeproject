@@ -87,6 +87,24 @@ namespace Events
             }
         }
 
+        public void RemoveEvent(IEvent evt)
+        {
+            if (evt == null || !eventStack.Contains(evt))
+            {
+                return;
+            }
+
+            // Call on end?
+            if (evt == currentEvent ||
+                startedEvents.Contains(evt))
+            {
+                evt.OnEnd();
+            }
+
+            // Remove the event
+            eventStack.Remove(evt);
+        }
+
         private void Update()
         {
             UpdateEvents();

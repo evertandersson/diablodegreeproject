@@ -80,8 +80,6 @@ public class PlayerManager : Character
         }
     }
 
-
-
     public ActionItemSO CurrentAction
     {
         get => currentAction;
@@ -158,7 +156,7 @@ public class PlayerManager : Character
         healthBar.SetMaxHealth(maxHealth);
     }
 
-    private void Update()
+    public void Update()
     {
         HandleAttackDelay();
         slotManager.HandleCooldowns();
