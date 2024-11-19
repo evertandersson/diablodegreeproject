@@ -7,6 +7,9 @@ namespace Game
         public override void OnBegin(bool firstTime)
         {
             base.OnBegin(firstTime);
+
+            enemy.EnableRagdoll();
+
             agent.isStopped = true;
             animator.SetTrigger("IsHit");
             Debug.Log("Enemy took damage");
