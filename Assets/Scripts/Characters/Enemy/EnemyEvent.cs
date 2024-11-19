@@ -5,31 +5,30 @@ namespace Game
 { 
     public class EnemyEvent : EventHandler.GameEventBehaviour
     {
-        protected NavMeshAgent agent;
-        protected Animator animator;
         protected Enemy enemy;
-        protected EventHandler enemyEventHandler;
 
         protected bool isDone = false;
 
+        private void Start()
+        {
+            enemy = GetComponent<Enemy>();
+        }
 
         public override void OnBegin(bool firstTime)
         {
-            enemy = GetComponent<Enemy>();  // Get reference to Enemy script
-            agent = enemy.GetComponent<NavMeshAgent>();
-            enemyEventHandler = enemy.enemyEventHandler;
-            animator = enemy.GetComponent<Animator>();
-            Debug.Log("Enemy Event Started: " + enemyEventHandler.CurrentEvent);
+            isDone = false;
+            Debug.Log("Enemy Event Started: " + enemy.EnemyEventHandler.CurrentEvent);
         }
 
         public override void OnUpdate()
         {
-            float speed = agent.velocity.magnitude / agent.speed;
-            animator.SetFloat("RunSpeed", speed);
+            float speed = enemy.Agent.velocity.magnitude / enemy.Agent.speed;
+            enemy.Animator.SetFloat("RunSpeed", speed);
         }
 
         public override void OnEnd()
         {
+            isDone = false;
             Debug.Log("Enemy Event Ended");
         }
 

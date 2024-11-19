@@ -10,8 +10,8 @@ namespace Game
 
             enemy.EnableRagdoll();
 
-            agent.isStopped = true;
-            animator.SetTrigger("IsHit");
+            enemy.Agent.isStopped = true;
+            enemy.Animator.SetTrigger("IsHit");
             Debug.Log("Enemy took damage");
         }
 
@@ -22,7 +22,7 @@ namespace Game
             if (IsAnimationPlaying(enemy.damageAnimName))
             {
                 // When the animation is done, destroy the enemy object
-                if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f)
+                if (enemy.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f)
                 {
                     isDone = true;
                     Debug.Log("IsDone");
@@ -33,7 +33,7 @@ namespace Game
         public override void OnEnd()
         {
             base.OnEnd();
-            agent.isStopped = false;
+            enemy.Agent.isStopped = false;
             Debug.Log("Done with takedamge");
         }
 
@@ -45,7 +45,7 @@ namespace Game
         private bool IsAnimationPlaying(string animationName)
         {
             // Check if the current animation state is the one we are interested in
-            return animator.GetCurrentAnimatorStateInfo(0).IsName(animationName);
+            return enemy.Animator.GetCurrentAnimatorStateInfo(0).IsName(animationName);
         }
     }
 }
