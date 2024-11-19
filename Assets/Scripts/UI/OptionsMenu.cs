@@ -7,8 +7,6 @@ namespace Game
 {
     public class OptionsMenu : Popup
     {
-        private static GameObject prefab = null;
-
         public override void OnEnd()
         {
             base.OnEnd();

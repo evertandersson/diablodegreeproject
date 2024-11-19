@@ -6154,6 +6154,7 @@ GameObject:
   - component: {fileID: 3120307258029321989}
   - component: {fileID: 8073677023320427492}
   - component: {fileID: 8388076702170604132}
+  - component: {fileID: 4221154618234213713}
   m_Layer: 0
   m_Name: Goblin
   m_TagString: Untagged
@@ -6215,8 +6216,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 0
   maxHealth: 20
+  enemyEventHandler: {fileID: 0}
   state: 0
-  targetPosition: {x: 0, y: 0, z: 0}
 --- !u!195 &8388076702170604132
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -6239,6 +6240,29 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!136 &4221154618234213713
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1682753497815864180}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 1.806041
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.85, z: 0}
 --- !u!1 &1699094944921927917
 GameObject:
   m_ObjectHideFlags: 0
