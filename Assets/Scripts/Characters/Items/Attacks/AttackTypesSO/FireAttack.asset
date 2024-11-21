@@ -12,16 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ff4fa61d8a0b0842bcf103fcaab50e7, type: 3}
   m_Name: FireAttack
   m_EditorClassIdentifier: 
-  itemName: FireAttackSO
+  itemName: Fireball
   itemDescription: 
   itemIcon: {fileID: 2800000, guid: 17c9d81a34a12f14fa4ace849d01fb39, type: 3}
   prefab: {fileID: 0}
   isStackable: 1
   cooldown: 2
-  timerCooldown: 2.0017784
+  timerCooldown: 2.000003
   attackDelay: 1
   projectile: {fileID: 1947871717301538, guid: a990e3ac1318b834488c784d851f42a9, type: 3}
   attackTrigger: FireAttack
-  damage: 5
-  projectileCount: 1
-  followEnemies: 0
