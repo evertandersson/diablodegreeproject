@@ -1,4 +1,5 @@
 using Leguar.TotalJSON;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Unity.VisualScripting;
@@ -7,12 +8,15 @@ using UnityEngine;
 public class InventorySaver : MonoBehaviour
 {
     [SerializeField] private Inventory myInventory;
+    [SerializeField] private SlotManager slotManager;
     [SerializeField] private ItemDataBaseSO itemDB;
-    private SerializableListString SL = new SerializableListString();
+
+    private SerializableListString inventoryList = new SerializableListString();
+    private SerializableListString actionSlotList = new SerializableListString();
 
     private void Start()
     {
-        SL.serializableList.Clear();
+        inventoryList.serializableList.Clear();
 
         LoadScriptables();
 
@@ -21,7 +25,7 @@ public class InventorySaver : MonoBehaviour
 
     private void OnDisable()
     {
-        SL.serializableList.Clear();
+        inventoryList.serializableList.Clear();
 
         BuildSaveData();
 
@@ -49,71 +53,108 @@ public class InventorySaver : MonoBehaviour
 
     private void BuildSaveData()
     {
-        for (int i = 0; i < myInventory.inventory.Count; i++)
+        inventoryList.serializableList.Clear(); // Clear previous data
+        actionSlotList.serializableList.Clear();
+
+        SaveSlotsToSerializableList(myInventory.inventory, inventoryList);
+        SaveSlotsToSerializableList(slotManager.actionSlots, actionSlotList);
+    }
+
+    private void SaveSlotsToSerializableList(IEnumerable<InventorySlot> slots, SerializableListString targetList)
+    {
+        foreach (var slot in slots)
         {
-            if (myInventory.inventory[i] != null)
+            if (slot != null && slot.item != null)
             {
-                if (myInventory.inventory[i].item != null)
+                SerializableListString.SerialItem SI = new SerializableListString.SerialItem
                 {
-                    SerializableListString.SerialItem SI = new SerializableListString.SerialItem();
-                    SI.name = myInventory.inventory[i].item.name;
-                    SI.count = myInventory.inventory[i].itemAmount;
-
-                    SL.serializableList.Add(SI);
-                }
-
+                    name = slot.item.name,
+                    count = slot.itemAmount
+                };
+                targetList.serializableList.Add(SI);
             }
         }
     }
 
+
     public void SaveScriptables()
     {
-        Debug.Log("IS: Saving to: " + Application.persistentDataPath);
+        Debug.Log("Saving to: " + Application.persistentDataPath);
 
-        string filepath = Application.persistentDataPath + "/newsave.json";
+        string filepath = Application.persistentDataPath + "/inventory_save.json";
+        string actionFilePath = Application.persistentDataPath + "/action_slots_save.json";
 
-        StreamWriter sw = new StreamWriter(filepath);
+        // Save inventory
+        string inventoryJson = JSON.Serialize(inventoryList).CreatePrettyString();
+        File.WriteAllText(filepath, inventoryJson);
 
-        JSON jsonObject = JSON.Serialize(SL);
+        // Save action slots
+        string actionSlotJson = JSON.Serialize(actionSlotList).CreatePrettyString();
+        File.WriteAllText(actionFilePath, actionSlotJson);
 
-        string json = jsonObject.CreatePrettyString();
-
-        sw.WriteLine(json);
-
-        sw.Close();
+        Debug.Log("Save completed.");
     }
 
     private void ImportSaveData()
     {
-        for (int i = 0; i < SL.serializableList.Count; i++)
+        // Clear existing data for both inventories
+        ClearSlots(myInventory.inventory);
+        ClearSlots(slotManager.actionSlots);
+
+        // Load data into inventory and action slots
+        LoadSlots(myInventory.inventory, inventoryList);
+        LoadSlots(slotManager.actionSlots, actionSlotList);
+    }
+
+    private void ClearSlots(IEnumerable<InventorySlot> slots)
+    {
+        foreach (var slot in slots)
         {
-            string name = SL.serializableList[i].name;
-            int count = SL.serializableList[i].count;
+            slot.item = null;
+            slot.itemAmount = 0;
+        }
+    }
+
+    private void LoadSlots(IList<InventorySlot> slots, SerializableListString targetList)
+    {
+        for (int i = 0; i < targetList.serializableList.Count; i++)
+        {
+            string name = targetList.serializableList[i].name;
+            int count = targetList.serializableList[i].count;
 
             ItemSO obj = itemDB.GetItem(name);
-            if (obj)
+            if (obj && i < slots.Count)
             {
-                myInventory.AddItemToInventory(obj);
-
-                myInventory.inventory[i].itemAmount = count;
+                slots[i].item = obj;
+                slots[i].itemAmount = count;
             }
         }
     }
 
+
+
     public void LoadScriptables()
     {
-        Debug.Log("IS: Loading from: " + Application.persistentDataPath);
+        Debug.Log("Loading from: " + Application.persistentDataPath);
 
-        string filepath = Application.persistentDataPath + "/newsave.json";
+        string filepath = Application.persistentDataPath + "/inventory_save.json";
+        string actionFilePath = Application.persistentDataPath + "/action_slots_save.json";
 
+        // Load inventory
         if (File.Exists(filepath))
         {
-            string json = File.ReadAllText(filepath);
-
-            JSON jsonObject = JSON.ParseString(json);
-
-            SL = jsonObject.Deserialize<SerializableListString>();
+            string inventoryJson = File.ReadAllText(filepath);
+            inventoryList = JSON.ParseString(inventoryJson).Deserialize<SerializableListString>();
         }
+
+        // Load action slots
+        if (File.Exists(actionFilePath))
+        {
+            string actionSlotJson = File.ReadAllText(actionFilePath);
+            actionSlotList = JSON.ParseString(actionSlotJson).Deserialize<SerializableListString>();
+        }
+
+        Debug.Log("Load completed.");
     }
 
     public void SaveReset()
@@ -123,7 +164,7 @@ public class InventorySaver : MonoBehaviour
             itemSlot.item = null;
             itemSlot.itemAmount = 0;
         }
-        SL.serializableList.Clear();
+        inventoryList.serializableList.Clear();
         BuildSaveData();
         SaveScriptables();
     }

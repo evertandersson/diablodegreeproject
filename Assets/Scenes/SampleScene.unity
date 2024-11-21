@@ -407,6 +407,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myInventory: {fileID: 1066489853}
+  slotManager: {fileID: 2050822553}
   itemDB: {fileID: 11400000, guid: 72d622a140631bd41900b104d3938121, type: 2}
 --- !u!4 &51627077
 Transform:
@@ -2242,6 +2243,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1059697164171005891, guid: f15896cef99df0e43b9c64e54c96a3eb, type: 3}
   m_PrefabInstance: {fileID: 1066489847}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2050822553 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4794053700111252992, guid: f15896cef99df0e43b9c64e54c96a3eb, type: 3}
+  m_PrefabInstance: {fileID: 1066489847}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 554c29e5ac6b3434495e9dcd3ad9f2b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2133313210 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8722707484499129528, guid: e36f78db816620d428e793016e941dd2, type: 3}
