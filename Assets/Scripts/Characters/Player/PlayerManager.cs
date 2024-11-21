@@ -30,7 +30,7 @@ public class PlayerManager : Character
     private HealthBar healthBar;
 
     private bool isAttacking;
-    private bool canAttack;
+    private bool canAttack = true;
 
     [SerializeField]
     private float attackTimer;
