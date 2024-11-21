@@ -1718,6 +1718,10 @@ PrefabInstance:
       propertyPath: testItem
       value: 
       objectReference: {fileID: 11400000, guid: 6a72418d073c349408edf46a932793c1, type: 2}
+    - target: {fileID: 5026935154392543405, guid: f15896cef99df0e43b9c64e54c96a3eb, type: 3}
+      propertyPath: slotManager
+      value: 
+      objectReference: {fileID: 2050822553}
     - target: {fileID: 6517391382206892462, guid: f15896cef99df0e43b9c64e54c96a3eb, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

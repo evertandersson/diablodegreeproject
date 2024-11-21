@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class InventorySaver : MonoBehaviour
 {
+    private static InventorySaver _instance;
+
     [SerializeField] private Inventory myInventory;
     [SerializeField] private SlotManager slotManager;
     [SerializeField] private ItemDataBaseSO itemDB;
@@ -14,7 +16,32 @@ public class InventorySaver : MonoBehaviour
     private SerializableListString inventoryList = new SerializableListString();
     private SerializableListString actionSlotList = new SerializableListString();
 
-    private void Start()
+    public static InventorySaver Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                Debug.LogError("InventorySaver instance is null.");
+            }
+            return _instance;
+        }
+    }
+
+    private void Awake()
+    {
+        // Singleton setup
+        if (_instance != null && _instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        _instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
+    public void Load()
     {
         inventoryList.serializableList.Clear();
 
@@ -23,19 +50,25 @@ public class InventorySaver : MonoBehaviour
         ImportSaveData();
     }
 
-    private void OnDisable()
+    private void Save()
     {
         inventoryList.serializableList.Clear();
 
         BuildSaveData();
 
         SaveScriptables();
+        
+        Debug.Log("OnDisable called: Saving data...");
+
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.K))
             SaveReset();
+
+        if (Input.GetKeyDown(KeyCode.S))
+            Save();
     }
 
     public void ResetScriptables()
@@ -72,6 +105,7 @@ public class InventorySaver : MonoBehaviour
                     count = slot.itemAmount
                 };
                 targetList.serializableList.Add(SI);
+                Debug.Log($"Saved item: {SI.name} with count: {SI.count}");
             }
         }
     }
@@ -122,14 +156,29 @@ public class InventorySaver : MonoBehaviour
             string name = targetList.serializableList[i].name;
             int count = targetList.serializableList[i].count;
 
+            Debug.Log($"Attempting to load item: {name} with count: {count} into slot {i}");
+
             ItemSO obj = itemDB.GetItem(name);
-            if (obj && i < slots.Count)
+            if (obj == null)
             {
-                slots[i].item = obj;
-                slots[i].itemAmount = count;
+                Debug.LogWarning($"Item '{name}' not found in the database. Skipping slot {i}.");
+                continue;
             }
+
+            if (i >= slots.Count)
+            {
+                Debug.LogWarning($"Not enough slots to load item '{name}' at index {i}. Skipping.");
+                continue;
+            }
+
+            slots[i].item = obj;
+            slots[i].itemAmount = count;
+            slots[i].CheckIfItemNull(); // Ensure UI updates correctly
+
+            Debug.Log($"Loaded item '{obj.name}' with count {count} into slot {i}.");
         }
     }
+
 
 
 

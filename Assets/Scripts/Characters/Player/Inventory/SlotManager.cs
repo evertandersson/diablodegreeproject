@@ -5,7 +5,7 @@ public class SlotManager : MonoBehaviour
 {
     public ActionSlot[] actionSlots;
 
-    private void Awake()
+    public void GetActionSlots()
     {
         actionSlots = GetComponentsInChildren<ActionSlot>();
     }

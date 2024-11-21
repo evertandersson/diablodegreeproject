@@ -7,6 +7,9 @@ public class Inventory : Popup
     [SerializeField]
     public List<InventorySlot> inventory = new List<InventorySlot>();
 
+    [SerializeField]
+    private SlotManager slotManager;
+
     [SerializeField] private Transform inventoryPanel;  
     [SerializeField] private Transform actionPanel;     
 
@@ -23,8 +26,9 @@ public class Inventory : Popup
         // Add all inventory slots from the inventory panel
         inventory.AddRange(inventoryPanel.GetComponentsInChildren<InventorySlot>());
 
-        // Add all action slots from the action panel
-        //inventory.AddRange(actionPanel.GetComponentsInChildren<InventorySlot>());
+        slotManager.GetActionSlots();
+
+        InventorySaver.Instance.Load();
     }
 
     public bool AddItemToInventory(ItemSO item)

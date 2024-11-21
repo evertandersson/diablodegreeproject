@@ -32,12 +32,12 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         artworkCanvas = artwork.GetComponentInParent<Canvas>();
     }
 
-    protected virtual void Start()
+    private void Start()
     {
         CheckIfItemNull();
     }
 
-    public void CheckIfItemNull()
+    public virtual void CheckIfItemNull()
     {
         if (item == null)
         {
