@@ -12,13 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaf782312f4f07c42853b723a1e84eb8, type: 3}
   m_Name: LightningAttack
   m_EditorClassIdentifier: 
-  itemName: Lightning Attack
+  itemName: LightningAttackSO
   itemDescription: 
   itemIcon: {fileID: 2800000, guid: bef348517eaa7034b85daa49c535b764, type: 3}
   prefab: {fileID: 0}
   isStackable: 1
   cooldown: 3
-  timerCooldown: 3.0007617
+  timerCooldown: 3.003207
   attackDelay: 1.3
   projectile: {fileID: 0}
   attackTrigger: LightningAttack
+  damage: 10
+  projectileCount: 1
+  followEnemies: 0

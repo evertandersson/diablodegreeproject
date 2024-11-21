@@ -10,6 +10,7 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public int itemAmount;  // The amount of this item
     public TextMeshProUGUI amountText;  // Text showing the item amount
     public RawImage artwork;  // Image of the item
+    private Inventory inventory;
 
     private CanvasGroup canvasGroup;  // To manage raycast blocking during drag
     private Transform originalParent;  // Slot's original parent
@@ -42,6 +43,7 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         {
             UpdateItemAmountText();
         }
+        inventory = FindFirstObjectByType<Inventory>();
     }
 
     private void HideItemUI()
@@ -128,6 +130,7 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                     SwapItems(targetSlot);
                 else
                     MoveItem(targetSlot);
+
             }
             // Handle non-ActionSlot cases
             else
@@ -138,6 +141,8 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                     MoveItem(targetSlot);
             }
             PlayerManager.Instance.UpdateActionSlots();
+
+            inventory.SaveGame("savefile.json");
         }
 
         canvasGroup.blocksRaycasts = true;

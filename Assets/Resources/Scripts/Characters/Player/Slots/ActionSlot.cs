@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ActionSlot : InventorySlot, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    public AttackInstance attackInstance;
     public TextMeshProUGUI indexText;
     public Image cooldownImage;
 

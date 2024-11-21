@@ -14,7 +14,7 @@ public class ItemWorld : MonoBehaviour
 
             if (playerInventory != null)
             {
-                bool itemAdded = playerInventory.AddItemToInventory(item);
+                bool itemAdded = playerInventory.AddItemToInventory(item, 1);
 
                 if (itemAdded)
                 {

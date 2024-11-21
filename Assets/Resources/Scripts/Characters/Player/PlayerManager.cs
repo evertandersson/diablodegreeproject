@@ -1,5 +1,7 @@
+using Game;
 using System.Collections.Generic;
 using UnityEngine;
+using static SaveManager;
 
 public class PlayerManager : Character
 {
@@ -144,9 +146,6 @@ public class PlayerManager : Character
 
         slotManager = GetComponentInChildren<SlotManager>();
 
-        //Set up the slots in SlotManager in case the player already has attacks available
-        slotManager.SetUpSlots();
-
         UpdateActionSlots();
         
         animator = GetComponentInChildren<Animator>();
@@ -180,12 +179,12 @@ public class PlayerManager : Character
         if (CanAttack)
         {
             // Check if the index is valid
-            if (attackIndex >= 0 && attackIndex < slotManager.actionSlots.Length)
+            if (attackIndex >= 0 && attackIndex < slotManager.actionSlots.Count)
             {
                 // Get the item from the corresponding action slot
                 ActionItemSO actionItem = slotManager.actionSlots[attackIndex].item as ActionItemSO;
 
-                if (actionItem != null && actionItem.timerCooldown >= actionItem.cooldown)
+                if (actionItem != null && actionItem.timerCooldown <= 0) // Check cooldown is finished
                 {
                     CurrentAction = actionItem;
 
@@ -194,7 +193,14 @@ public class PlayerManager : Character
                         attackTypeAction.PerformAction(animator);
                         IsAttacking = true;
                         projectileSpawner.projectile = attackTypeAction.projectile;
+
+                        // Reset the cooldown after attack
+                        actionItem.timerCooldown = actionItem.cooldown;
                     }
+                }
+                else
+                {
+                    Debug.Log("Action is on cooldown");
                 }
             }
             else
@@ -205,9 +211,17 @@ public class PlayerManager : Character
     }
 
 
+
     public void UpdateActionSlots()
     {
-        slotManager.SetUpSlots(); // Refresh UI slots
+        // Access the SaveManager singleton
+        var saveData = SaveManager.Instance.LoadSavedData("savefile.json");
+
+        // Now call SetUpSlots with the saved action slots
+        if (saveData != null)
+        {
+            slotManager.SetUpSlots();
+        }
     }
 
 
