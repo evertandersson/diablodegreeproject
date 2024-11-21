@@ -5,7 +5,7 @@ using Game;
 public class Inventory : Popup
 {
     [SerializeField]
-    List<InventorySlot> inventory = new List<InventorySlot>();
+    public List<InventorySlot> inventory = new List<InventorySlot>();
 
     [SerializeField] private Transform inventoryPanel;  
     [SerializeField] private Transform actionPanel;     

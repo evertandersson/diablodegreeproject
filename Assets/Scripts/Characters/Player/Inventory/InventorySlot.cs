@@ -34,6 +34,11 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     protected virtual void Start()
     {
+        CheckIfItemNull();
+    }
+
+    public void CheckIfItemNull()
+    {
         if (item == null)
         {
             HideItemUI();

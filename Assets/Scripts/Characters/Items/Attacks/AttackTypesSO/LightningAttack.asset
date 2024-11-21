@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaf782312f4f07c42853b723a1e84eb8, type: 3}
   m_Name: LightningAttack
   m_EditorClassIdentifier: 
-  itemName: Lightning Attack
+  itemName: LightningAttack
   itemDescription: 
   itemIcon: {fileID: 2800000, guid: bef348517eaa7034b85daa49c535b764, type: 3}
   prefab: {fileID: 0}
