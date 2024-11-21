@@ -19,8 +19,8 @@ public class PlayerManager : Character
 
     private State currentPlayerState;
 
-    [SerializeField]
-    private SlotManager slotManager;
+    public SlotManager slotManager;
+    public Inventory inventory;
 
     Animator animator;
 
@@ -141,11 +141,6 @@ public class PlayerManager : Character
         playerAnimator = GetComponent<PlayerAnimator>();
         playerInput = GetComponent<PlayerInput>();
         projectileSpawner = GetComponentInChildren<ProjectileSpawner>();
-
-        slotManager = GetComponentInChildren<SlotManager>();
-
-        //Set up the slots in SlotManager in case the player already has attacks available
-        slotManager.SetUpSlots();
 
         UpdateActionSlots();
         

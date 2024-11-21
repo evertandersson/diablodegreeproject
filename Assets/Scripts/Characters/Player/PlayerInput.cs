@@ -18,8 +18,6 @@ public class PlayerInput : MonoBehaviour
     InputAction[] attacks;  // Array to store all attack actions
     InputAction openInventory;
 
-    Inventory inventory;
-
     private void Awake()
     {
         playerInputSystem = new PlayerInputSystem();
@@ -93,13 +91,13 @@ public class PlayerInput : MonoBehaviour
         if (PlayerManager.Instance.CurrentPlayerState != PlayerManager.State.Inventory)
         {
             // Show inventory
-            inventory = Popup.Create<Inventory>();
+            PlayerManager.Instance.inventory = Popup.Create<Inventory>();
             PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Inventory;
         }
         else
         {
             // Hide inventory
-            inventory.OnCancel();
+            PlayerManager.Instance.inventory.OnCancel();
             PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Idle;
         }
     }

@@ -9,8 +9,6 @@ public class InventorySaver : MonoBehaviour
 {
     private static InventorySaver _instance;
 
-    [SerializeField] private Inventory myInventory;
-    [SerializeField] private SlotManager slotManager;
     [SerializeField] private ItemDataBaseSO itemDB;
 
     private SerializableListString inventoryList = new SerializableListString();
@@ -89,8 +87,8 @@ public class InventorySaver : MonoBehaviour
         inventoryList.serializableList.Clear(); // Clear previous data
         actionSlotList.serializableList.Clear();
 
-        SaveSlotsToSerializableList(myInventory.inventory, inventoryList);
-        SaveSlotsToSerializableList(slotManager.actionSlots, actionSlotList);
+        SaveSlotsToSerializableList(PlayerManager.Instance.inventory.inventory, inventoryList);
+        SaveSlotsToSerializableList(PlayerManager.Instance.slotManager.actionSlots, actionSlotList);
     }
 
     private void SaveSlotsToSerializableList(IEnumerable<InventorySlot> slots, SerializableListString targetList)
@@ -132,12 +130,12 @@ public class InventorySaver : MonoBehaviour
     private void ImportSaveData()
     {
         // Clear existing data for both inventories
-        ClearSlots(myInventory.inventory);
-        ClearSlots(slotManager.actionSlots);
+        ClearSlots(PlayerManager.Instance.inventory.inventory);
+        ClearSlots(PlayerManager.Instance.slotManager.actionSlots);
 
         // Load data into inventory and action slots
-        LoadSlots(myInventory.inventory, inventoryList);
-        LoadSlots(slotManager.actionSlots, actionSlotList);
+        LoadSlots(PlayerManager.Instance.inventory.inventory, inventoryList);
+        LoadSlots(PlayerManager.Instance.slotManager.actionSlots, actionSlotList);
     }
 
     private void ClearSlots(IEnumerable<InventorySlot> slots)
@@ -208,7 +206,7 @@ public class InventorySaver : MonoBehaviour
 
     public void SaveReset()
     {
-        foreach(InventorySlot itemSlot in myInventory.inventory)
+        foreach(InventorySlot itemSlot in PlayerManager.Instance.inventory.inventory)
         {
             itemSlot.item = null;
             itemSlot.itemAmount = 0;

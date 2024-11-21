@@ -406,8 +406,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0802baa675f902b4693cd31f7f919521, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myInventory: {fileID: 1066489853}
-  slotManager: {fileID: 2050822553}
   itemDB: {fileID: 11400000, guid: 72d622a140631bd41900b104d3938121, type: 2}
 --- !u!4 &51627077
 Transform:
@@ -1489,7 +1487,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 0
   maxHealth: 50
-  slotManager: {fileID: 0}
+  slotManager: {fileID: 2050822553}
+  inventory: {fileID: 1066489853}
   healthBar: {fileID: 1066489849}
   attackTimer: 0
 --- !u!4 &751876957 stripped
