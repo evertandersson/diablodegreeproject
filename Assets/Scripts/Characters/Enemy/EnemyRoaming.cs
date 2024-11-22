@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -5,22 +6,29 @@ namespace Game
 {
     public class EnemyRoaming : EnemyEvent
     {
-        private Vector3 targetPosition;
         private float walkingRange = 20f;
         private float roamingTimeout = 5f; // Max time to attempt roaming
-        private float elapsedTime = 0f;
 
         public override void OnBegin(bool firstTime)
         {
             base.OnBegin(firstTime);
             enemy.Agent.isStopped = false;
             elapsedTime = 0f; // Reset timeout
-            SetNewDestination(); // Set the first destination
+            SetNewDestination(GetRandomPosition()); // Set the first destination
         }
 
         public override void OnUpdate()
         {
             base.OnUpdate();
+
+            //If enemy can see player, remove this event and add FollowTarget event
+            if (enemy.CanSeePlayer())
+            {
+                isDone = true;
+                enemy.EnemyEventHandler.RemoveEvent(this);
+                enemy.SetNewEvent<EnemyFollowTarget>();
+            }
+
 
             if (enemy.Agent.pathPending)
                 return; // Wait until the NavMeshAgent finishes calculating the path
@@ -40,23 +48,6 @@ namespace Game
             }
         }
 
-        private void SetNewDestination()
-        {
-            for (int i = 0; i < 10; i++) // Try up to 10 random positions
-            {
-                Vector3 potentialPosition = GetRandomPosition();
-                if (IsValidDestination(potentialPosition))
-                {
-                    targetPosition = potentialPosition;
-                    enemy.Agent.SetDestination(targetPosition);
-                    elapsedTime = 0f; // Reset timeout
-                    Debug.Log($"Setting new destination: {targetPosition}");
-                    return;
-                }
-            }
-
-            isDone = true; // Mark as done if no valid destination is found
-        }
 
         private Vector3 GetRandomPosition()
         {
@@ -75,12 +66,7 @@ namespace Game
             return transform.position; // Default to current position if invalid
         }
 
-        private bool IsValidDestination(Vector3 position)
-        {
-            NavMeshPath path = new NavMeshPath();
-            enemy.Agent.CalculatePath(position, path);
-            return path.status == NavMeshPathStatus.PathComplete;
-        }
+
 
         public override void OnEnd()
         {

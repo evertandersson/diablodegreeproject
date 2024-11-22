@@ -21,16 +21,20 @@ namespace Game
 
             standStillTimer += Time.deltaTime;
 
+            if (enemy.CanSeePlayer()) // When sees player, transition to follow target
+            {
+                standStillTimer = 0;
+                enemy.SetNewEvent<EnemyFollowTarget>();
+            }
+
             if (standStillTimer > 2.0f) // After 2 seconds, transition to roaming
             {
-                EnemyEvent roamingEvent = enemy.Events.FirstOrDefault(e => e is EnemyRoaming);
-                if (roamingEvent != null)
-                {
-                    enemy.EnemyEventHandler.PushEvent(roamingEvent);
-                    standStillTimer = 0; // Reset the timer after pushing roaming
-                }
+                standStillTimer = 0; 
+                enemy.SetNewEvent<EnemyRoaming>();
             }
         }
+
+
 
         public override bool IsDone()
         {

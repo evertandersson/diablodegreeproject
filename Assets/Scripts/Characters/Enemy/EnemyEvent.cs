@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,6 +9,9 @@ namespace Game
         protected Enemy enemy;
 
         protected bool isDone = false;
+
+        protected Vector3 targetPosition;
+        protected float elapsedTime = 0f;
 
         private void Start()
         {
@@ -35,6 +39,30 @@ namespace Game
         public override bool IsDone()
         {
             return true;
+        }
+
+        protected void SetNewDestination(Vector3 pos)
+        {
+            for (int i = 0; i < 10; i++) // Try up to 10 random positions
+            {
+                if (IsValidDestination(pos))
+                {
+                    targetPosition = pos;
+                    enemy.Agent.SetDestination(targetPosition);
+                    elapsedTime = 0f; // Reset timeout
+                    Debug.Log($"Setting new destination: {targetPosition}");
+                    return;
+                }
+            }
+
+            isDone = true; // Mark as done if no valid destination is found
+        }
+
+        protected bool IsValidDestination(Vector3 position)
+        {
+            NavMeshPath path = new NavMeshPath();
+            enemy.Agent.CalculatePath(position, path);
+            return path.status == NavMeshPathStatus.PathComplete;
         }
     }
 }

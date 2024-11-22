@@ -9,13 +9,18 @@ namespace Game
 {
     public class Enemy : Character
     {
-        public NavMeshAgent Agent { get; private set; }
-        public Animator Animator { get; private set; }
-        public EventHandler EnemyEventHandler { get; private set; }
+        [SerializeField] private float visionAngle = 45f; // Half of the total field of view
+        [SerializeField] private float visionRange = 10f; // Distance the enemy can see
+        [SerializeField] private LayerMask detectionMask; // Layers the enemy can "see" (e.g., player)
+        private Transform player; // Reference to the player
 
         public string damageAnimName = "damage";
 
+        public NavMeshAgent Agent { get; private set; }
+        public Animator Animator { get; private set; }
+        public EventHandler EnemyEventHandler { get; private set; }
         public List<EnemyEvent> Events { get; private set; } 
+        public Transform Player => player;
 
         private void Awake()
         {
@@ -37,24 +42,16 @@ namespace Game
             maxHealth = 20;
             base.Start();
 
-            EnemyEvent idleEvent = Events.FirstOrDefault(e => e is EnemyIdle);
-            EnemyEventHandler.PushEvent(idleEvent);
+            player = PlayerManager.Instance.gameObject.transform;
 
-        }
+            SetNewEvent<EnemyIdle>();
 
-        public void PerformAction()
-        {
-            // Push an event to perform an action
-            EnemyEvent enemyEvent = new EnemyEvent();
-            EnemyEventHandler.PushEvent(enemyEvent);
         }
 
         public override void TakeDamage(int damage)
         {
             base.TakeDamage(damage);
-            EnemyEvent takeDamageEvent = Events.FirstOrDefault(e => e is EnemyTakeDamage);
-            EnemyEventHandler.PushEvent(takeDamageEvent);
-
+            SetNewEvent<EnemyTakeDamage>();
         }
 
         public void EnableRagdoll()
@@ -88,6 +85,38 @@ namespace Game
             }
         }
 
+        public bool CanSeePlayer()
+        {
+            if (!player) return false;
+
+            Vector3 directionToPlayer = (player.position - transform.position).normalized;
+            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+            // Check if the player is within the vision range
+            if (distanceToPlayer > visionRange) return false;
+
+            // Check if the player is within the vision angle
+            float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
+            if (angleToPlayer > visionAngle) return false;
+
+            // Perform a raycast to ensure there are no obstacles
+            if (Physics.Raycast(transform.position, directionToPlayer, out RaycastHit hit, visionRange, detectionMask))
+            {
+                return hit.transform == player; // Check if the hit object is the player
+            }
+
+            return false;
+        }
+
+        public void SetNewEvent<T>() where T : EnemyEvent
+        {
+            EnemyEvent newEvent = Events.FirstOrDefault(e => e is T);
+            if (newEvent != null)
+            {
+                EnemyEventHandler.PushEvent(newEvent);
+
+            }
+        }
 
         public override void Attack(int attackIndex)
         {
@@ -117,5 +146,22 @@ namespace Game
             }
 #endif
         }
+
+        private void OnDrawGizmos()
+        {
+            // Draw the vision range
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, visionRange);
+
+            // Draw the vision cone
+            Vector3 forward = transform.forward * visionRange;
+            Vector3 leftBoundary = Quaternion.Euler(0, -visionAngle, 0) * forward;
+            Vector3 rightBoundary = Quaternion.Euler(0, visionAngle, 0) * forward;
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(transform.position, leftBoundary);
+            Gizmos.DrawRay(transform.position, rightBoundary);
+        }
+
     }
 }
