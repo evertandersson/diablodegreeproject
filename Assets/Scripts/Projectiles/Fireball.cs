@@ -7,6 +7,8 @@ public class Fireball : MonoBehaviour
 
     public GameObject explosion;
 
+    private bool hasHit = false;
+
     [SerializeField]
     float lifeTime = 5.0f;
     float timer = 0;
@@ -24,10 +26,15 @@ public class Fireball : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (explosion != null && !other.gameObject.GetComponent<PlayerManager>())
+        if (hasHit == false)
         {
-            Instantiate(explosion, transform.position, Quaternion.identity);
-            Destroy(gameObject);
+            if (explosion != null && !other.gameObject.GetComponent<PlayerManager>())
+            {
+                Instantiate(explosion, transform.position, Quaternion.identity);
+                Destroy(gameObject);
+                hasHit = true;
+            }
         }
+
     }
 }
