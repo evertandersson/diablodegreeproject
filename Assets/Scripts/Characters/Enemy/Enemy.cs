@@ -14,8 +14,6 @@ namespace Game
         [SerializeField] private LayerMask detectionMask; // Layers the enemy can "see" (e.g., player)
         private Transform player; // Reference to the player
 
-        [SerializeField] private Rigidbody[] childrenRigidbodies;
-
         // Animation names:
         public string damageAnimName = "damage";
         public string[] attackAnimNames = { "Attack1", "Attack2" };
@@ -24,7 +22,6 @@ namespace Game
         public Animator Animator { get; private set; }
         public EventHandler EnemyEventHandler { get; private set; }
         public List<EnemyEvent> Events { get; private set; } 
-        public Rigidbody RB { get; private set; }
         public Transform Player => player;
 
         private void Awake()
@@ -32,17 +29,6 @@ namespace Game
             // Cache components on Awake
             Agent = GetComponent<NavMeshAgent>();
             Animator = GetComponent<Animator>();
-            RB = GetComponent<Rigidbody>();
-            RB.isKinematic = true;
-            RB.useGravity = false;
-
-            childrenRigidbodies = GetComponentsInChildren<Rigidbody>(true).Where(rb => rb != RB).ToArray();
-            foreach (Rigidbody rb in childrenRigidbodies)
-            {
-                rb.isKinematic = true;
-                rb.useGravity = false;
-            }
-
             EnemyEventHandler = EventHandler.CreateEventHandler();
 
             if (EnemyEventHandler == null)
@@ -76,10 +62,7 @@ namespace Game
             if (Animator != null)
                 Animator.enabled = false;
 
-            RB.isKinematic = true;
-            RB.useGravity = false;
-
-            Rigidbody[] rigidbodies = GetComponentsInChildren<Rigidbody>(true).Where(rb => rb != RB).ToArray();
+            Rigidbody[] rigidbodies = GetComponentsInChildren<Rigidbody>();
             foreach (Rigidbody rb in rigidbodies)
             {
                 rb.isKinematic = false;

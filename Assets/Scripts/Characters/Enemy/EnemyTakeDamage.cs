@@ -11,15 +11,6 @@ namespace Game
             enemy.Agent.isStopped = true;
             enemy.Animator.SetTrigger("IsHit");
             Debug.Log("Enemy took damage");
-
-            // Disable movement and animation root motion
-            enemy.Agent.enabled = false;
-            enemy.RB.isKinematic = false;
-            enemy.RB.useGravity = true;
-            enemy.Animator.applyRootMotion = false; // Disable root motion
-
-            // Freeze rotation to prevent spinning
-            enemy.RB.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         }
 
         public override void OnUpdate()
@@ -28,7 +19,7 @@ namespace Game
 
             if (IsAnimationPlaying(enemy.damageAnimName))
             {
-                // When the animation is done, set the event as done
+                // When the animation is done, destroy the enemy object
                 if (enemy.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f)
                 {
                     isDone = true;
@@ -40,17 +31,9 @@ namespace Game
         public override void OnEnd()
         {
             base.OnEnd();
-
-            // Re-enable Rigidbody and Animator behavior
-            enemy.RB.isKinematic = true;
-            enemy.RB.useGravity = false;
-            enemy.RB.constraints = RigidbodyConstraints.FreezeRotation; // Allow rotation again if needed
-            enemy.Animator.applyRootMotion = true;
-            enemy.Agent.enabled = true;
             enemy.Agent.isStopped = false;
-            Debug.Log("Done with takedamage");
+            Debug.Log("Done with takedamge");
         }
-
 
         public override bool IsDone()
         {
