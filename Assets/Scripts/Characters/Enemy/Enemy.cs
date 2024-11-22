@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Linq;
@@ -86,11 +87,11 @@ namespace Game
 
             if (sword != null)
             {
-                Destroy(sword.gameObject);
+                sword.gameObject.SetActive(false);
             }
             if (shield != null)
             {
-                Destroy(shield.gameObject);
+                shield.gameObject.SetActive(false);
             }
         }
 
