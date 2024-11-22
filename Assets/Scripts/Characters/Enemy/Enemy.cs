@@ -13,6 +13,7 @@ namespace Game
         [SerializeField] private float visionRange = 10f; // Distance the enemy can see
         [SerializeField] private LayerMask detectionMask; // Layers the enemy can "see" (e.g., player)
         private Transform player; // Reference to the player
+        private CapsuleCollider capsuleCollider;
 
         // Animation names:
         public string damageAnimName = "damage";
@@ -24,12 +25,15 @@ namespace Game
         public List<EnemyEvent> Events { get; private set; } 
         public Transform Player => player;
 
+        [SerializeField] private EnemyHealthBar healthBar;
+
         private void Awake()
         {
             // Cache components on Awake
             Agent = GetComponent<NavMeshAgent>();
             Animator = GetComponent<Animator>();
             EnemyEventHandler = EventHandler.CreateEventHandler();
+            capsuleCollider = GetComponent<CapsuleCollider>();
 
             if (EnemyEventHandler == null)
             {
@@ -41,8 +45,8 @@ namespace Game
 
         protected override void Start()
         {
-            maxHealth = 20;
             base.Start();
+            healthBar.SetMaxHealth(maxHealth);
 
             player = PlayerManager.Instance.gameObject.transform;
 
@@ -53,7 +57,7 @@ namespace Game
         public override void TakeDamage(int damage)
         {
             base.TakeDamage(damage);
-            
+            healthBar.SetHealth(health);
             SetNewEvent<EnemyTakeDamage>();
         }
 
@@ -61,6 +65,8 @@ namespace Game
         {
             if (Animator != null)
                 Animator.enabled = false;
+
+            capsuleCollider.enabled = false;
 
             Rigidbody[] rigidbodies = GetComponentsInChildren<Rigidbody>();
             foreach (Rigidbody rb in rigidbodies)

@@ -15,7 +15,7 @@ public class Explosion : MonoBehaviour
         {
             if (Vector3.Distance(transform.position, enemy.transform.position) < 4)
             {
-                enemy.TakeDamage(2);
+                enemy.TakeDamage(5);
             }
         }
 

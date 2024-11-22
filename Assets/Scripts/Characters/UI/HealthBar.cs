@@ -4,61 +4,37 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    private Slider slider;
-    private Vector3 originalScale;
-    private Coroutine scaleCoroutine;
-
-    void Awake()
-    {
-        slider = GetComponent<Slider>();
-        originalScale = transform.localScale;
-    }
+    [SerializeField] protected Slider slider;
+    [SerializeField] protected Slider backgroundSlider;
 
     public void SetMaxHealth(int health)
     {
         slider.maxValue = health;
         slider.value = health;
+        backgroundSlider.maxValue = health;
+        backgroundSlider.value = health;
     }
 
-    public void SetHealth(int health)
+    public virtual void SetHealth(int health)
     {
-        if (health < slider.value) // Only trigger scaling when taking damage
+        if (gameObject.activeSelf)
         {
-            if (scaleCoroutine != null)
-                StopCoroutine(scaleCoroutine);
-
-            scaleCoroutine = StartCoroutine(ScaleEffect());
+            slider.value = health;
+            StartCoroutine(SetBackgroundSlider());
         }
-
-        slider.value = health;
     }
 
-    private IEnumerator ScaleEffect()
+    private IEnumerator SetBackgroundSlider()
     {
-        // Increase scale
-        Vector3 targetScale = originalScale + new Vector3(0.3f, 0.3f, 0.3f);
-        float durationToBig = 0.025f;
-        float durationToSmall = 0.15f;
-        float elapsed = 0f;
+        yield return new WaitForSeconds(0.5f);
 
-        while (elapsed < durationToBig)
+        while (backgroundSlider.value > slider.value)
         {
-            transform.localScale = Vector3.Lerp(originalScale, targetScale, elapsed / durationToBig);
-            elapsed += Time.deltaTime;
+            backgroundSlider.value = Mathf.MoveTowards(backgroundSlider.value, slider.value, 10f * Time.deltaTime);
             yield return null;
         }
 
-        transform.localScale = targetScale;
-
-        // Return to original scale
-        elapsed = 0f;
-        while (elapsed < durationToSmall)
-        {
-            transform.localScale = Vector3.Lerp(targetScale, originalScale, elapsed / durationToSmall);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        transform.localScale = originalScale;
     }
+
+
 }
