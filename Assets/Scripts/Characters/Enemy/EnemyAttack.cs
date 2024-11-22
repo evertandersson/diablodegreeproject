@@ -8,6 +8,12 @@ namespace Game
 
         public override void OnBegin(bool firstTime)
         {
+            if (!IsCloseToPlayer())
+            {
+                isDone = true;
+                return;
+            }
+
             currentAttackIndex = 0;
             enemy.Agent.isStopped = true;
             enemy.Animator.SetTrigger("Attack");
@@ -22,10 +28,16 @@ namespace Game
 
         private void HandleAnimationCombo()
         {
+            // Don't attack while in take damage animation
+            if (IsAnimationPlaying(enemy.damageAnimName))
+                return;
+
+            // If current attack animation is playing
             if (IsAnimationPlaying(enemy.attackAnimNames[currentAttackIndex]))
             {
                 if (enemy.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.7f)
                 {
+                    // If close to player, do the next attack in the list
                     if (IsCloseToPlayer())
                     {
                         currentAttackIndex++;
@@ -41,6 +53,14 @@ namespace Game
                         Debug.Log("IsDone");
                     }
                 }
+            }
+        }
+
+        public void DealDamage()
+        {
+            if (IsCloseToPlayer() && IsTargetedAtPlayer())
+            {
+                PlayerManager.Instance.TakeDamage(2);
             }
         }
 

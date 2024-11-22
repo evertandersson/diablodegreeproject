@@ -8,8 +8,6 @@ namespace Game
         {
             base.OnBegin(firstTime);
 
-            enemy.EnableRagdoll();
-
             enemy.Agent.isStopped = true;
             enemy.Animator.SetTrigger("IsHit");
             Debug.Log("Enemy took damage");

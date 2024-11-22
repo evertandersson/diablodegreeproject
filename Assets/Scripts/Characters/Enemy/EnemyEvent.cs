@@ -50,7 +50,7 @@ namespace Game
                     targetPosition = pos;
                     enemy.Agent.SetDestination(targetPosition);
                     elapsedTime = 0f; // Reset timeout
-                    Debug.Log($"Setting new destination: {targetPosition}");
+                    //Debug.Log($"Setting new destination: {targetPosition}");
                     return;
                 }
             }
@@ -86,6 +86,19 @@ namespace Game
         protected bool IsCloseToPlayer()
         {
             return Vector3.Distance(enemy.transform.position, enemy.Player.position) < 1.5;
+        }
+
+        protected bool IsTargetedAtPlayer()
+        {
+            RaycastHit hit;
+
+            if (Physics.Raycast(enemy.transform.position, transform.forward, out hit))
+            {
+                // Check if the raycast hit the player
+                return hit.transform == enemy.Player;
+            }
+
+            return false; // Raycast did not hit the player
         }
     }
 }

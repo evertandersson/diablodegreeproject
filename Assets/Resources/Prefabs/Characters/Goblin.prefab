@@ -6425,6 +6425,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   damageAnimName: damage
+  attackAnimNames:
+  - Attack1
+  - Attack2
 --- !u!195 &8388076702170604132
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -15129,6 +15132,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5631352021537460535}
   - component: {fileID: 8111885097707989429}
+  - component: {fileID: 4963576320882924003}
   m_Layer: 0
   m_Name: sword_low
   m_TagString: Untagged
@@ -15211,6 +15215,27 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.61956024, y: 0.45643014, z: 0.0007593408}
     m_Extent: {x: 0.1451636, y: 0.45514762, z: 0.11076511}
   m_DirtyAABB: 0
+--- !u!65 &4963576320882924003
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3864844161719339187}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.2215302, y: 0.05, z: 0.9504332}
+  m_Center: {x: -0.0007593383, y: -0.007985482, z: 0.335852}
 --- !u!1 &3865082124852168345
 GameObject:
   m_ObjectHideFlags: 0

@@ -82,7 +82,6 @@ public class PlayerInput : MonoBehaviour
     {
         // Call the PlayerManager's attack method with the correct index
         PlayerManager.Instance.Attack(attackIndex);
-        PlayerManager.Instance.TakeDamage(3);
     }
 
 

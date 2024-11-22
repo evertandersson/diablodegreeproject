@@ -1,3 +1,4 @@
+using Game;
 using UnityEngine;
 
 public class Explosion : MonoBehaviour
@@ -8,13 +9,13 @@ public class Explosion : MonoBehaviour
     {
         explosionParticle = GetComponent<ParticleSystem>();
 
-        Character[] characters = FindObjectsByType<Character>(FindObjectsSortMode.None);
+        Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
 
-        foreach (Character character in characters)
+        foreach (Enemy enemy in enemies)
         {
-            if (Vector3.Distance(transform.position, character.transform.position) < 4)
+            if (Vector3.Distance(transform.position, enemy.transform.position) < 4)
             {
-                character.TakeDamage(2);
+                enemy.TakeDamage(2);
             }
         }
 

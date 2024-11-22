@@ -53,6 +53,7 @@ namespace Game
         public override void TakeDamage(int damage)
         {
             base.TakeDamage(damage);
+            
             SetNewEvent<EnemyTakeDamage>();
         }
 
@@ -127,7 +128,12 @@ namespace Game
 
         protected override void Die()
         {
-            throw new System.NotImplementedException();
+            for(int i = 0; i < EnemyEventHandler.EventStack.Count; i++) 
+            { 
+                EnemyEventHandler.EventStack.RemoveAt(0);
+            }
+
+            EnableRagdoll();
         }
 
         private void OnGUI()
