@@ -21,7 +21,15 @@ namespace Game
         {
             base.OnUpdate();
 
+            if (IsAnyAttackAnimationPlaying())
+                return;
+
             timer += Time.deltaTime;
+
+            if (IsCloseToPlayer())
+            {
+                enemy.SetNewEvent<EnemyAttack>();
+            }
 
             if (timer > updateTargetDelay)
             {

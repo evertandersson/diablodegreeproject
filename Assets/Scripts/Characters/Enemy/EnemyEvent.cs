@@ -64,5 +64,28 @@ namespace Game
             enemy.Agent.CalculatePath(position, path);
             return path.status == NavMeshPathStatus.PathComplete;
         }
+
+        protected bool IsAnyAttackAnimationPlaying()
+        {
+            foreach (var animationName in enemy.attackAnimNames)
+            {
+                if (IsAnimationPlaying(animationName))
+                {
+                    return true;
+                }
+            }
+            return false; // No animations are playing
+        }
+
+        protected bool IsAnimationPlaying(string animationName)
+        {
+            // Check if the current animation state is the one we are interested in
+            return enemy.Animator.GetCurrentAnimatorStateInfo(0).IsName(animationName);
+        }
+
+        protected bool IsCloseToPlayer()
+        {
+            return Vector3.Distance(enemy.transform.position, enemy.Player.position) < 1.5;
+        }
     }
 }

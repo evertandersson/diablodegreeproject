@@ -41,11 +41,5 @@ namespace Game
         {
             return isDone;
         }
-
-        private bool IsAnimationPlaying(string animationName)
-        {
-            // Check if the current animation state is the one we are interested in
-            return enemy.Animator.GetCurrentAnimatorStateInfo(0).IsName(animationName);
-        }
     }
 }

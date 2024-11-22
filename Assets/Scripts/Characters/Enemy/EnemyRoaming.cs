@@ -21,6 +21,9 @@ namespace Game
         {
             base.OnUpdate();
 
+            if (IsAnyAttackAnimationPlaying())
+                return;
+
             //If enemy can see player, remove this event and add FollowTarget event
             if (enemy.CanSeePlayer())
             {

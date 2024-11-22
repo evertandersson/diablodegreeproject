@@ -14,7 +14,9 @@ namespace Game
         [SerializeField] private LayerMask detectionMask; // Layers the enemy can "see" (e.g., player)
         private Transform player; // Reference to the player
 
+        // Animation names:
         public string damageAnimName = "damage";
+        public string[] attackAnimNames = { "Attack1", "Attack2" };
 
         public NavMeshAgent Agent { get; private set; }
         public Animator Animator { get; private set; }
