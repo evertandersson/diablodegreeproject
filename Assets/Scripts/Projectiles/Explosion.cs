@@ -1,14 +1,17 @@
 using Game;
 using UnityEngine;
 
-public class Explosion : MonoBehaviour
+public class Explosion : MonoBehaviour, IPooledObject
 {
     private ParticleSystem explosionParticle;
 
-    void Start()
+    void Awake()
     {
         explosionParticle = GetComponent<ParticleSystem>();
+    } 
 
+    public void OnObjectSpawn()
+    {
         Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
 
         foreach (Enemy enemy in enemies)
@@ -18,14 +21,13 @@ public class Explosion : MonoBehaviour
                 enemy.TakeDamage(5);
             }
         }
-
     }
 
     void Update()
     {
         if (!explosionParticle.isPlaying && explosionParticle.time >= explosionParticle.main.duration)
         {
-            Destroy(gameObject);
+            ObjectPooling.Instance.DespawnObject(this.gameObject);
         }
     }
 }

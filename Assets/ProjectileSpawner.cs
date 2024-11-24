@@ -2,18 +2,16 @@ using UnityEngine;
 
 public class ProjectileSpawner : MonoBehaviour
 {
-    PlayerManager playerManager;
     public GameObject projectile;
     private Vector3 offset = new Vector3(0, 1.2f, 0);
 
-    private void Start()
-    {
-        playerManager = GetComponentInParent<PlayerManager>();
-    }
-
-    public void SpawnProjectile()
+    public void SpawnProjectile(string tag)
     {
         Debug.Log("Spawn projectile");
-        projectile = Instantiate(projectile, transform.position + offset, playerManager.transform.rotation);
+        projectile = ObjectPooling.Instance.SpawnFromPool(
+            "Projectile", 
+            transform.position + offset, 
+            PlayerManager.Instance.transform.rotation);
+        //projectile = Instantiate(projectile, transform.position + offset, PlayerManager.Instance.transform.rotation);
     }
 }

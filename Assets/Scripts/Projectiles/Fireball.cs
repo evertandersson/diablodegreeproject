@@ -1,17 +1,23 @@
 using UnityEngine;
 
-public class Fireball : MonoBehaviour
+public class Fireball : MonoBehaviour, IPooledObject
 {
     [SerializeField]
     private float moveSpeed = 10;
 
     public GameObject explosion;
 
-    private bool hasHit = false;
+    private bool hasHit;
 
     [SerializeField]
     float lifeTime = 5.0f;
-    float timer = 0;
+    float timer;
+
+    public void OnObjectSpawn()
+    {
+        hasHit = false;
+        timer = 0;
+    }
 
     private void FixedUpdate()
     {
@@ -20,7 +26,7 @@ public class Fireball : MonoBehaviour
         timer += Time.fixedDeltaTime;
         if (timer >= lifeTime)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 
@@ -28,13 +34,16 @@ public class Fireball : MonoBehaviour
     {
         if (hasHit == false)
         {
-            if (explosion != null && !other.gameObject.GetComponent<PlayerManager>())
+            if (explosion != null 
+                && !other.gameObject.GetComponent<PlayerManager>()
+                && !other.gameObject.CompareTag("Projectile"))
             {
-                Instantiate(explosion, transform.position, Quaternion.identity);
-                Destroy(gameObject);
+                ObjectPooling.Instance.SpawnFromPool("Explosion", transform.position, Quaternion.identity);
+                ObjectPooling.Instance.DespawnObject(this.gameObject);
                 hasHit = true;
             }
         }
 
     }
+
 }
