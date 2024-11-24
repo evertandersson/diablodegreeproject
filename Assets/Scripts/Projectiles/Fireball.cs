@@ -45,5 +45,4 @@ public class Fireball : MonoBehaviour, IPooledObject
         }
 
     }
-
 }

@@ -8,7 +8,7 @@ using UnityEngine.AI;
 
 namespace Game
 {
-    public class Enemy : Character
+    public class Enemy : Character, IPooledObject
     {
         [SerializeField] private float visionAngle = 45f; // Half of the total field of view
         [SerializeField] private float visionRange = 10f; // Distance the enemy can see
@@ -20,7 +20,7 @@ namespace Game
         public string damageAnimName = "damage";
         public string[] attackAnimNames = { "Attack1", "Attack2" };
 
-        public NavMeshAgent Agent { get; private set; }
+        [SerializeField] public NavMeshAgent Agent { get; private set; }
         public Animator Animator { get; private set; }
         public EventHandler EnemyEventHandler { get; private set; }
         public List<EnemyEvent> Events { get; private set; } 
@@ -28,10 +28,32 @@ namespace Game
 
         [SerializeField] private EnemyHealthBar healthBar;
 
+        public void OnObjectSpawn()
+        {
+            health = maxHealth;
+            healthBar.SetMaxHealth(maxHealth);
+
+            RemoveAllEvents();
+            EnableRagdoll(false);
+
+            Agent = gameObject.AddComponent<NavMeshAgent>();
+
+            if (Agent != null)
+            {
+                Agent.enabled = true; // Ensure it's active
+                Agent.speed = 3.5f; // Set desired speed or other properties
+                Agent.angularSpeed = 120f; // Example property, adjust as needed
+                SetNewEvent<EnemyIdle>(); // Assign the first event
+            }
+            else
+            {
+                Debug.LogError("Failed to add NavMeshAgent to the enemy!");
+            }
+        }
+
         private void Awake()
         {
             // Cache components on Awake
-            Agent = GetComponent<NavMeshAgent>();
             Animator = GetComponent<Animator>();
             EnemyEventHandler = EventHandler.CreateEventHandler();
             capsuleCollider = GetComponent<CapsuleCollider>();
@@ -47,39 +69,42 @@ namespace Game
         protected override void Start()
         {
             base.Start();
-            healthBar.SetMaxHealth(maxHealth);
-
             player = PlayerManager.Instance.gameObject.transform;
-
-            SetNewEvent<EnemyIdle>();
-
         }
 
         public override void TakeDamage(int damage)
         {
-            base.TakeDamage(damage);
+            health -= damage;
+            StartCoroutine(FlashRoutine());
+            if (health <= 0)
+            {
+                Die();
+            }
+            else
+            {
+                SetNewEvent<EnemyTakeDamage>();
+            }
             healthBar.SetHealth(health);
-            SetNewEvent<EnemyTakeDamage>();
         }
 
-        public void EnableRagdoll()
+        public void EnableRagdoll(bool enable)
         {
             if (Animator != null)
-                Animator.enabled = false;
+                Animator.enabled = !enable;
 
-            capsuleCollider.enabled = false;
+            capsuleCollider.enabled = !enable;
 
             Rigidbody[] rigidbodies = GetComponentsInChildren<Rigidbody>();
             foreach (Rigidbody rb in rigidbodies)
             {
-                rb.isKinematic = false;
-                rb.useGravity = true;
+                rb.isKinematic = !enable;
+                rb.useGravity = enable;
             }
 
-            DetachWeapons();
+            DetachWeapons(enable);
         }
 
-        public void DetachWeapons()
+        public void DetachWeapons(bool enable)
         {
             // Locate the sword and shield GameObjects (adjust the names based on your hierarchy)
             Transform sword = transform.Find("Group/Geometry/geo/sword_low");
@@ -87,11 +112,11 @@ namespace Game
 
             if (sword != null)
             {
-                sword.gameObject.SetActive(false);
+                sword.gameObject.SetActive(!enable);
             }
             if (shield != null)
             {
-                shield.gameObject.SetActive(false);
+                shield.gameObject.SetActive(!enable);
             }
         }
 
@@ -124,7 +149,6 @@ namespace Game
             if (newEvent != null)
             {
                 EnemyEventHandler.PushEvent(newEvent);
-
             }
         }
 
@@ -135,13 +159,30 @@ namespace Game
 
         protected override void Die()
         {
-            for(int i = 0; i < EnemyEventHandler.EventStack.Count; i++) 
-            { 
-                EnemyEventHandler.EventStack.RemoveAt(0);
+            RemoveAllEvents();
+            EnableRagdoll(true);
+        }
+
+        private void RemoveAllEvents()
+        {
+            if (EnemyEventHandler.EventStack.Count > 0)
+            {
+                // Create a copy of the EventStack to avoid modifying it during iteration
+                var eventsCopy = new List<EventHandler.IEvent>(EnemyEventHandler.EventStack);
+                foreach (var ev in eventsCopy)
+                {
+                    EnemyEventHandler.RemoveEvent(ev);
+                }
             }
 
-            EnableRagdoll();
+            // Destroy NavMeshAgent
+            if (Agent != null)
+            {
+                Destroy(Agent);
+                Agent = null; // Clear the reference
+            }
         }
+
 
         private void OnGUI()
         {

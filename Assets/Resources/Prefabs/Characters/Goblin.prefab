@@ -6351,7 +6351,6 @@ GameObject:
   - component: {fileID: 7512959232865010981}
   - component: {fileID: 3120307258029321989}
   - component: {fileID: 8073677023320427492}
-  - component: {fileID: 8388076702170604132}
   - component: {fileID: 4221154618234213713}
   - component: {fileID: 8292932150625689165}
   - component: {fileID: 8763008119268560673}
@@ -6420,6 +6419,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 0
   maxHealth: 20
+  renderers: []
   visionAngle: 45
   visionRange: 10
   detectionMask:
@@ -6430,28 +6430,6 @@ MonoBehaviour:
   - Attack1
   - Attack2
   healthBar: {fileID: 8795097459470752480}
---- !u!195 &8388076702170604132
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1682753497815864180}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 6
-  m_Acceleration: 20
-  avoidancePriority: 50
-  m_AngularSpeed: 1000
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!136 &4221154618234213713
 CapsuleCollider:
   m_ObjectHideFlags: 0

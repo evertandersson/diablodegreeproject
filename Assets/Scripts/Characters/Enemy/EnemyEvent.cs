@@ -13,7 +13,7 @@ namespace Game
         protected Vector3 targetPosition;
         protected float elapsedTime = 0f;
 
-        private void Start()
+        private void Awake()
         {
             enemy = GetComponent<Enemy>();
         }
@@ -21,11 +21,17 @@ namespace Game
         public override void OnBegin(bool firstTime)
         {
             isDone = false;
-            Debug.Log("Enemy Event Started: " + enemy.EnemyEventHandler.CurrentEvent);
+            Debug.Log("Enemy Event Started: " + enemy?.EnemyEventHandler.CurrentEvent);
         }
 
         public override void OnUpdate()
         {
+            if (enemy == null)
+                return;
+
+            if (enemy.Agent == null)
+                return;
+
             float speed = enemy.Agent.velocity.magnitude / enemy.Agent.speed;
             enemy.Animator.SetFloat("RunSpeed", speed);
         }
