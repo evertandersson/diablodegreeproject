@@ -12,16 +12,12 @@ namespace Game
         public override void OnBegin(bool firstTime)
         {
             base.OnBegin(firstTime);
-            enemy = GetComponent<Enemy>();
             standStillTimer = 0; // Reset timer when idle begins
         }
 
         public override void OnUpdate()
         {
             base.OnUpdate();
-
-            if (enemy == null)
-                return;
 
             standStillTimer += Time.deltaTime;
 

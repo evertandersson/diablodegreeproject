@@ -32,6 +32,7 @@ namespace Game
                 enemy.SetNewEvent<EnemyFollowTarget>();
             }
 
+
             if (enemy.Agent.pathPending)
                 return; // Wait until the NavMeshAgent finishes calculating the path
 

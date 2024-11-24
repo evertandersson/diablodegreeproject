@@ -38,7 +38,7 @@ public abstract class Character : MonoBehaviour
         }
     }
 
-    protected IEnumerator FlashRoutine()
+    private IEnumerator FlashRoutine()
     {
         foreach (Renderer r in renderers)
         {
