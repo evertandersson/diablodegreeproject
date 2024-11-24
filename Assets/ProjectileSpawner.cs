@@ -7,11 +7,9 @@ public class ProjectileSpawner : MonoBehaviour
 
     public void SpawnProjectile(string tag)
     {
-        Debug.Log("Spawn projectile");
         projectile = ObjectPooling.Instance.SpawnFromPool(
-            "Projectile", 
+            tag, 
             transform.position + offset, 
             PlayerManager.Instance.transform.rotation);
-        //projectile = Instantiate(projectile, transform.position + offset, PlayerManager.Instance.transform.rotation);
     }
 }
