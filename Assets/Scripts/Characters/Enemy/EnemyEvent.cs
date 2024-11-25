@@ -21,7 +21,6 @@ namespace Game
         public override void OnBegin(bool firstTime)
         {
             isDone = false;
-            Debug.Log("Enemy Event Started: " + enemy.EnemyEventHandler.CurrentEvent);
         }
 
         public override void OnUpdate()
@@ -33,7 +32,6 @@ namespace Game
         public override void OnEnd()
         {
             isDone = false;
-            Debug.Log("Enemy Event Ended");
         }
 
         public override bool IsDone()

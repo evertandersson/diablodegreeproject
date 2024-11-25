@@ -8,7 +8,7 @@ using UnityEngine.AI;
 
 namespace Game
 {
-    public class Enemy : Character
+    public class Enemy : Character, IPooledObject
     {
         [SerializeField] private float visionAngle = 45f; // Half of the total field of view
         [SerializeField] private float visionRange = 10f; // Distance the enemy can see
@@ -27,6 +27,19 @@ namespace Game
         public Transform Player => player;
 
         [SerializeField] private EnemyHealthBar healthBar;
+
+        public void OnObjectSpawn()
+        {
+            health = maxHealth;
+            healthBar.SetMaxHealth(maxHealth);
+
+            Agent.enabled = false;
+
+            EnemyEventHandler.EventStack.Clear();
+            EnableRagdoll(false);
+
+            SetNewEvent<EnemyIdle>();
+        }
 
         private void Awake()
         {
@@ -57,29 +70,38 @@ namespace Game
 
         public override void TakeDamage(int damage)
         {
-            base.TakeDamage(damage);
+            health -= damage;
             healthBar.SetHealth(health);
-            SetNewEvent<EnemyTakeDamage>();
+            StartCoroutine(FlashRoutine());
+            if (health <= 0)
+            {
+                Die();
+            }
+            else
+            {
+                SetNewEvent<EnemyTakeDamage>();
+            }
         }
 
-        public void EnableRagdoll()
+        public void EnableRagdoll(bool enable)
         {
             if (Animator != null)
-                Animator.enabled = false;
+                Animator.enabled = !enable;
 
-            capsuleCollider.enabled = false;
+            capsuleCollider.enabled = !enable;
+            Agent.enabled = !enable;
 
             Rigidbody[] rigidbodies = GetComponentsInChildren<Rigidbody>();
             foreach (Rigidbody rb in rigidbodies)
             {
-                rb.isKinematic = false;
-                rb.useGravity = true;
+                rb.isKinematic = !enable;
+                rb.useGravity = enable;
             }
 
-            DetachWeapons();
+            DetachWeapons(enable);
         }
 
-        public void DetachWeapons()
+        public void DetachWeapons(bool enable)
         {
             // Locate the sword and shield GameObjects (adjust the names based on your hierarchy)
             Transform sword = transform.Find("Group/Geometry/geo/sword_low");
@@ -87,11 +109,11 @@ namespace Game
 
             if (sword != null)
             {
-                sword.gameObject.SetActive(false);
+                sword.gameObject.SetActive(!enable);
             }
             if (shield != null)
             {
-                shield.gameObject.SetActive(false);
+                shield.gameObject.SetActive(!enable);
             }
         }
 
@@ -124,7 +146,6 @@ namespace Game
             if (newEvent != null)
             {
                 EnemyEventHandler.PushEvent(newEvent);
-
             }
         }
 
@@ -135,12 +156,8 @@ namespace Game
 
         protected override void Die()
         {
-            for(int i = 0; i < EnemyEventHandler.EventStack.Count; i++) 
-            { 
-                EnemyEventHandler.EventStack.RemoveAt(0);
-            }
-
-            EnableRagdoll();
+            EnemyEventHandler.EventStack.Clear();
+            EnableRagdoll(true);
         }
 
         private void OnGUI()
@@ -177,6 +194,7 @@ namespace Game
             Gizmos.DrawRay(transform.position, leftBoundary);
             Gizmos.DrawRay(transform.position, rightBoundary);
         }
+
 
     }
 }
