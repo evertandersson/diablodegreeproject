@@ -13,6 +13,9 @@ public class PlayerManager : Character
 
     private static PlayerManager _instance;
 
+    public LevelSystem levelSystem { get; private set; }
+    [SerializeField] private LevelProgressBar progressBar;
+
     //Components and fields
     private PlayerAnimator playerAnimator;
     private PlayerInput playerInput;
@@ -138,6 +141,10 @@ public class PlayerManager : Character
 
         _instance = this;
         DontDestroyOnLoad(gameObject);
+
+        // Level setup
+        levelSystem = new LevelSystem();
+        progressBar.SetLevelSystem(levelSystem);
 
         base.Awake();
     }

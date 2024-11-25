@@ -70,23 +70,24 @@ namespace Game
 
         public override void TakeDamage(int damage)
         {
-            health -= damage;
-            healthBar.SetHealth(health);
-
             if (!IsDead)
             {
+                health -= damage;
+                healthBar.SetHealth(health);
                 StartCoroutine(FlashRoutine());
                 bloodSplashEffect.Play();
+
+                if (health <= 0)
+                {
+                    Die();
+                }
+                else
+                {
+                    SetNewEvent<EnemyTakeDamage>();
+                }
             }
 
-            if (health <= 0)
-            {
-                Die();
-            }
-            else
-            {
-                SetNewEvent<EnemyTakeDamage>();
-            }
+
         }
 
         public void EnableRagdoll(bool enable)
@@ -165,6 +166,7 @@ namespace Game
             EnemyEventHandler.EventStack.Clear();
             EnableRagdoll(true);
             isDead = true;
+            PlayerManager.Instance.levelSystem.AddExperience(20);
         }
 
         private void OnGUI()
