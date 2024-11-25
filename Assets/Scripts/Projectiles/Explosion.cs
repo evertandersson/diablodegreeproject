@@ -7,7 +7,7 @@ public class Explosion : MonoBehaviour, IPooledObject
 
     void Awake()
     {
-        explosionParticle = GetComponent<ParticleSystem>();
+        explosionParticle = GetComponentInChildren<ParticleSystem>();
     } 
 
     public void OnObjectSpawn()

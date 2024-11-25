@@ -639,10 +639,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pools:
   - tag: Projectile
-    prefab: {fileID: 1947871717301538, guid: a990e3ac1318b834488c784d851f42a9, type: 3}
+    prefab: {fileID: 5048752434976709204, guid: c0e6fdf5328564d4f8ff41348ac69144, type: 3}
     size: 5
   - tag: Explosion
-    prefab: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664, type: 3}
+    prefab: {fileID: 2825708195889961966, guid: 875f70afee49f2043b53c89c081f20ac, type: 3}
     size: 5
   - tag: Goblin
     prefab: {fileID: 1682753497815864180, guid: fdc6d01e773f558459a5049125bc51a9, type: 3}
@@ -813,6 +813,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseInputPosition: {x: 0, y: 0, z: 0}
+  raycastLayers:
+    serializedVersion: 2
+    m_Bits: 1
   offset: {x: 0, y: 7, z: -10}
 --- !u!1 &410087039
 GameObject:

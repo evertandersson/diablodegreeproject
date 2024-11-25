@@ -14,7 +14,7 @@ public class LevelSystem
 
     public LevelSystem() 
     {
-        level = 0;
+        level = 1;
         experience = 0;
         experienceToNextLevel = 100;
     }

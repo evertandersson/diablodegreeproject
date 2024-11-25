@@ -18,7 +18,7 @@ MonoBehaviour:
   prefab: {fileID: 0}
   isStackable: 1
   cooldown: 2
-  timerCooldown: 0.1032337
+  timerCooldown: 2.0033438
   attackDelay: 1
-  projectile: {fileID: 1947871717301538, guid: a990e3ac1318b834488c784d851f42a9, type: 3}
+  projectile: {fileID: 5048752434976709204, guid: c0e6fdf5328564d4f8ff41348ac69144, type: 3}
   attackTrigger: FireAttack

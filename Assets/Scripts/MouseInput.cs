@@ -5,6 +5,9 @@ public class MouseInput : MonoBehaviour
     public Vector3 mouseInputPosition;
 
     [SerializeField]
+    private LayerMask raycastLayers;
+
+    [SerializeField]
     private Vector3 offset;
 
     GameObject player;
@@ -18,7 +21,9 @@ public class MouseInput : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if(Physics.Raycast(ray, out hit, float.MaxValue))
+
+        // Perform raycast with LayerMask
+        if (Physics.Raycast(ray, out hit, float.MaxValue, raycastLayers))
         {
             mouseInputPosition = hit.point;
         }

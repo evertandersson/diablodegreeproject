@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class LevelProgressBar : MonoBehaviour
 {
+    private TextMeshProUGUI experienceText;
     private TextMeshProUGUI levelText;
     [SerializeField] private Slider experienceBar;
     [SerializeField] private Slider backgroundSlider;
@@ -12,15 +13,17 @@ public class LevelProgressBar : MonoBehaviour
 
     private void Awake()
     {
+        experienceText = transform.Find("ExperienceText").GetComponent<TextMeshProUGUI>();
         levelText = transform.Find("LevelText").GetComponent<TextMeshProUGUI>();
         experienceBar = GetComponent<Slider>();
         backgroundSlider = transform.Find("Background Fill Area").GetComponent<Slider>();
     }
 
-    public void SetExperienceToNextLevel(int amount)
+    public void SetExperienceToNextLevel(int amount, int level)
     {
         experienceBar.maxValue = amount;
         backgroundSlider.maxValue = amount;
+        levelText.text = "Level " + level;
     }
 
     private void SetExperience(int experience, int experienceToNextLevel)
@@ -28,7 +31,7 @@ public class LevelProgressBar : MonoBehaviour
         if (gameObject.activeSelf)
         {
             backgroundSlider.value = experience;
-            levelText.text = experience + " / " + experienceToNextLevel + " xp";
+            experienceText.text = experience + " / " + experienceToNextLevel + " xp";
             StartCoroutine(SetBackgroundSlider());
         }
     }
@@ -39,7 +42,7 @@ public class LevelProgressBar : MonoBehaviour
         this.levelSystem = levelSystem;
 
         //Set the experience to next level
-        SetExperienceToNextLevel(levelSystem.GetExperienceToNextLevel());
+        SetExperienceToNextLevel(levelSystem.GetExperienceToNextLevel(), levelSystem.GetCurrentLevel());
         //Set current experience
         SetExperience(levelSystem.GetExperience(), levelSystem.GetExperienceToNextLevel());
 
@@ -52,7 +55,7 @@ public class LevelProgressBar : MonoBehaviour
     {
         //Level changed, set new max experience and set current experience
         experienceBar.value = levelSystem.GetExperience();
-        SetExperienceToNextLevel(levelSystem.GetExperienceToNextLevel());
+        SetExperienceToNextLevel(levelSystem.GetExperienceToNextLevel(), levelSystem.GetCurrentLevel());
         SetExperience(levelSystem.GetExperience(), levelSystem.GetExperienceToNextLevel());
     }
 
