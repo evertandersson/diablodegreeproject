@@ -20,7 +20,6 @@ namespace Game
         public string damageAnimName = "damage";
         public string[] attackAnimNames = { "Attack1", "Attack2" };
 
-        public NavMeshAgent Agent { get; private set; }
         public Animator Animator { get; private set; }
         public EventHandler EnemyEventHandler { get; private set; }
         public List<EnemyEvent> Events { get; private set; } 
@@ -30,6 +29,7 @@ namespace Game
 
         public void OnObjectSpawn()
         {
+            isDead = false;
             health = maxHealth;
             healthBar.SetMaxHealth(maxHealth);
 
@@ -41,10 +41,10 @@ namespace Game
             SetNewEvent<EnemyIdle>();
         }
 
-        private void Awake()
+        protected override void Awake()
         {
             // Cache components on Awake
-            Agent = GetComponent<NavMeshAgent>();
+            base.Awake();
             Animator = GetComponent<Animator>();
             EnemyEventHandler = EventHandler.CreateEventHandler();
             capsuleCollider = GetComponent<CapsuleCollider>();
@@ -72,7 +72,13 @@ namespace Game
         {
             health -= damage;
             healthBar.SetHealth(health);
-            StartCoroutine(FlashRoutine());
+
+            if (!IsDead)
+            {
+                StartCoroutine(FlashRoutine());
+                bloodSplashEffect.Play();
+            }
+
             if (health <= 0)
             {
                 Die();
@@ -158,6 +164,7 @@ namespace Game
         {
             EnemyEventHandler.EventStack.Clear();
             EnableRagdoll(true);
+            isDead = true;
         }
 
         private void OnGUI()

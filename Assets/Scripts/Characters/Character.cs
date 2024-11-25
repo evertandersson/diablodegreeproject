@@ -1,5 +1,7 @@
+using Game;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 public abstract class Character : MonoBehaviour
 {
@@ -8,6 +10,13 @@ public abstract class Character : MonoBehaviour
 
     [SerializeField]
     protected int maxHealth = 20;
+
+    protected float rotationSpeed = 10.0f;
+
+    [SerializeField]   
+    protected ParticleSystem bloodSplashEffect;
+
+    protected bool isDead = false;
 
     //Components for flash effect:
     [SerializeField] private SkinnedMeshRenderer[] renderers;
@@ -19,7 +28,16 @@ public abstract class Character : MonoBehaviour
 
     public int Health => health;
 
+    public bool IsDead => isDead;
+
+    public NavMeshAgent Agent { get; protected set; }
+
     #endregion
+
+    protected virtual void Awake()
+    {
+        Agent = GetComponent<NavMeshAgent>();
+    }
 
     protected virtual void Start()
     {
@@ -51,6 +69,23 @@ public abstract class Character : MonoBehaviour
             if (r.enabled)
                 r.material.color = originalColor;
         }
+    }
+
+
+    public virtual void HandleRotation(Vector3 destinationPosition)
+    {
+        destinationPosition.y = transform.position.y;
+
+        Vector3 direction = destinationPosition - transform.position;
+
+        if (direction.sqrMagnitude > 0.01f)  // Check if the direction is not too small (to avoid jittering)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+        }
+
+        Agent.isStopped = true;
     }
 
     protected abstract void Die();

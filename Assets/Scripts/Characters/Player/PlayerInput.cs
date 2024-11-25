@@ -4,9 +4,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerInput : MonoBehaviour
 {
-    [SerializeField]
-    MouseInput mouseInput;
-
     PlayerMovement playerMovement;
 
     [SerializeField]
@@ -70,12 +67,7 @@ public class PlayerInput : MonoBehaviour
     {
         // Move the player based on mouse input position
         if (PlayerManager.Instance.CurrentPlayerState != PlayerManager.State.Inventory)
-            playerMovement.SetDestination(mouseInput.mouseInputPosition);
-    }
-
-    public void HandleAttackRotation()
-    {
-        playerMovement.StandStill(mouseInput.mouseInputPosition);
+            playerMovement.SetDestination(PlayerManager.Instance.mouseInput.mouseInputPosition);
     }
 
     private void Attack(InputAction.CallbackContext context, int attackIndex)

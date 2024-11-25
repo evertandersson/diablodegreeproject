@@ -646,7 +646,7 @@ MonoBehaviour:
     size: 5
   - tag: Goblin
     prefab: {fileID: 1682753497815864180, guid: fdc6d01e773f558459a5049125bc51a9, type: 3}
-    size: 6
+    size: 20
 --- !u!4 &192798917
 Transform:
   m_ObjectHideFlags: 0
@@ -1531,10 +1531,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemiesToSpawn:
   - enemyTag: Goblin
-    count: 4
+    count: 20
   - enemyTag: Goblin
     count: 4
-  spawnInterval: 4
+  spawnInterval: 1
 --- !u!4 &918331052
 Transform:
   m_ObjectHideFlags: 0
@@ -1845,6 +1845,10 @@ PrefabInstance:
       propertyPath: mouseInput
       value: 
       objectReference: {fileID: 330585548}
+    - target: {fileID: 2925374488890722608, guid: e36f78db816620d428e793016e941dd2, type: 3}
+      propertyPath: mouseInput
+      value: 
+      objectReference: {fileID: 330585548}
     - target: {fileID: 2981925754706606885, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1920,6 +1924,14 @@ PrefabInstance:
     - target: {fileID: 4857214118510606905, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5022280592166717840, guid: e36f78db816620d428e793016e941dd2, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5022280592166717840, guid: e36f78db816620d428e793016e941dd2, type: 3}
+      propertyPath: stopAction
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5098833398093251624, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_Layer
@@ -2076,6 +2088,14 @@ PrefabInstance:
     - target: {fileID: 8726200157435960023, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8868815206486666797, guid: e36f78db816620d428e793016e941dd2, type: 3}
+      propertyPath: clearBehavior
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8868815206486666797, guid: e36f78db816620d428e793016e941dd2, type: 3}
+      propertyPath: cameraShake.enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8939114629999894244, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_Layer

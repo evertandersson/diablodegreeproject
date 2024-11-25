@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerManager : Character
 {
@@ -16,6 +17,9 @@ public class PlayerManager : Character
     private PlayerAnimator playerAnimator;
     private PlayerInput playerInput;
     private ProjectileSpawner projectileSpawner;
+    
+    [SerializeField]
+    public MouseInput mouseInput;
 
     private State currentPlayerState;
 
@@ -123,7 +127,7 @@ public class PlayerManager : Character
     #endregion
 
 
-    private void Awake()
+    protected override void Awake()
     {
         // Singleton setup
         if (_instance != null && _instance != this)
@@ -134,6 +138,8 @@ public class PlayerManager : Character
 
         _instance = this;
         DontDestroyOnLoad(gameObject);
+
+        base.Awake();
     }
 
     protected override void Start()
@@ -159,13 +165,15 @@ public class PlayerManager : Character
 
         if (IsAttacking)
         {
-            playerInput.HandleAttackRotation();
+            HandleRotation(mouseInput.mouseInputPosition);
         }
     }
 
     public override void TakeDamage(int damage)
     {
         base.TakeDamage(damage);
+        if (bloodSplashEffect)
+            bloodSplashEffect.Play();
         healthBar.SetHealth(health);
     }
 

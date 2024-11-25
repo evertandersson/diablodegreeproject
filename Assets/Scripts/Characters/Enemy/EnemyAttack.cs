@@ -23,6 +23,7 @@ namespace Game
         {
             base.OnUpdate();
 
+            enemy.HandleRotation(PlayerManager.Instance.transform.position);
             HandleAnimationCombo();
         }
 
