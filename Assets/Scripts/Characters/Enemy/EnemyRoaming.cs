@@ -38,7 +38,6 @@ namespace Game
 
             if (enemy.Agent.remainingDistance <= enemy.Agent.stoppingDistance && !enemy.Agent.pathPending)
             {
-                Debug.Log($"Reached destination: {targetPosition}");
                 isDone = true; // Mark roaming as done
             }
 
@@ -46,7 +45,6 @@ namespace Game
             elapsedTime += Time.deltaTime;
             if (elapsedTime > roamingTimeout)
             {
-                Debug.Log("Roaming timed out");
                 isDone = true;
             }
         }

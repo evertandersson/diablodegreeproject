@@ -61,7 +61,7 @@ namespace Game
         {
             if (IsCloseToPlayer() && IsTargetedAtPlayer())
             {
-                PlayerManager.Instance.TakeDamage(5);
+                PlayerManager.Instance.TakeDamage(enemy.Damage);
             }
         }
 
