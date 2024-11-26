@@ -2,11 +2,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBar : MonoBehaviour
+public class HealthBar : Bar
 {
-    [SerializeField] protected Slider slider;
-    [SerializeField] protected Slider backgroundSlider;
-
     public void SetMaxHealth(int health)
     {
         slider.maxValue = health;
@@ -20,21 +17,7 @@ public class HealthBar : MonoBehaviour
         if (gameObject.activeSelf)
         {
             slider.value = health;
-            StartCoroutine(SetBackgroundSlider());
+            StartCoroutine(SmoothFill(slider, backgroundSlider, 0.5f, 10f));
         }
     }
-
-    private IEnumerator SetBackgroundSlider()
-    {
-        yield return new WaitForSeconds(0.5f);
-
-        while (backgroundSlider.value > slider.value)
-        {
-            backgroundSlider.value = Mathf.MoveTowards(backgroundSlider.value, slider.value, 10f * Time.deltaTime);
-            yield return null;
-        }
-
-    }
-
-
 }

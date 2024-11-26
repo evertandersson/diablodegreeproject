@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -28,6 +29,7 @@ public class PlayerManager : Character
 
     public SlotManager slotManager;
     public Inventory inventory;
+    private StatsDisplay statsDisplay;
 
     Animator animator;
 
@@ -142,9 +144,14 @@ public class PlayerManager : Character
         _instance = this;
         DontDestroyOnLoad(gameObject);
 
+        statsDisplay = GetComponentInChildren<StatsDisplay>(true);
+
         // Level setup
         levelSystem = new LevelSystem();
         progressBar.SetLevelSystem(levelSystem);
+
+        levelSystem.OnLevelChanged += SetStats;
+        SetStats(this, EventArgs.Empty);
 
         base.Awake();
     }
@@ -162,6 +169,18 @@ public class PlayerManager : Character
         //Health setup
         base.Start();
         healthBar.SetMaxHealth(maxHealth);
+    }
+
+    private void SetStats(object sender, System.EventArgs e)
+    {
+        level = levelSystem.GetCurrentLevel();
+        float statsMultiplier = 1.5f;
+        maxHealth = maxHealth * level;
+        health = maxHealth;
+        damage = damage * level;
+        defense = defense * level;
+        healthBar.SetMaxHealth(maxHealth);
+        statsDisplay.UpdateStatsText();
     }
 
     public void Update()

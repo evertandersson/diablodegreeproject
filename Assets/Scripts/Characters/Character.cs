@@ -8,8 +8,23 @@ public abstract class Character : MonoBehaviour
     [SerializeField]
     protected int health;
 
+    #region Stats
+
+    protected int level;
+
     [SerializeField]
     protected int maxHealth = 20;
+
+    protected int damage = 5;
+
+    protected int defense = 2;
+
+    public int Level => level;
+    public int MaxHealth => maxHealth;
+    public int Damage => damage;
+    public int Defense => defense;
+
+    #endregion
 
     protected float rotationSpeed = 10.0f;
 
