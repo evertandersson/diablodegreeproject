@@ -32,6 +32,16 @@ public class LevelSystem
         if (OnExperienceChanged != null) OnExperienceChanged(this, EventArgs.Empty);
     }
 
+    public void SetLevel(int lvl)
+    {
+        level = lvl;
+        for (int i = 0; i < level - 1; i++)
+        {
+            experienceToNextLevel = (int)(experienceToNextLevel * experienceMultiplier);
+        }
+        if (OnLevelChanged != null) OnLevelChanged(this, EventArgs.Empty);
+    }
+
     public int GetCurrentLevel()
     {
         return level;

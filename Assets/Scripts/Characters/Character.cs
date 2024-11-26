@@ -10,14 +10,11 @@ public abstract class Character : MonoBehaviour
 
     #region Stats
 
-    protected int level;
-
-    [SerializeField]
-    protected int maxHealth = 20;
-
-    protected int damage = 5;
-
-    protected int defense = 2;
+    [Header("Stats")]
+    [SerializeField] protected int level;
+    [SerializeField] protected int maxHealth = 20;
+    [SerializeField] protected int damage = 5;
+    [SerializeField] protected int defense = 2;
 
     public int Level => level;
     public int MaxHealth => maxHealth;
@@ -59,6 +56,22 @@ public abstract class Character : MonoBehaviour
         health = maxHealth;
         renderers = GetComponentsInChildren<SkinnedMeshRenderer>(true);
         originalColor = renderers[0].material.color;
+    }
+
+
+    protected virtual void SetStats()
+    {
+        if (level > 1)
+        {
+            for (int i = 0; i < level - 1; i++)
+            {
+                float statsMultiplier = 1.5f;
+                maxHealth = Mathf.RoundToInt(maxHealth * statsMultiplier);
+                health = maxHealth;
+                damage = Mathf.RoundToInt(damage * statsMultiplier);
+                defense = Mathf.RoundToInt(defense * statsMultiplier);
+            }
+        }
     }
 
     public virtual void TakeDamage(int damage)

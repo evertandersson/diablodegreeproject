@@ -150,8 +150,7 @@ public class PlayerManager : Character
         levelSystem = new LevelSystem();
         progressBar.SetLevelSystem(levelSystem);
 
-        levelSystem.OnLevelChanged += SetStats;
-        SetStats(this, EventArgs.Empty);
+        SetStats();
 
         base.Awake();
     }
@@ -169,17 +168,30 @@ public class PlayerManager : Character
         //Health setup
         base.Start();
         healthBar.SetMaxHealth(maxHealth);
+
+        levelSystem.OnLevelChanged += UpgradeStats;
     }
 
-    private void SetStats(object sender, System.EventArgs e)
+    protected override void SetStats()
+    {
+        base.SetStats();
+        statsDisplay.UpdateStatsText();
+        levelSystem.SetLevel(level);
+    }
+
+    private void UpgradeStats(object sender, EventArgs e)
     {
         level = levelSystem.GetCurrentLevel();
-        float statsMultiplier = 1.5f;
-        maxHealth = maxHealth * level;
-        health = maxHealth;
-        damage = damage * level;
-        defense = defense * level;
-        healthBar.SetMaxHealth(maxHealth);
+        if (level > 1)
+        {
+            float statsMultiplier = 1.5f;
+            maxHealth = Mathf.RoundToInt(maxHealth * statsMultiplier);
+            health = maxHealth;
+            damage = Mathf.RoundToInt(damage * statsMultiplier);
+            defense = Mathf.RoundToInt(defense * statsMultiplier);
+            healthBar.SetMaxHealth(maxHealth);
+        }
+
         statsDisplay.UpdateStatsText();
     }
 
