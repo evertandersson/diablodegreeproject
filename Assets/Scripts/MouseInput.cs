@@ -10,9 +10,6 @@ namespace Game
         private LayerMask raycastLayers;
 
         [SerializeField]
-        private LayerMask raycastLayerWall;
-
-        [SerializeField]
         private Vector3 offset;
 
         GameObject player;
@@ -32,9 +29,6 @@ namespace Game
             {
                 mouseInputPosition = hit.point;
             }
-
-            Ray rayWall = Camera.main.ScreenPointToRay(player.transform.position);
-            if (Physics.Raycast(ray, out hit))
 
             transform.position = player.transform.position + offset;
             transform.LookAt(player.transform.position);
