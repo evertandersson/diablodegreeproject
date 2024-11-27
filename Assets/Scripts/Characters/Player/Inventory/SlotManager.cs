@@ -1,59 +1,60 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class SlotManager : MonoBehaviour
+namespace Game
 {
-    public ActionSlot[] actionSlots;
-
-    public void GetActionSlots()
+    public class SlotManager : MonoBehaviour
     {
-        actionSlots = GetComponentsInChildren<ActionSlot>();
-    }
+        public ActionSlot[] actionSlots;
 
-    public void SetUpSlots()
-    {
-        for (int i = 0; i < actionSlots.Length; i++)
+        public void GetActionSlots()
         {
-            actionSlots[i].indexText.text = (i + 1).ToString();
-
-            if (actionSlots[i].item != null)
-            {
-                actionSlots[i].artwork.texture = actionSlots[i].item.itemIcon;
-                actionSlots[i].artwork.enabled = true;
-            }
-            else
-            {
-                actionSlots[i].artwork.enabled = false; // Hide artwork if no item
-            }
+            actionSlots = GetComponentsInChildren<ActionSlot>();
         }
-    }
 
-    public void HandleCooldowns()
-    {
-        foreach (var actionSlot in actionSlots)
+        public void SetUpSlots()
         {
-            // Skip empty slots
-            if (actionSlot.item == null) continue;
-
-            // Cast the item to ActionItemSO (if applicable)
-            if (actionSlot.item is ActionItemSO actionItem)
+            for (int i = 0; i < actionSlots.Length; i++)
             {
-                // Increment cooldown timer
-                if (actionItem.timerCooldown < actionItem.cooldown)
-                {
-                    actionItem.timerCooldown += Time.deltaTime;
+                actionSlots[i].indexText.text = (i + 1).ToString();
 
-                    // Update the UI for the cooldown
-                    actionSlot.RefillCooldown(actionItem.cooldown, actionItem.timerCooldown);
+                if (actionSlots[i].item != null)
+                {
+                    actionSlots[i].artwork.texture = actionSlots[i].item.itemIcon;
+                    actionSlots[i].artwork.enabled = true;
                 }
                 else
                 {
-                    // Cooldown complete, reset UI
-                    actionSlot.cooldownImage.fillAmount = 0;
+                    actionSlots[i].artwork.enabled = false; // Hide artwork if no item
+                }
+            }
+        }
+
+        public void HandleCooldowns()
+        {
+            foreach (var actionSlot in actionSlots)
+            {
+                // Skip empty slots
+                if (actionSlot.item == null) continue;
+
+                // Cast the item to ActionItemSO (if applicable)
+                if (actionSlot.item is ActionItemSO actionItem)
+                {
+                    // Increment cooldown timer
+                    if (actionItem.timerCooldown < actionItem.cooldown)
+                    {
+                        actionItem.timerCooldown += Time.deltaTime;
+
+                        // Update the UI for the cooldown
+                        actionSlot.RefillCooldown(actionItem.cooldown, actionItem.timerCooldown);
+                    }
+                    else
+                    {
+                        // Cooldown complete, reset UI
+                        actionSlot.cooldownImage.fillAmount = 0;
+                    }
                 }
             }
         }
     }
-
-
 }

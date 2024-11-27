@@ -1,49 +1,52 @@
 using UnityEngine;
 
-public class Fireball : MonoBehaviour, IPooledObject
+namespace Game
 {
-    [SerializeField]
-    private float moveSpeed = 10;
-
-    public GameObject explosion;
-
-    private bool hasHit;
-
-    [SerializeField]
-    float lifeTime = 5.0f;
-    float timer;
-
-    public void OnObjectSpawn()
+    public class Fireball : MonoBehaviour, IPooledObject
     {
-        hasHit = false;
-        timer = 0;
-    }
+        [SerializeField]
+        private float moveSpeed = 10;
 
-    private void FixedUpdate()
-    {
-        transform.position += transform.forward * moveSpeed * Time.fixedDeltaTime;
+        public GameObject explosion;
 
-        timer += Time.fixedDeltaTime;
-        if (timer >= lifeTime)
+        private bool hasHit;
+
+        [SerializeField]
+        float lifeTime = 5.0f;
+        float timer;
+
+        public void OnObjectSpawn()
         {
-            gameObject.SetActive(false);
+            hasHit = false;
+            timer = 0;
         }
-    }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (hasHit == false)
+        private void FixedUpdate()
         {
-            if (explosion != null 
-                && !other.gameObject.GetComponent<PlayerManager>()
-                && !other.gameObject.CompareTag("Projectile"))
+            transform.position += transform.forward * moveSpeed * Time.fixedDeltaTime;
+
+            timer += Time.fixedDeltaTime;
+            if (timer >= lifeTime)
             {
-                ObjectPooling.Instance.SpawnFromPool("Explosion", transform.position, Quaternion.identity);
-                ObjectPooling.Instance.DespawnObject(this.gameObject);
-                hasHit = true;
+                gameObject.SetActive(false);
             }
         }
 
-    }
+        private void OnTriggerEnter(Collider other)
+        {
+            if (hasHit == false)
+            {
+                if (explosion != null
+                    && !other.gameObject.GetComponent<PlayerManager>()
+                    && !other.gameObject.CompareTag("Projectile"))
+                {
+                    ObjectPooling.Instance.SpawnFromPool("Explosion", transform.position, Quaternion.identity);
+                    ObjectPooling.Instance.DespawnObject(this.gameObject);
+                    hasHit = true;
+                }
+            }
 
+        }
+
+    }
 }

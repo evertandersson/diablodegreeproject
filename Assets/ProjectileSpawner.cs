@@ -1,15 +1,19 @@
 using UnityEngine;
 
-public class ProjectileSpawner : MonoBehaviour
+namespace Game
 {
-    public GameObject projectile;
-    private Vector3 offset = new Vector3(0, 1.2f, 0);
-
-    public void SpawnProjectile(string tag)
+    public class ProjectileSpawner : MonoBehaviour
     {
-        projectile = ObjectPooling.Instance.SpawnFromPool(
-            tag, 
-            transform.position + offset, 
-            PlayerManager.Instance.transform.rotation);
+        public GameObject projectile;
+        private Vector3 offset = new Vector3(0, 1.2f, 0);
+
+        public void SpawnProjectile(string tag)
+        {
+            projectile = ObjectPooling.Instance.SpawnFromPool(
+                tag,
+                transform.position + offset,
+                PlayerManager.Instance.transform.rotation);
+        }
     }
+
 }

@@ -1,33 +1,36 @@
 using UnityEngine;
 
-public class MouseInput : MonoBehaviour
+namespace Game
 {
-    public Vector3 mouseInputPosition;
-
-    [SerializeField]
-    private LayerMask raycastLayers;
-
-    [SerializeField]
-    private Vector3 offset;
-
-    GameObject player;
-
-    private void Start()
+    public class MouseInput : MonoBehaviour
     {
-        player = FindFirstObjectByType<PlayerMovement>().gameObject;
-    }
+        public Vector3 mouseInputPosition;
 
-    void Update()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
+        [SerializeField]
+        private LayerMask raycastLayers;
 
-        // Perform raycast with LayerMask
-        if (Physics.Raycast(ray, out hit, float.MaxValue, raycastLayers))
+        [SerializeField]
+        private Vector3 offset;
+
+        GameObject player;
+
+        private void Start()
         {
-            mouseInputPosition = hit.point;
+            player = FindFirstObjectByType<PlayerMovement>().gameObject;
         }
 
-        transform.position = player.transform.position + offset;
+        void Update()
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            // Perform raycast with LayerMask
+            if (Physics.Raycast(ray, out hit, float.MaxValue, raycastLayers))
+            {
+                mouseInputPosition = hit.point;
+            }
+
+            transform.position = player.transform.position + offset;
+        }
     }
-}
+}   
