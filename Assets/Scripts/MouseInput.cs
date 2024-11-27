@@ -31,6 +31,7 @@ namespace Game
             }
 
             transform.position = player.transform.position + offset;
+            transform.LookAt(player.transform.position);
         }
     }
 }   
