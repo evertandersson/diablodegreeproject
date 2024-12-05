@@ -10,6 +10,8 @@ namespace Game
 {
     public class Enemy : Character, IPooledObject
     {
+        [SerializeField] private int experienceOnDeath = 20;
+
         [SerializeField] private float visionAngle = 45f; // Half of the total field of view
         [SerializeField] private float visionRange = 10f; // Distance the enemy can see
         [SerializeField] private LayerMask detectionMask; // Layers the enemy can "see" (e.g., player)
@@ -166,7 +168,7 @@ namespace Game
             EnemyEventHandler.EventStack.Clear();
             EnableRagdoll(true);
             isDead = true;
-            PlayerManager.Instance.levelSystem.AddExperience(20);
+            PlayerManager.Instance.levelSystem.AddExperience(experienceOnDeath);
         }
 
         private void OnGUI()
