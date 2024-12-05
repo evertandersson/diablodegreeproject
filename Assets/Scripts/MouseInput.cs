@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace Game
@@ -9,14 +10,15 @@ namespace Game
         [SerializeField]
         private LayerMask raycastLayers;
 
-        [SerializeField]
-        private Vector3 offset;
+        [SerializeField] private CinemachineFollow followComponent;
+        private Vector3 followOffset;
+        [SerializeField] float followOffsetMinY = 10f;
+        [SerializeField] float followOffsetMaxY = 50f;
 
-        GameObject player;
-
-        private void Start()
+        private void Awake()
         {
-            player = FindFirstObjectByType<PlayerMovement>().gameObject;
+            followComponent = GetComponent<CinemachineFollow>();
+            followOffset = followComponent.FollowOffset;
         }
 
         void Update()
@@ -30,8 +32,25 @@ namespace Game
                 mouseInputPosition = hit.point;
             }
 
-            transform.position = player.transform.position + offset;
-            transform.LookAt(player.transform.position);
+            HandleCameraZoom();
+        }
+
+        private void HandleCameraZoom()
+        {
+            float zoomAmount = 2f;
+            if (Input.mouseScrollDelta.y > 0)
+            {
+                followOffset.y -= zoomAmount;
+            }
+            if (Input.mouseScrollDelta.y < 0)
+            {
+                followOffset.y += zoomAmount;
+            }
+
+            followOffset.y = Mathf.Clamp(followOffset.y, followOffsetMinY, followOffsetMaxY);
+
+            float zoomSpeed = 10f;
+            followComponent.FollowOffset = Vector3.Lerp(followComponent.FollowOffset, followOffset, zoomSpeed * Time.deltaTime);
         }
     }
 }   
