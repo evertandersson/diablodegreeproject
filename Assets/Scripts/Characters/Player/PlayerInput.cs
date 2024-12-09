@@ -68,7 +68,27 @@ namespace Game
         {
             // Move the player based on mouse input position
             if (PlayerManager.Instance.CurrentPlayerState != PlayerManager.State.Inventory)
-                playerMovement.SetDestination(PlayerManager.Instance.mouseInput.mouseInputPosition);
+            {
+                if (PlayerManager.Instance.mouseInput.hit.transform != null)
+                {
+                    if (PlayerManager.Instance.mouseInput.hit.transform.CompareTag("Door"))
+                    {
+                        Door door = PlayerManager.Instance.mouseInput.hit.transform.GetComponent<Door>();
+                        playerMovement.SetDestination(door.transform.position);
+
+                        PlayerManager.Instance.SetCurrentDoor(door);
+                    }
+                    else
+                    {
+                        playerMovement.SetDestination(PlayerManager.Instance.mouseInput.mouseInputPosition);
+                    }
+                }
+                else
+                {
+                    playerMovement.SetDestination(PlayerManager.Instance.mouseInput.mouseInputPosition);
+                }
+            }
+
         }
 
         private void Attack(InputAction.CallbackContext context, int attackIndex)

@@ -7,7 +7,8 @@ namespace Game
 {
     public class Door : MonoBehaviour
     {
-        private NavMeshSurface navMeshSurface;
+        private Outline outline;
+
 
         public enum State
         {
@@ -20,7 +21,7 @@ namespace Game
 
         private void Start()
         {
-            navMeshSurface = FindFirstObjectByType<NavMeshSurface>();
+            outline = GetComponent<Outline>();
         }
 
         private void Update()
@@ -38,10 +39,12 @@ namespace Game
                     break;
                 case State.Closed:
                     state = State.Open;
+                    StopAllCoroutines();
                     StartCoroutine(PlayDoorAnimation());
                     break;
                 case State.Open:
                     state = State.Closed;
+                    StopAllCoroutines();
                     StartCoroutine(PlayDoorAnimation());
                     break;
             }

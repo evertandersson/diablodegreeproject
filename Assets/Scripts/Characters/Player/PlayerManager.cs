@@ -11,7 +11,8 @@ namespace Game
         {
             Idle,
             Attack,
-            Inventory
+            Inventory,
+            GoToDoor
         }
 
         private static PlayerManager _instance;
@@ -42,6 +43,8 @@ namespace Game
 
         private bool isAttacking;
         private bool canAttack = true;
+
+        private Door currentDoor = null;
 
         [SerializeField]
         private float attackTimer;
@@ -207,6 +210,21 @@ namespace Game
             {
                 HandleRotation(mouseInput.mouseInputPosition);
             }
+
+            if (currentDoor != null)
+            {
+                if (Vector3.Distance(transform.position, currentDoor.transform.position) < 2)
+                {
+                    currentDoor.TriggerDoor();
+                    currentDoor = null;
+                    Agent.isStopped = true;
+                }
+            }
+        }
+
+        public void SetCurrentDoor(Door door)
+        {
+            currentDoor = door;
         }
 
         public override void TakeDamage(int damage)
