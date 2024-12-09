@@ -94,62 +94,66 @@ namespace Game
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            artwork.transform.SetParent(originalParent);
-
-            Vector3 finalLocalPosition = artworkRectTransform.localPosition;
-            finalLocalPosition.z = originalZPosition;
-            artworkRectTransform.localPosition = finalLocalPosition;
-
-            // Initialize targetSlot as null
-            InventorySlot targetSlot = null;
-
-            // Try to get the slot from the pointerEnter first
-            if (eventData.pointerEnter != null)
+            if (item != null)
             {
-                targetSlot = eventData.pointerEnter.GetComponent<InventorySlot>();
-            }
+                artwork.transform.SetParent(originalParent);
 
-            // If pointerEnter is null, perform a raycast to find the target
-            if (targetSlot == null)
-            {
-                List<RaycastResult> results = new List<RaycastResult>();
-                EventSystem.current.RaycastAll(eventData, results);
+                Vector3 finalLocalPosition = artworkRectTransform.localPosition;
+                finalLocalPosition.z = originalZPosition;
+                artworkRectTransform.localPosition = finalLocalPosition;
 
-                foreach (RaycastResult result in results)
+                // Initialize targetSlot as null
+                InventorySlot targetSlot = null;
+
+                // Try to get the slot from the pointerEnter first
+                if (eventData.pointerEnter != null)
                 {
-                    // Look for an InventorySlot or ActionSlot in the raycast results
-                    targetSlot = result.gameObject.GetComponent<InventorySlot>();
-                    if (targetSlot != null)
+                    targetSlot = eventData.pointerEnter.GetComponent<InventorySlot>();
+                }
+
+                // If pointerEnter is null, perform a raycast to find the target
+                if (targetSlot == null)
+                {
+                    List<RaycastResult> results = new List<RaycastResult>();
+                    EventSystem.current.RaycastAll(eventData, results);
+
+                    foreach (RaycastResult result in results)
                     {
-                        break;
+                        // Look for an InventorySlot or ActionSlot in the raycast results
+                        targetSlot = result.gameObject.GetComponent<InventorySlot>();
+                        if (targetSlot != null)
+                        {
+                            break;
+                        }
                     }
                 }
+
+                if (targetSlot != null && targetSlot != this)
+                {
+                    // If the target is an ActionSlot and the item is an ActionItem
+                    if (targetSlot is ActionSlot && item is ActionItemSO)
+                    {
+                        if (targetSlot.item != null)
+                            SwapItems(targetSlot);
+                        else
+                            MoveItem(targetSlot);
+                    }
+                    // Handle non-ActionSlot cases
+                    else
+                    {
+                        if (targetSlot.item != null)
+                            SwapItems(targetSlot);
+                        else
+                            MoveItem(targetSlot);
+                    }
+                    PlayerManager.Instance.UpdateActionSlots();
+                }
+
+                canvasGroup.blocksRaycasts = true;
+                artworkRectTransform.anchoredPosition = Vector3.zero;
+                artworkRectTransform.rotation = Quaternion.identity;
             }
 
-            if (targetSlot != null && targetSlot != this)
-            {
-                // If the target is an ActionSlot and the item is an ActionItem
-                if (targetSlot is ActionSlot && item is ActionItemSO)
-                {
-                    if (targetSlot.item != null)
-                        SwapItems(targetSlot);
-                    else
-                        MoveItem(targetSlot);
-                }
-                // Handle non-ActionSlot cases
-                else
-                {
-                    if (targetSlot.item != null)
-                        SwapItems(targetSlot);
-                    else
-                        MoveItem(targetSlot);
-                }
-                PlayerManager.Instance.UpdateActionSlots();
-            }
-
-            canvasGroup.blocksRaycasts = true;
-            artworkRectTransform.anchoredPosition = Vector3.zero;
-            artworkRectTransform.rotation = Quaternion.identity;
         }
 
 
