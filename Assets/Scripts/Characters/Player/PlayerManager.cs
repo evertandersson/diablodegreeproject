@@ -44,7 +44,7 @@ namespace Game
         private bool isAttacking;
         private bool canAttack = true;
 
-        private Door currentDoor = null;
+        private Interactable currentObject = null;
 
         [SerializeField]
         private float attackTimer;
@@ -211,20 +211,22 @@ namespace Game
                 HandleRotation(mouseInput.mouseInputPosition);
             }
 
-            if (currentDoor != null)
+            if (currentObject != null)
             {
-                if (Vector3.Distance(transform.position, currentDoor.transform.position) < 2)
+                var interactableTransform = (currentObject as MonoBehaviour)?.transform;
+
+                if (Vector3.Distance(transform.position, interactableTransform.position) < 2)
                 {
-                    currentDoor.TriggerDoor();
-                    currentDoor = null;
+                    currentObject.Trigger();
+                    currentObject = null;
                     Agent.isStopped = true;
                 }
             }
         }
 
-        public void SetCurrentDoor(Door door)
+        public void SetCurrentObject(Interactable obj)
         {
-            currentDoor = door;
+            currentObject = obj;
         }
 
         public override void TakeDamage(int damage)

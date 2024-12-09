@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game
 {
-    public class Door : MonoBehaviour
+    public class Door : MonoBehaviour, Interactable
     {
         private Outline outline;
 
@@ -24,13 +24,7 @@ namespace Game
             outline = GetComponent<Outline>();
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.V))
-                TriggerDoor();
-        }
-
-        public void TriggerDoor()
+        public void Trigger()
         {
             switch (state)
             {

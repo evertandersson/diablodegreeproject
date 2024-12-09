@@ -76,7 +76,7 @@ namespace Game
                         Door door = PlayerManager.Instance.mouseInput.hit.transform.GetComponent<Door>();
                         playerMovement.SetDestination(door.transform.position);
 
-                        PlayerManager.Instance.SetCurrentDoor(door);
+                        PlayerManager.Instance.SetCurrentObject(door);
                     }
                     else
                     {
