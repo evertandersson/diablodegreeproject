@@ -2,32 +2,30 @@ using UnityEngine;
 
 namespace Game
 {
-    public class ItemWorld : MonoBehaviour
+    public class ItemWorld : MonoBehaviour, Interactable
     {
         [SerializeField]
         private ItemSO item;
 
-        private void OnTriggerEnter(Collider other)
+        public void Trigger()
         {
-            if (other.TryGetComponent(out PlayerManager playerManager))
+            // Try to get the Inventory component on the player or its child objects
+            Inventory playerInventory = PlayerManager.Instance.GetComponentInChildren<Inventory>(true);
+
+            if (playerInventory != null)
             {
-                // Try to get the Inventory component on the player or its child objects
-                Inventory playerInventory = playerManager.GetComponentInChildren<Inventory>();
+                bool itemAdded = playerInventory.AddItemToInventory(item);
 
-                if (playerInventory != null)
+                if (itemAdded)
                 {
-                    bool itemAdded = playerInventory.AddItemToInventory(item);
-
-                    if (itemAdded)
-                    {
-                        Destroy(gameObject); // Destroy item after adding it to inventory
-                    }
-                }
-                else
-                {
-                    Debug.LogError("Inventory component not found on player!");
+                    Destroy(gameObject); // Destroy item after adding it to inventory
                 }
             }
+            else
+            {
+                Debug.LogError("Inventory component not found on player!");
+            }
+            
         }
     }
 

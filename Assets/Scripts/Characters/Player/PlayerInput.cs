@@ -71,25 +71,32 @@ namespace Game
             {
                 if (PlayerManager.Instance.mouseInput.hit.transform != null)
                 {
-                    if (PlayerManager.Instance.mouseInput.hit.transform.CompareTag("Door"))
-                    {
-                        Door door = PlayerManager.Instance.mouseInput.hit.transform.GetComponent<Door>();
-                        playerMovement.SetDestination(door.transform.position);
+                    // Try to get the Interactable interface from the hit object
+                    var interactable = PlayerManager.Instance.mouseInput.hit.transform.GetComponent<Interactable>();
 
-                        PlayerManager.Instance.SetCurrentObject(door);
+                    if (interactable != null)
+                    {
+                        // Set destination to the interactable object's position
+                        Transform location = PlayerManager.Instance.mouseInput.hit.transform;
+                        playerMovement.SetDestination(location.position);
+
+                        // Set the current object in the PlayerManager
+                        PlayerManager.Instance.SetCurrentObject(interactable);
                     }
                     else
                     {
+                        // Move to the clicked position if not interactable
                         playerMovement.SetDestination(PlayerManager.Instance.mouseInput.mouseInputPosition);
                     }
                 }
                 else
                 {
+                    // Default movement to the mouse input position
                     playerMovement.SetDestination(PlayerManager.Instance.mouseInput.mouseInputPosition);
                 }
             }
-
         }
+
 
         private void Attack(InputAction.CallbackContext context, int attackIndex)
         {

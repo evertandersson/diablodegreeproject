@@ -165,9 +165,8 @@ namespace Game
                 int totalAmount = this.itemAmount + targetSlot.itemAmount;
                 targetSlot.itemAmount = totalAmount;
                 targetSlot.UpdateItemAmountText();
-                this.item = null;
-                this.itemAmount = 0;
-                this.UpdateItemAmountText();
+
+                RemoveItem();
             }
             else
             {
@@ -190,6 +189,11 @@ namespace Game
             targetSlot.itemAmount = this.itemAmount;
             targetSlot.UpdateItemAmountText();
 
+            RemoveItem();
+        }
+
+        public void RemoveItem()
+        {
             this.item = null;
             this.itemAmount = 0;
             this.UpdateItemAmountText();

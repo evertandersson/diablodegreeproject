@@ -7,8 +7,7 @@ namespace Game
 {
     public class Door : MonoBehaviour, Interactable
     {
-        private Outline outline;
-
+        [SerializeField] private ItemSO key;
 
         public enum State
         {
@@ -19,17 +18,12 @@ namespace Game
 
         public State state;
 
-        private void Start()
-        {
-            outline = GetComponent<Outline>();
-        }
-
         public void Trigger()
         {
             switch (state)
             {
                 case State.Locked:
-                    state = State.Closed;
+                    CheckIfPlayerHasKey();
                     break;
                 case State.Closed:
                     state = State.Open;
@@ -41,6 +35,22 @@ namespace Game
                     StopAllCoroutines();
                     StartCoroutine(PlayDoorAnimation());
                     break;
+            }
+        }
+
+        private void CheckIfPlayerHasKey()
+        {
+            foreach (InventorySlot slot in PlayerManager.Instance.inventory.inventory)
+            {
+                if (slot.item != null)
+                {
+                    if (slot.item.name == key.name)
+                    {
+                        slot.RemoveItem();
+                        state = State.Closed;
+                        break;
+                    }
+                }
             }
         }
 
