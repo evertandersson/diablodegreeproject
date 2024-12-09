@@ -8,6 +8,7 @@ namespace Game
     public class Door : MonoBehaviour, Interactable
     {
         [SerializeField] private ItemSO key;
+        Renderer doorRenderer;
 
         public enum State
         {
@@ -17,6 +18,11 @@ namespace Game
         }
 
         public State state;
+
+        private void Awake()
+        {
+            doorRenderer = GetComponent<Renderer>();
+        }
 
         public void Trigger()
         {
@@ -48,6 +54,13 @@ namespace Game
                     {
                         slot.RemoveItem();
                         state = State.Closed;
+
+                        Vector3 offset = new Vector3(0, 1, -0.5f);
+                        Vector3 textSpawnPosition = GetDoorCenter() + offset;
+
+                        PopupText text = ObjectPooling.Instance.SpawnFromPool("PopupText", textSpawnPosition, Quaternion.identity).GetComponent<PopupText>();
+                        text.message = "Unlocked door";
+                        text.StartCoroutine("Trigger");
                         break;
                     }
                 }
@@ -84,6 +97,17 @@ namespace Game
             transform.rotation = targetRotation;
         }
 
+        private Vector3 GetDoorCenter()
+        {
+            Renderer doorRenderer = GetComponent<Renderer>();
+            if (doorRenderer != null)
+            {
+                return doorRenderer.bounds.center; // Center of the door in world space
+            }
+
+            // Fallback to the transform position if no Renderer is found
+            return transform.position;
+        }
     }
 
 }
