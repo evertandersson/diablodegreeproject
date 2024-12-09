@@ -33,7 +33,7 @@ namespace Game
                 mouseInputPosition = hit.point;
 
                 // Check if the raycast hit a Door
-                if (hit.transform.CompareTag("Door"))
+                if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Interactable"))
                 {
                     var doorOutline = hit.transform.GetComponent<Outline>();
 
