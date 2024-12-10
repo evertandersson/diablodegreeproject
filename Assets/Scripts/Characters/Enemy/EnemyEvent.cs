@@ -81,9 +81,9 @@ namespace Game
             return enemy.Animator.GetCurrentAnimatorStateInfo(0).IsName(animationName);
         }
 
-        protected bool IsCloseToPlayer()
+        protected bool IsCloseToPlayer(float distance)
         {
-            return Vector3.Distance(enemy.transform.position, enemy.Player.position) < 1.5;
+            return Vector3.Distance(enemy.transform.position, enemy.Player.position) < distance;
         }
 
         protected bool IsTargetedAtPlayer()

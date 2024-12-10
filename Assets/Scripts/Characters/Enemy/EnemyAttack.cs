@@ -5,10 +5,11 @@ namespace Game
     public class EnemyAttack : EnemyEvent
     {
         private int currentAttackIndex;
+        float distance = 2.0f;
 
         public override void OnBegin(bool firstTime)
         {
-            if (!IsCloseToPlayer())
+            if (!IsCloseToPlayer(distance))
             {
                 isDone = true;
                 return;
@@ -39,7 +40,7 @@ namespace Game
                 if (enemy.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.7f)
                 {
                     // If close to player, do the next attack in the list
-                    if (IsCloseToPlayer())
+                    if (IsCloseToPlayer(distance))
                     {
                         currentAttackIndex++;
                         if (currentAttackIndex >= enemy.attackAnimNames.Length)
@@ -59,7 +60,7 @@ namespace Game
 
         public void DealDamage()
         {
-            if (IsCloseToPlayer() && IsTargetedAtPlayer())
+            if (IsCloseToPlayer(distance) && IsTargetedAtPlayer())
             {
                 PlayerManager.Instance.TakeDamage(enemy.Damage);
             }

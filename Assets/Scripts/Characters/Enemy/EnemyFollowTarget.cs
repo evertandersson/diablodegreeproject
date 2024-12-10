@@ -9,6 +9,8 @@ namespace Game
         float updateTargetDelay = 0.4f;
         float timer = 0;
 
+        float distance = 1.5f;
+
         public override void OnBegin(bool firstTime)
         {
             base.OnBegin(firstTime);
@@ -26,7 +28,7 @@ namespace Game
 
             timer += Time.deltaTime;
 
-            if (IsCloseToPlayer())
+            if (IsCloseToPlayer(distance))
             {
                 enemy.SetNewEvent<EnemyAttack>();
             }

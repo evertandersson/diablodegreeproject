@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e7cf26e9f0c47a14e8a0bbc28bcea259
+guid: 902e56417bc576849bddfa6aa7eb9e46
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -49,7 +49,7 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 0
       keepOriginalPositionY: 0
       keepOriginalPositionXZ: 0
@@ -385,13 +385,13 @@ ModelImporter:
         length: 0
         modified: 0
     skeleton:
-    - name: Standing Melee Attack Downward (2)(Clone)
+    - name: Standing Melee Attack Downward (3)(Clone)
       parentName: 
       position: {x: -0.07938266, y: -0.15497291, z: -0.014638658}
       rotation: {x: 0.050277617, y: 0.42385265, z: -0.048247892, w: 0.90304667}
       scale: {x: 1, y: 1, z: 1}
     - name: DeformationSystem
-      parentName: Standing Melee Attack Downward (2)(Clone)
+      parentName: Standing Melee Attack Downward (3)(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
@@ -611,7 +611,7 @@ ModelImporter:
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Geometry
-      parentName: Standing Melee Attack Downward (2)(Clone)
+      parentName: Standing Melee Attack Downward (3)(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
