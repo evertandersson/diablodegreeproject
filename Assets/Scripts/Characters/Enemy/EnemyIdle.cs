@@ -19,6 +19,9 @@ namespace Game
         {
             base.OnUpdate();
 
+            if (enemy.standStill)
+                return;
+
             standStillTimer += Time.deltaTime;
 
             if (enemy.CanSeePlayer()) // When sees player, transition to follow target

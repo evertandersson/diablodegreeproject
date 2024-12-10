@@ -48,7 +48,6 @@ namespace Game
                     targetPosition = pos;
                     enemy.Agent.SetDestination(targetPosition);
                     elapsedTime = 0f; // Reset timeout
-                    //Debug.Log($"Setting new destination: {targetPosition}");
                     return;
                 }
             }

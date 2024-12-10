@@ -18,6 +18,8 @@ namespace Game
         private Transform player; // Reference to the player
         private CapsuleCollider capsuleCollider;
 
+        public bool standStill = false;
+
         // Animation names:
         public string damageAnimName = "damage";
         public string[] attackAnimNames = { "Attack1", "Attack2" };
@@ -50,6 +52,7 @@ namespace Game
             Animator = GetComponent<Animator>();
             EnemyEventHandler = EventHandler.CreateEventHandler();
             capsuleCollider = GetComponent<CapsuleCollider>();
+            EnableRagdoll(false);
 
             if (EnemyEventHandler == null)
             {
@@ -57,6 +60,21 @@ namespace Game
             }
 
             Events = new List<EnemyEvent>(GetComponents<EnemyEvent>());
+        }
+
+        void OnEnable()
+        {
+            TriggerCutscene.StopCutsceneEvent += StopCutscene;
+        }
+
+        void OnDisable()
+        {
+            TriggerCutscene.StopCutsceneEvent -= StopCutscene;
+        }
+
+        private void StopCutscene()
+        {
+            standStill = false;
         }
 
         protected override void Start()

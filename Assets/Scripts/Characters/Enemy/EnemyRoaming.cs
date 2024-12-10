@@ -11,10 +11,12 @@ namespace Game
 
         public override void OnBegin(bool firstTime)
         {
-            base.OnBegin(firstTime);
+            base.OnBegin(firstTime);            
             enemy.Agent.isStopped = false;
             elapsedTime = 0f; // Reset timeout
             SetNewDestination(GetRandomPosition()); // Set the first destination
+            
+
         }
 
         public override void OnUpdate()
