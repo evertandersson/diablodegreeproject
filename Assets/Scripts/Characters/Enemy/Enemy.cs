@@ -77,12 +77,14 @@ namespace Game
         private void StartCutscene()
         {
             Agent.isStopped = true;
+            EnemyEventHandler.EventStack.Clear();
         }
 
         private void StopCutscene()
         {
             Agent.isStopped = false;
             standStill = false;
+            SetNewEvent<EnemyIdle>();
         }
 
         protected override void Start()
@@ -197,7 +199,7 @@ namespace Game
             PlayerManager.Instance.levelSystem.AddExperience(experienceOnDeath);
         }
 
-        private void OnGUI()
+        /*private void OnGUI()
         {
 
 #if UNITY_EDITOR
@@ -231,7 +233,7 @@ namespace Game
             Gizmos.DrawRay(transform.position, leftBoundary);
             Gizmos.DrawRay(transform.position, rightBoundary);
         }
-
+        */
 
     }
 }

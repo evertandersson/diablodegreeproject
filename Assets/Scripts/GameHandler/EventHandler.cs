@@ -45,7 +45,7 @@ public class EventHandler : MonoBehaviour
 
     public IEvent CurrentEvent => currentEvent;
     public List<IEvent> EventStack => eventStack;
-    
+
     #endregion
 
     public static EventHandler CreateEventHandler()
@@ -112,23 +112,23 @@ public class EventHandler : MonoBehaviour
         }
     }
 
- //   private void OnGUI()
- //   {
- //       if (this != Main) return;
- //
- //       #if UNITY_EDITOR
- //       const float LINE_HEIGHT = 32.0f;
- //       GUI.color = new Color(0.0f, 0.0f, 0.0f, 0.7f);
- //       Rect r = new Rect(0, 0, 250.0f, LINE_HEIGHT * eventStack.Count);
- //       GUI.DrawTexture(r, Texture2D.whiteTexture);
- //
- //       Rect line = new Rect(10, 0, r.width - 20, LINE_HEIGHT);
- //       for (int i = 0; i < eventStack.Count; i++)
- //       {
- //           GUI.color = eventStack[i] == currentEvent ? Color.green : Color.white;
- //           GUI.Label(line, "#" + i + ": " + eventStack[i].ToString(), i == 0 ? UnityEditor.EditorStyles.boldLabel : UnityEditor.EditorStyles.label);
- //           line.y += line.height;
- //       }
- //       #endif
- //   }
+    private void OnGUI()
+    {
+        if (this != Main) return;
+ 
+        #if UNITY_EDITOR
+        const float LINE_HEIGHT = 32.0f;
+        GUI.color = new Color(0.0f, 0.0f, 0.0f, 0.7f);
+        Rect r = new Rect(0, 0, 250.0f, LINE_HEIGHT * eventStack.Count);
+        GUI.DrawTexture(r, Texture2D.whiteTexture);
+ 
+        Rect line = new Rect(10, 0, r.width - 20, LINE_HEIGHT);
+        for (int i = 0; i < eventStack.Count; i++)
+        {
+            GUI.color = eventStack[i] == currentEvent ? Color.green : Color.white;
+            GUI.Label(line, "#" + i + ": " + eventStack[i].ToString(), i == 0 ? UnityEditor.EditorStyles.boldLabel : UnityEditor.EditorStyles.label);
+            line.y += line.height;
+        }
+        #endif
+    }
 }
