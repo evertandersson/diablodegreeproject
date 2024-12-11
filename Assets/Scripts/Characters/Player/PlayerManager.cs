@@ -200,6 +200,12 @@ namespace Game
             statsDisplay.UpdateStatsText();
         }
 
+        public void Heal(int amount)
+        {
+            health += amount;
+            healthBar.SetHealth(health);
+        }
+
         public void Update()
         {
             HandleAttackDelay();
@@ -257,6 +263,12 @@ namespace Game
                             attackTypeAction.PerformAction(animator);
                             IsAttacking = true;
                             projectileSpawner.projectile = attackTypeAction.projectile;
+                        }
+                        if (actionItem is PotionSO potionSO)
+                        {
+                            potionSO.PerformAction(animator);
+                            slotManager.actionSlots[attackIndex].itemAmount -= 1;
+                            slotManager.actionSlots[attackIndex].UpdateItemAmountText();
                         }
                     }
                 }

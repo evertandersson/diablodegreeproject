@@ -59,6 +59,11 @@ namespace Game
 
         public void UpdateItemAmountText()
         {
+            if (itemAmount <= 0)
+            {
+                item = null;
+                HideItemUI();
+            }
             if (item != null)
             {
                 artwork.enabled = true;

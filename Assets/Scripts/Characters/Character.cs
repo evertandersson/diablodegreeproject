@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public abstract class Character : MonoBehaviour
 {
     [SerializeField]
-    protected int health;
+    public int health;
 
     #region Stats
 
@@ -38,7 +38,14 @@ public abstract class Character : MonoBehaviour
 
     #region Properties
 
-    public int Health => health;
+    public int Health
+    {
+        get => health;
+        private set
+        {
+            health = Mathf.Clamp(value, 0, maxHealth); // Clamp to ensure within bounds
+        }
+    }
 
     public bool IsDead => isDead;
 
