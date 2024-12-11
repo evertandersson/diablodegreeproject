@@ -48,7 +48,7 @@ public class WallRendering : MonoBehaviour
     {
         foreach (Renderer renderer in wallRenderers)
         {
-            renderer.enabled = renderer.transform.position.y <= playerY;
+            renderer.enabled = renderer.transform.position.y - 3 <= playerY;
         }
     }
 }

@@ -76,7 +76,9 @@ namespace Game
 
         private void StartCutscene()
         {
-            Agent.isStopped = true;
+            if (Agent.enabled)
+                Agent.isStopped = true;
+
             EnemyEventHandler.EventStack.Clear();
         }
 
