@@ -17,6 +17,11 @@ namespace Game
 
         private static PlayerManager _instance;
 
+        //Events
+        public event Action<float> OnYValueChanged;
+
+        private float lastYPosition;
+
         public LevelSystem levelSystem { get; private set; }
         [SerializeField] private LevelProgressBar progressBar;
 
@@ -227,6 +232,14 @@ namespace Game
                     currentObject = null;
                     Agent.isStopped = true;
                 }
+            }
+
+            // Check if the Y position has changed
+            float currentYPosition = transform.position.y;
+            if (Mathf.Abs(currentYPosition - lastYPosition) > Mathf.Epsilon)
+            {
+                lastYPosition = currentYPosition;
+                OnYValueChanged?.Invoke(currentYPosition); // Trigger the event
             }
         }
 
