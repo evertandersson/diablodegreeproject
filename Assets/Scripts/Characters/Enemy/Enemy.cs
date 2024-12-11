@@ -64,16 +64,24 @@ namespace Game
 
         void OnEnable()
         {
+            TriggerCutscene.StartCutsceneEvent += StartCutscene;
             TriggerCutscene.StopCutsceneEvent += StopCutscene;
         }
 
         void OnDisable()
         {
+            TriggerCutscene.StartCutsceneEvent -= StartCutscene;
             TriggerCutscene.StopCutsceneEvent -= StopCutscene;
+        }
+
+        private void StartCutscene()
+        {
+            Agent.isStopped = true;
         }
 
         private void StopCutscene()
         {
+            Agent.isStopped = false;
             standStill = false;
         }
 

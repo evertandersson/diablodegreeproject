@@ -76,9 +76,7 @@ namespace Game
 
                     if (interactable != null)
                     {
-                        // Set destination to the interactable object's position
-                        Transform location = PlayerManager.Instance.mouseInput.hit.transform;
-                        playerMovement.SetDestination(location.position);
+                        playerMovement.SetDestination(interactable.GetCenterPoint());
 
                         // Set the current object in the PlayerManager
                         PlayerManager.Instance.SetCurrentObject(interactable);

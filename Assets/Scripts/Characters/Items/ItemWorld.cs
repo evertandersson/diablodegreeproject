@@ -34,6 +34,11 @@ namespace Game
             }
             
         }
+
+        public Vector3 GetCenterPoint()
+        {
+            return transform.position;
+        }
     }
 
 }

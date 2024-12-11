@@ -30,8 +30,9 @@ public class TriggerCutscene : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!isTriggered)
+        if (!isTriggered && other.CompareTag("Player"))
         {
+            StartCutsceneEvent?.Invoke();
             director.Play();
             isTriggered = true;
         }

@@ -56,7 +56,7 @@ namespace Game
                         state = State.Closed;
 
                         Vector3 offset = new Vector3(0, 1, -0.5f);
-                        Vector3 textSpawnPosition = GetDoorCenter() + offset;
+                        Vector3 textSpawnPosition = GetCenterPoint() + offset;
 
                         PopupText text = ObjectPooling.Instance.SpawnFromPool("PopupText", textSpawnPosition, Quaternion.identity).GetComponent<PopupText>();
                         text.message = "Unlocked door";
@@ -97,9 +97,8 @@ namespace Game
             transform.rotation = targetRotation;
         }
 
-        private Vector3 GetDoorCenter()
+        public Vector3 GetCenterPoint()
         {
-            Renderer doorRenderer = GetComponent<Renderer>();
             if (doorRenderer != null)
             {
                 return doorRenderer.bounds.center; // Center of the door in world space
