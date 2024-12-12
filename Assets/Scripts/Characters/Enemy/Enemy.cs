@@ -84,9 +84,12 @@ namespace Game
 
         private void StopCutscene()
         {
-            Agent.isStopped = false;
-            standStill = false;
-            SetNewEvent<EnemyIdle>();
+            if (Agent.enabled)
+            {
+                Agent.isStopped = false;
+                standStill = false;
+                SetNewEvent<EnemyIdle>();
+            }
         }
 
         protected override void Start()
