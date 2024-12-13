@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class LightningEffect : MonoBehaviour, IPooledObject
 {
-    [SerializeField] private float maxChainDistance = 5f; // Maximum distance for chaining
+    [SerializeField] private float maxChainDistance = 10f; // Maximum distance for chaining
     [SerializeField] private int maxChains = 5; // Maximum number of enemies to chain to
     [SerializeField] private Material lightningMaterial; // Material for the lightning effect
     [SerializeField] private float flickerDuration = 0.5f; // Duration of the lightning flicker
@@ -29,12 +29,9 @@ public class LightningEffect : MonoBehaviour, IPooledObject
             new GradientColorKey[] {
                 new GradientColorKey(Color.white, 0.0f),
                 new GradientColorKey(Color.blue, 0.5f),
-                new GradientColorKey(Color.clear, 1.0f)
             },
             new GradientAlphaKey[] {
-                new GradientAlphaKey(1.0f, 0.0f),
-                new GradientAlphaKey(0.5f, 0.5f),
-                new GradientAlphaKey(0.5f, 0.5f)
+                new GradientAlphaKey(1.0f, 0.0f)
             }
         );
         lineRenderer.colorGradient = gradient;
