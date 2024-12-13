@@ -4886,7 +4886,7 @@ MonoBehaviour:
     prefab: {fileID: 5048752434976709204, guid: c0e6fdf5328564d4f8ff41348ac69144, type: 3}
     size: 5
   - tag: LightningAttack
-    prefab: {fileID: 5048752434976709204, guid: c0e6fdf5328564d4f8ff41348ac69144, type: 3}
+    prefab: {fileID: 9030057087606249886, guid: 9883230eb71304045a4e87d071eb38b0, type: 3}
     size: 3
   - tag: Explosion
     prefab: {fileID: 2825708195889961966, guid: 875f70afee49f2043b53c89c081f20ac, type: 3}
@@ -25478,7 +25478,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5251107426523682287, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -16
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5251107426523682287, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_LocalPosition.y
@@ -25486,7 +25486,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5251107426523682287, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -28
+      value: 6.5
       objectReference: {fileID: 0}
     - target: {fileID: 5251107426523682287, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_LocalRotation.w
