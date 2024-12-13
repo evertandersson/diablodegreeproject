@@ -95729,7 +95729,7 @@ AnimationClip:
   m_Events:
   - time: 1.2666667
     functionName: SpawnProjectile
-    data: Projectile
+    data: Fireball
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
