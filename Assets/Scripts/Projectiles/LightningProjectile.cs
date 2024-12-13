@@ -13,6 +13,7 @@ public class LightningEffect : MonoBehaviour, IPooledObject
     private LineRenderer lineRenderer;
     private List<Enemy> chainedEnemies = new List<Enemy>(); // Track chained enemies
     private Vector3 offset = new Vector3(0, 1.2f, 0);
+    private GameObject[] lightningEffects;
 
     private void Awake()
     {
@@ -53,6 +54,7 @@ public class LightningEffect : MonoBehaviour, IPooledObject
 
     private void ChainToClosestEnemy(Vector3 startPosition)
     {
+        lightningEffects = new GameObject[maxChains];
         for (int i = 0; i < maxChains; i++)
         {
             // Find the closest enemy that hasn't been chained yet
@@ -77,6 +79,7 @@ public class LightningEffect : MonoBehaviour, IPooledObject
             {
                 lineRenderer.positionCount = chainedEnemies.Count + 1;
                 lineRenderer.SetPosition(chainedEnemies.Count, closestEnemy.transform.position + offset);
+                lightningEffects[i] = ObjectPooling.Instance.SpawnFromPool("Lightning", transform.position, Quaternion.identity);
                 closestEnemy.TakeDamage(PlayerManager.Instance.Damage);
             }
         }
@@ -106,6 +109,14 @@ public class LightningEffect : MonoBehaviour, IPooledObject
     private IEnumerator DespawnTimer()
     {
         yield return new WaitForSeconds(0.3f);
+        
+        //Remove all lightning effects
+        foreach(GameObject lightningEffect in lightningEffects)
+        {
+            if (lightningEffect != null) ObjectPooling.Instance.DespawnObject(lightningEffect);
+        }
+
+        //Remove lightning trail
         ObjectPooling.Instance.DespawnObject(this.gameObject);
     }
 
