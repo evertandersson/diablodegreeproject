@@ -28,6 +28,7 @@ namespace Game
         //Components and fields
         private PlayerAnimator playerAnimator;
         private PlayerInput playerInput;
+        private PlayerMovement playerMovement;
         private ProjectileSpawner projectileSpawner;
 
         [SerializeField]
@@ -169,6 +170,7 @@ namespace Game
         {
             playerAnimator = GetComponent<PlayerAnimator>();
             playerInput = GetComponent<PlayerInput>();
+            playerMovement = GetComponent<PlayerMovement>();
             projectileSpawner = GetComponentInChildren<ProjectileSpawner>();
 
             UpdateActionSlots();
