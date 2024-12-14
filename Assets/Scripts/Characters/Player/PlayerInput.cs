@@ -13,6 +13,7 @@ namespace Game
         PlayerInputSystem playerInputSystem;
 
         InputAction move;
+        InputAction roll;
         InputAction[] attacks;  // Array to store all attack actions
         InputAction openInventory;
 
@@ -29,11 +30,15 @@ namespace Game
             move.Enable();
             move.performed += Move;
 
+            roll = playerInputSystem.Player.Roll;
+            roll.Enable();
+            roll.performed += Roll;
+
             // Array for all attacks
             attacks = new InputAction[] {
             playerInputSystem.Player.Attack1,
             playerInputSystem.Player.Attack2
-        };
+            };
 
             // Initialize the open inventory action
             openInventory = playerInputSystem.UI.OpenInventory;
@@ -95,6 +100,10 @@ namespace Game
             }
         }
 
+        private void Roll(InputAction.CallbackContext context)
+        {
+            PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Rolling;
+        }
 
         private void Attack(InputAction.CallbackContext context, int attackIndex)
         {
