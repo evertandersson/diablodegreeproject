@@ -36,20 +36,14 @@ namespace Game
 
             // Array for all attacks
             attacks = new InputAction[] {
-            playerInputSystem.Player.Attack1,
-            playerInputSystem.Player.Attack2
+                playerInputSystem.Player.Attack1,
+                playerInputSystem.Player.Attack2
             };
 
             // Initialize the open inventory action
             openInventory = playerInputSystem.UI.OpenInventory;
             openInventory.Enable();
             openInventory.performed += OpenInventory;
-
-            // Log bindings to confirm
-            for (int i = 0; i < attacks.Length; i++)
-            {
-                Debug.Log($"Attack {i + 1} binding: " + attacks[i].bindings[0].ToString());
-            }
 
             // Subscribe to each attack action
             for (int i = 0; i < attacks.Length; i++)
@@ -63,6 +57,8 @@ namespace Game
         private void OnDisable()
         {
             move.Disable();
+            roll.Disable();
+            openInventory.Disable();
             for (int i = 0; i < attacks.Length; i++)
             {
                 attacks[i].Disable();
@@ -71,7 +67,14 @@ namespace Game
 
         private void Move(InputAction.CallbackContext context)
         {
-            // Move the player based on mouse input position
+            // Handle movement input
+            if (PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Rolling)
+            {
+                // Buffer the movement input during a roll
+                playerMovement.BufferInput(PlayerManager.Instance.mouseInput.mouseInputPosition);
+                return;
+            }
+
             if (PlayerManager.Instance.CurrentPlayerState != PlayerManager.State.Inventory)
             {
                 if (PlayerManager.Instance.mouseInput.hit.transform != null)
@@ -102,15 +105,28 @@ namespace Game
 
         private void Roll(InputAction.CallbackContext context)
         {
-            PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Rolling;
+            // Start rolling only if the player is not already rolling
+            if (PlayerManager.Instance.CurrentPlayerState != PlayerManager.State.Rolling)
+            {
+                PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Rolling;
+            }
+            else
+            {
+                playerMovement.BufferRoll();
+            }
         }
 
         private void Attack(InputAction.CallbackContext context, int attackIndex)
         {
-            // Call the PlayerManager's attack method with the correct index
+            // Allow attacking during idle or buffered for after rolling
+            if (PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Rolling)
+            {
+                playerMovement.BufferAttack(attackIndex);
+                return;
+            }
+
             PlayerManager.Instance.Attack(attackIndex);
         }
-
 
         private void OpenInventory(InputAction.CallbackContext context)
         {
@@ -128,6 +144,4 @@ namespace Game
             }
         }
     }
-
-
 }

@@ -28,7 +28,7 @@ namespace Game
 
         //Components and fields
         private PlayerAnimator playerAnimator;
-        private PlayerInput playerInput;
+        public PlayerInput playerInput;
         private PlayerMovement playerMovement;
         private ProjectileSpawner projectileSpawner;
 
@@ -87,6 +87,7 @@ namespace Game
                         break;
 
                     case State.Attack:
+                        Agent.isStopped = true;
                         break;
 
                     case State.Rolling:
@@ -327,13 +328,18 @@ namespace Game
                     }
                     else
                     {
-                        attackTimer = 0;
-                        currentAction = null;
-                        IsAttacking = false;
+                        ClearAttack();
                         currentPlayerState = State.Idle;
                     }
                 }
             }
+        }
+
+        public void ClearAttack()
+        {
+            attackTimer = 0;
+            currentAction = null;
+            IsAttacking = false;
         }
 
         protected override void Die()

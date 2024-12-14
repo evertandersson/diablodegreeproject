@@ -126,7 +126,6 @@ public abstract class Character : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
         }
 
-        Agent.isStopped = true;
     }
 
     public bool CanSeeTarget(Transform target, Vector3 offset)

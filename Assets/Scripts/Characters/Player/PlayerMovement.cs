@@ -12,6 +12,13 @@ namespace Game
         private Vector3 rollDirection; // To store the roll direction
         private float initialYPosition; // To store the initial Y position
 
+        // Buffer variables:
+        private Vector3 bufferedDestination;
+        private bool hasBufferedMovement;
+        private int bufferedAttackIndex;
+        private bool hasBufferedAttack;
+        private bool hasBufferedRoll;
+
         private void Start()
         {
             playerManager = PlayerManager.Instance;
@@ -26,6 +33,44 @@ namespace Game
             Physics.IgnoreLayerCollision(playerLayer, enemyLayer, true);
         }
 
+        public void BufferInput(Vector3 destination)
+        {
+            bufferedDestination = destination;
+            hasBufferedMovement = true;
+        }
+
+        public void BufferAttack(int attackIndex)
+        {
+            bufferedAttackIndex = attackIndex;
+            hasBufferedAttack = true;
+        }
+
+        public void BufferRoll()
+        {
+            hasBufferedRoll = true;
+        }
+
+        public void ProcessBufferedInput()
+        {
+            if (hasBufferedMovement)
+            {
+                SetDestination(bufferedDestination);
+                hasBufferedMovement = false;
+            }
+
+            if (hasBufferedAttack)
+            {
+                PlayerManager.Instance.Attack(bufferedAttackIndex);
+                hasBufferedAttack = false;
+            }
+
+            if (hasBufferedRoll)
+            {
+                PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Rolling;
+                hasBufferedRoll = false;
+            }
+        }
+
         public void SetDestination(Vector3 destinationPosition)
         {
             if (!playerManager.Agent.enabled) return;
@@ -36,6 +81,8 @@ namespace Game
 
         public void StartRolling()
         {
+            playerManager.ClearAttack();
+            
             // Store the initial Y position
             initialYPosition = transform.position.y;
 
@@ -87,6 +134,7 @@ namespace Game
 
                     rollTimer = 0;
                     playerManager.CurrentPlayerState = PlayerManager.State.Idle;
+                    ProcessBufferedInput();
                 }
             }
         }
