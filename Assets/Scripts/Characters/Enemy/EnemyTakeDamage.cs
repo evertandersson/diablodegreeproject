@@ -17,7 +17,7 @@ namespace Game
         {
             base.OnUpdate();
 
-            if (IsAnimationPlaying(enemy.damageAnimName))
+            if (enemy.IsAnimationPlaying(enemy.damageAnimName))
             {
                 // When the animation is done, destroy the enemy object
                 if (enemy.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f)
