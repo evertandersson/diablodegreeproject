@@ -38,7 +38,7 @@ public abstract class Character : MonoBehaviour
 
     [SerializeField] private float visionAngle = 45f; // Half of the total field of view
     [SerializeField] public float visionRange = 10f; // Distance the character can see
-    [SerializeField] private LayerMask detectionMask; // Layers the character can "see" (e.g., player)
+    [SerializeField] public LayerMask detectionMask; // Layers the character can "see" (e.g., player)
 
     #region Properties
 

@@ -13,6 +13,8 @@ namespace Game
         protected Vector3 targetPosition;
         protected float elapsedTime = 0f;
 
+        Vector3 offset = new Vector3(0, 1.2f, 0);
+
         private void Start()
         {
             enemy = GetComponent<Enemy>();
@@ -62,6 +64,12 @@ namespace Game
             return path.status == NavMeshPathStatus.PathComplete;
         }
 
+        public bool IsAnimationPlaying(string animationName)
+        {
+            // Check if the current animation state is the one we are interested in
+            return enemy.Animator.GetCurrentAnimatorStateInfo(0).IsName(animationName);
+        }
+
         protected bool IsAnyAttackAnimationPlaying()
         {
             foreach (var animationName in enemy.attackAnimNames)
@@ -83,7 +91,7 @@ namespace Game
         {
             RaycastHit hit;
 
-            if (Physics.Raycast(enemy.transform.position, transform.forward, out hit))
+            if (Physics.Raycast(enemy.transform.position + offset, transform.forward, out hit, enemy.detectionMask))
             {
                 // Check if the raycast hit the player
                 return hit.transform == enemy.Player;

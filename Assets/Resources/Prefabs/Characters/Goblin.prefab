@@ -6431,6 +6431,8 @@ MonoBehaviour:
   detectionMask:
     serializedVersion: 2
     m_Bits: 128
+  experienceOnDeath: 20
+  standStill: 0
   damageAnimName: damage
   attackAnimNames:
   - Attack1
