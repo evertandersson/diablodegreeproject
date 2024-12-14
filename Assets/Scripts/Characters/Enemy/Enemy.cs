@@ -77,6 +77,8 @@ namespace Game
                 Agent.isStopped = true;
 
             EnemyEventHandler.EventStack.Clear();
+            standStill = true;
+            SetNewEvent<EnemyIdle>();
         }
 
         private void StopCutscene()
@@ -85,7 +87,6 @@ namespace Game
             {
                 Agent.isStopped = false;
                 standStill = false;
-                SetNewEvent<EnemyIdle>();
             }
         }
 
