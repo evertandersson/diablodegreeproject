@@ -17,6 +17,13 @@ namespace Game
             playerManager = PlayerManager.Instance;
             rb = GetComponent<Rigidbody>();
             rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionY;
+
+            // Get the layer indices for Player and Enemy
+            int playerLayer = LayerMask.NameToLayer("Player");
+            int enemyLayer = LayerMask.NameToLayer("Enemy");
+
+            // Ignore collisions between Player and Enemy layers
+            Physics.IgnoreLayerCollision(playerLayer, enemyLayer, true);
         }
 
         public void SetDestination(Vector3 destinationPosition)
