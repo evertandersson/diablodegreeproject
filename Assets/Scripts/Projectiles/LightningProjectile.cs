@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class LightningEffect : MonoBehaviour, IPooledObject
 {
-    [SerializeField] private float maxChainDistance = 10f; // Maximum distance for chaining
     [SerializeField] private int maxChains = 5; // Maximum number of enemies to chain to
     [SerializeField] private Material lightningMaterial; // Material for the lightning effect
     [SerializeField] private float flickerDuration = 0.5f; // Duration of the lightning flicker
@@ -58,7 +57,7 @@ public class LightningEffect : MonoBehaviour, IPooledObject
         for (int i = 0; i < maxChains; i++)
         {
             // Find the closest enemy that hasn't been chained yet
-            Enemy closestEnemy = FindClosestEnemy(startPosition);
+            Enemy closestEnemy = FindClosestEnemy(startPosition, i == 0);
 
             if (closestEnemy == null)
             {
@@ -85,19 +84,25 @@ public class LightningEffect : MonoBehaviour, IPooledObject
         }
     }
 
-    private Enemy FindClosestEnemy(Vector3 position)
+    private Enemy FindClosestEnemy(Vector3 position, bool firstTime)
     {
         Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
         Enemy closestEnemy = null;
-        float closestDistance = maxChainDistance;
+        float closestDistance = PlayerManager.Instance.visionRange;
 
         foreach (Enemy enemy in enemies)
         {
-            if (chainedEnemies.Contains(enemy) || enemy.IsDead) continue; // Skip already chained enemies
+            // Skip already chained or dead enemies
+            if (chainedEnemies.Contains(enemy) || enemy.IsDead) continue;
 
             float distance = Vector3.Distance(position, enemy.transform.position);
+            // Check if this enemy is closer and visible
             if (distance < closestDistance)
             {
+                if (firstTime && !PlayerManager.Instance.CanSeeTarget(enemy.transform, offset))
+                {
+                    continue;
+                }
                 closestEnemy = enemy;
                 closestDistance = distance;
             }
@@ -105,6 +110,7 @@ public class LightningEffect : MonoBehaviour, IPooledObject
 
         return closestEnemy;
     }
+
 
     private IEnumerator DespawnTimer()
     {
@@ -124,6 +130,6 @@ public class LightningEffect : MonoBehaviour, IPooledObject
     {
         // Visualize chain distance in the editor
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, maxChainDistance);
+        Gizmos.DrawWireSphere(transform.position, PlayerManager.Instance.visionRange);
     }
 }

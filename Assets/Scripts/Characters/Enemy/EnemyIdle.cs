@@ -24,7 +24,7 @@ namespace Game
 
             standStillTimer += Time.deltaTime;
 
-            if (enemy.CanSeePlayer()) // When sees player, transition to follow target
+            if (enemy.CanSeeTarget(PlayerManager.Instance.transform, Vector3.zero)) // When sees player, transition to follow target
             {
                 standStillTimer = 0;
                 enemy.SetNewEvent<EnemyFollowTarget>();

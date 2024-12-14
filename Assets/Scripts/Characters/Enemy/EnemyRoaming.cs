@@ -27,7 +27,7 @@ namespace Game
                 return;
 
             //If enemy can see player, remove this event and add FollowTarget event
-            if (enemy.CanSeePlayer())
+            if (enemy.CanSeeTarget(PlayerManager.Instance.transform, Vector3.zero))
             {
                 isDone = true;
                 enemy.EnemyEventHandler.RemoveEvent(this);

@@ -12,9 +12,6 @@ namespace Game
     {
         [SerializeField] private int experienceOnDeath = 20;
 
-        [SerializeField] private float visionAngle = 45f; // Half of the total field of view
-        [SerializeField] private float visionRange = 10f; // Distance the enemy can see
-        [SerializeField] private LayerMask detectionMask; // Layers the enemy can "see" (e.g., player)
         private Transform player; // Reference to the player
         private CapsuleCollider capsuleCollider;
 
@@ -157,29 +154,6 @@ namespace Game
             {
                 shield.gameObject.SetActive(!enable);
             }
-        }
-
-        public bool CanSeePlayer()
-        {
-            if (!player) return false;
-
-            Vector3 directionToPlayer = (player.position - transform.position).normalized;
-            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-
-            // Check if the player is within the vision range
-            if (distanceToPlayer > visionRange) return false;
-
-            // Check if the player is within the vision angle
-            float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
-            if (angleToPlayer > visionAngle) return false;
-
-            // Perform a raycast to ensure there are no obstacles
-            if (Physics.Raycast(transform.position, directionToPlayer, out RaycastHit hit, visionRange, detectionMask))
-            {
-                return hit.transform == player; // Check if the hit object is the player
-            }
-
-            return false;
         }
 
         public void SetNewEvent<T>() where T : EnemyEvent

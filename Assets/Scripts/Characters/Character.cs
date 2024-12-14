@@ -36,6 +36,10 @@ public abstract class Character : MonoBehaviour
     private Color flashColor = Color.red;
     private float flashDuration = 0.1f;
 
+    [SerializeField] private float visionAngle = 45f; // Half of the total field of view
+    [SerializeField] public float visionRange = 10f; // Distance the character can see
+    [SerializeField] private LayerMask detectionMask; // Layers the character can "see" (e.g., player)
+
     #region Properties
 
     public int Health
@@ -121,6 +125,29 @@ public abstract class Character : MonoBehaviour
         }
 
         Agent.isStopped = true;
+    }
+
+    public bool CanSeeTarget(Transform target, Vector3 offset)
+    {
+        if (!target) return false;
+
+        Vector3 directionToTarget = (target.position + offset - (transform.position + offset)).normalized;
+        float distanceToTarget = Vector3.Distance(transform.position, target.position);
+
+        // Check if the target is within the vision range
+        if (distanceToTarget > visionRange) return false;
+
+        // Check if the target is within the vision angle
+        float angleToPlayer = Vector3.Angle(transform.forward, directionToTarget);
+        if (angleToPlayer > visionAngle) return false;
+
+        // Perform a raycast to ensure there are no obstacles
+        if (Physics.Raycast(transform.position + offset, directionToTarget, out RaycastHit hit, visionRange, detectionMask))
+        {
+            return hit.transform == target; // Check if the hit object is the player
+        }
+
+        return false;
     }
 
     protected abstract void Die();
