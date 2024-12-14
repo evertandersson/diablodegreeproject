@@ -66,12 +66,18 @@ namespace Game
         {
             foreach (var animationName in enemy.attackAnimNames)
             {
-                if (enemy.IsAnimationPlaying(animationName))
+                if (IsAnimationPlaying(animationName))
                 {
                     return true;
                 }
             }
             return false; // No animations are playing
+        }
+
+        protected bool IsAnimationPlaying(string animationName)
+        {
+            // Check if the current animation state is the one we are interested in
+            return enemy.Animator.GetCurrentAnimatorStateInfo(0).IsName(animationName);
         }
 
         protected bool IsCloseToPlayer(float distance)

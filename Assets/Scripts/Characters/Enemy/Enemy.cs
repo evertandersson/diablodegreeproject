@@ -21,6 +21,7 @@ namespace Game
         public string damageAnimName = "damage";
         public string[] attackAnimNames = { "Attack1", "Attack2" };
 
+        public Animator Animator { get; private set; }
         public EventHandler EnemyEventHandler { get; private set; }
         public List<EnemyEvent> Events { get; private set; } 
         public Transform Player => player;

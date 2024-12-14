@@ -11,7 +11,6 @@ namespace Game
         {
             Idle,
             Attack,
-            Rolling,
             Inventory,
             GoToDoor
         }
@@ -41,6 +40,8 @@ namespace Game
         public Inventory inventory;
         private StatsDisplay statsDisplay;
 
+        Animator animator;
+
         private ActionItemSO currentAction;
 
         [SerializeField]
@@ -48,7 +49,6 @@ namespace Game
 
         private bool isAttacking;
         private bool canAttack = true;
-        private bool isRolling;
 
         private Interactable currentObject = null;
 
@@ -82,17 +82,10 @@ namespace Game
                 switch (value)
                 {
                     case State.Idle:
-                        isRolling = false;
                         CanAttack = true;
                         break;
 
                     case State.Attack:
-                        break;
-
-                    case State.Rolling:
-                        isRolling = true;
-                        playerMovement.Roll();
-                        CanAttack = false;
                         break;
 
                     case State.Inventory:
@@ -136,11 +129,6 @@ namespace Game
                     currentPlayerState = State.Attack;
                 }
             }
-        }
-
-        public bool IsRolling
-        {
-            get => isRolling;
         }
 
         public bool CanAttack
@@ -187,7 +175,7 @@ namespace Game
 
             UpdateActionSlots();
 
-            Animator = GetComponentInChildren<Animator>();
+            animator = GetComponentInChildren<Animator>();
 
             //Health setup
             base.Start();
@@ -287,13 +275,13 @@ namespace Game
 
                         if (actionItem is AttackTypeSO attackTypeAction)
                         {
-                            attackTypeAction.PerformAction(Animator);
+                            attackTypeAction.PerformAction(animator);
                             IsAttacking = true;
                             projectileSpawner.projectile = attackTypeAction.projectile;
                         }
                         if (actionItem is PotionSO potionSO)
                         {
-                            potionSO.PerformAction(Animator);
+                            potionSO.PerformAction(animator);
                             slotManager.actionSlots[attackIndex].itemAmount -= 1;
                             slotManager.actionSlots[attackIndex].UpdateItemAmountText();
                         }

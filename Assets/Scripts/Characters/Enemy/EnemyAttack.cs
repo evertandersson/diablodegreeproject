@@ -31,11 +31,11 @@ namespace Game
         private void HandleAnimationCombo()
         {
             // Don't attack while in take damage animation
-            if (enemy.IsAnimationPlaying(enemy.damageAnimName))
+            if (IsAnimationPlaying(enemy.damageAnimName))
                 return;
 
             // If current attack animation is playing
-            if (enemy.IsAnimationPlaying(enemy.attackAnimNames[currentAttackIndex]))
+            if (IsAnimationPlaying(enemy.attackAnimNames[currentAttackIndex]))
             {
                 if (enemy.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.7f)
                 {

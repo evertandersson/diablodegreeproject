@@ -14,7 +14,6 @@ namespace Game
 
         InputAction move;
         InputAction[] attacks;  // Array to store all attack actions
-        InputAction roll;
         InputAction openInventory;
 
         private void Awake()
@@ -29,10 +28,6 @@ namespace Game
             move = playerInputSystem.Player.Move;
             move.Enable();
             move.performed += Move;
-
-            roll = playerInputSystem.Player.Roll;
-            roll.Enable();
-            roll.performed += Roll;
 
             // Array for all attacks
             attacks = new InputAction[] {
@@ -63,7 +58,6 @@ namespace Game
         private void OnDisable()
         {
             move.Disable();
-            roll.Disable();
             for (int i = 0; i < attacks.Length; i++)
             {
                 attacks[i].Disable();
@@ -99,11 +93,6 @@ namespace Game
                     playerMovement.SetDestination(PlayerManager.Instance.mouseInput.mouseInputPosition);
                 }
             }
-        }
-
-        private void Roll(InputAction.CallbackContext context)
-        {
-            PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Rolling;
         }
 
 
