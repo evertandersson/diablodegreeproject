@@ -8315,10 +8315,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: KeyWorld
       objectReference: {fileID: 0}
+    - target: {fileID: 8527437691338737799, guid: 1fb2ee85bdf657d4f9e87a0a480bf597, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 8527437691338737799, guid: 1fb2ee85bdf657d4f9e87a0a480bf597, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8527437691338737799, guid: 1fb2ee85bdf657d4f9e87a0a480bf597, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2018714660}
   m_SourcePrefab: {fileID: 100100000, guid: 1fb2ee85bdf657d4f9e87a0a480bf597, type: 3}
 --- !u!1001 &373785808
 PrefabInstance:
@@ -41621,6 +41632,29 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1676609100239073865, guid: 0d780173c250d334f80c9061373c8e4f, type: 3}
   m_PrefabInstance: {fileID: 2018155300}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2018714653 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8527437691338737799, guid: 1fb2ee85bdf657d4f9e87a0a480bf597, type: 3}
+  m_PrefabInstance: {fileID: 372709625}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2018714660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2018714653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5.8
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1001 &2021400231
 PrefabInstance:
   m_ObjectHideFlags: 0

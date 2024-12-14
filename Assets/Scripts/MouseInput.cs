@@ -35,10 +35,10 @@ namespace Game
                 // Check if the raycast hit a Door
                 if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Interactable"))
                 {
-                    var doorOutline = hit.transform.GetComponent<Outline>();
+                    var outline = hit.transform.GetComponent<Outline>();
 
                     // If it's a new object, enable the outline
-                    if (doorOutline != highlightedObject)
+                    if (outline != highlightedObject)
                     {
                         // Disable the previous outline
                         if (highlightedObject != null)
@@ -47,7 +47,7 @@ namespace Game
                         }
 
                         // Update the highlighted object and enable its outline
-                        highlightedObject = doorOutline;
+                        highlightedObject = outline;
                         highlightedObject.enabled = true;
                     }
                 }
