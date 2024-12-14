@@ -15,8 +15,11 @@ public class PlayerAnimator : MonoBehaviour
     public void HandleAnimations(bool isAttacking)
     {
         float speed = agent.velocity.magnitude / agent.speed;
+        float currentSpeed = animator.GetFloat("RunSpeed");
+        float targetSpeed = Mathf.Clamp01(speed);
+        float smoothSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * 5f);
+        animator.SetFloat("RunSpeed", smoothSpeed);
 
-        animator.SetFloat("RunSpeed", Mathf.Clamp01(speed));
         animator.SetBool("IsAttacking", isAttacking);
     }
 }

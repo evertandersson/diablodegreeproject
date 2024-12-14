@@ -9,7 +9,8 @@ namespace Game
         Rigidbody rb;
 
         private float rollTimer = 0;
-        private Vector3 rollDirection;  // To store the roll direction
+        private Vector3 rollDirection; // To store the roll direction
+        private float initialYPosition; // To store the initial Y position
 
         private void Start()
         {
@@ -28,6 +29,9 @@ namespace Game
 
         public void StartRolling()
         {
+            // Store the initial Y position
+            initialYPosition = transform.position.y;
+
             // Use the mouseInputPosition from the MouseInput script
             Vector3 mouseWorldPosition = playerManager.mouseInput.mouseInputPosition;
 
@@ -36,7 +40,6 @@ namespace Game
             rollDirection.y = 0; // Ensure movement is constrained to the XZ plane
 
             // Disable NavMeshAgent and enable root motion for rolling
-            //playerManager.Agent.velocity = Vector3.zero; // Clear any lingering velocity
             playerManager.Agent.isStopped = true;
             playerManager.Agent.enabled = false;
             playerManager.Animator.applyRootMotion = true;
@@ -67,8 +70,12 @@ namespace Game
                     playerManager.Agent.isStopped = false;
                     playerManager.Animator.applyRootMotion = false;
 
+                    // Update the NavMeshAgent's position to prevent snapping
+                    Vector3 currentPosition = transform.position;
+                    currentPosition.y = initialYPosition; // Maintain the original Y position
+                    playerManager.Agent.Warp(currentPosition);
+
                     // Disable Rigidbody physics after the roll
-                    Rigidbody rb = GetComponent<Rigidbody>();
                     rb.isKinematic = true;
 
                     rollTimer = 0;
@@ -82,13 +89,13 @@ namespace Game
             if (playerManager.CurrentPlayerState != PlayerManager.State.Rolling)
                 return;
 
-            // Apply root motion position
-            transform.position += playerManager.Animator.deltaPosition;
+            // Apply root motion position, but lock the Y position
+            Vector3 newPosition = transform.position + playerManager.Animator.deltaPosition;
+            newPosition.y = initialYPosition; // Maintain the original Y position
+            transform.position = newPosition;
 
             // Force rotation to stay aligned with rollDirection
             playerManager.transform.rotation = Quaternion.LookRotation(rollDirection);
-
         }
-
     }
 }
