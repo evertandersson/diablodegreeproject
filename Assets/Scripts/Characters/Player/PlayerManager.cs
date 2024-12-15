@@ -46,6 +46,8 @@ namespace Game
         [SerializeField]
         private HealthBar healthBar;
 
+        public bool isInteracting;
+
         private bool isAttacking;
         private bool canAttack = true;
         private bool isRolling;
@@ -87,7 +89,6 @@ namespace Game
                         break;
 
                     case State.Attack:
-                        Agent.isStopped = true;
                         break;
 
                     case State.Rolling:
@@ -231,12 +232,22 @@ namespace Game
 
             if (IsAttacking)
             {
+                Agent.isStopped = true;
                 HandleRotation(mouseInput.mouseInputPosition);
             }
 
             if (isRolling)
             {
                 playerMovement.HandleEndRolling();
+            }
+
+            if (isRolling || isAttacking)
+            {
+                isInteracting = true;
+            }
+            else
+            {
+                isInteracting = false;
             }
 
             if (currentObject != null)
@@ -330,6 +341,7 @@ namespace Game
                     {
                         ClearAttack();
                         currentPlayerState = State.Idle;
+                        playerMovement.ProcessBufferedInput();
                     }
                 }
             }

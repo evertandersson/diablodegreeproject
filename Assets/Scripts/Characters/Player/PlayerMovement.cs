@@ -14,7 +14,7 @@ namespace Game
 
         // Buffer variables:
         private Vector3 bufferedDestination;
-        private bool hasBufferedMovement;
+        public bool hasBufferedMovement;
         private int bufferedAttackIndex;
         private bool hasBufferedAttack;
         private bool hasBufferedRoll;
@@ -52,20 +52,23 @@ namespace Game
 
         public void ProcessBufferedInput()
         {
-            if (hasBufferedMovement)
+            if (hasBufferedMovement && !playerManager.IsAttacking)
             {
+                HandleAgentAfterRoll();
                 SetDestination(bufferedDestination);
                 hasBufferedMovement = false;
             }
 
             if (hasBufferedAttack)
             {
+                HandleAgentAfterRoll();
                 PlayerManager.Instance.Attack(bufferedAttackIndex);
                 hasBufferedAttack = false;
             }
 
             if (hasBufferedRoll)
             {
+                HandleAgentAfterRoll();
                 PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Rolling;
                 hasBufferedRoll = false;
             }
@@ -73,7 +76,7 @@ namespace Game
 
         public void SetDestination(Vector3 destinationPosition)
         {
-            if (!playerManager.Agent.enabled) return;
+            if (!playerManager.Agent.enabled || playerManager.IsAttacking) return;
 
             playerManager.Agent.isStopped = false;
             playerManager.Agent.SetDestination(destinationPosition);
@@ -82,6 +85,7 @@ namespace Game
         public void StartRolling()
         {
             playerManager.ClearAttack();
+            rollTimer = 0;
             
             // Store the initial Y position
             initialYPosition = transform.position.y;
@@ -94,8 +98,11 @@ namespace Game
             rollDirection.y = 0; // Ensure movement is constrained to the XZ plane
 
             // Disable NavMeshAgent and enable root motion for rolling
-            playerManager.Agent.isStopped = true;
-            playerManager.Agent.enabled = false;
+            if (playerManager.Agent.enabled)
+            {
+                playerManager.Agent.isStopped = true;
+                playerManager.Agent.enabled = false;
+            }
             playerManager.Animator.applyRootMotion = true;
 
             // Enable Rigidbody physics for collisions
@@ -107,36 +114,43 @@ namespace Game
 
             // Trigger the roll animation
             playerManager.Animator.SetTrigger("Roll");
-
-            // Update state
-            playerManager.CurrentPlayerState = PlayerManager.State.Rolling;
         }
 
         public void HandleEndRolling()
         {
             rollTimer += Time.deltaTime;
-            if (rollTimer > 0.2f)
+            if (rollTimer > 0.4f)
             {
-                if (!playerManager.IsAnimationPlaying("Roll"))
+                if (hasBufferedMovement || hasBufferedAttack || hasBufferedRoll)
                 {
-                    // Re-enable NavMeshAgent and disable root motion after the roll
-                    playerManager.Agent.enabled = true;
-                    playerManager.Agent.isStopped = false;
-                    playerManager.Animator.applyRootMotion = false;
-
-                    // Update the NavMeshAgent's position to prevent snapping
-                    Vector3 currentPosition = transform.position;
-                    currentPosition.y = initialYPosition; // Maintain the original Y position
-                    playerManager.Agent.Warp(currentPosition);
-
-                    // Disable Rigidbody physics after the roll
-                    rb.isKinematic = true;
-
-                    rollTimer = 0;
                     playerManager.CurrentPlayerState = PlayerManager.State.Idle;
                     ProcessBufferedInput();
                 }
+
+                if (!playerManager.IsAnimationPlaying("Roll"))
+                {
+                    HandleAgentAfterRoll();
+                    playerManager.CurrentPlayerState = PlayerManager.State.Idle;
+                }
             }
+        }
+
+        private void HandleAgentAfterRoll()
+        {
+            // Re-enable NavMeshAgent and disable root motion after the roll
+            playerManager.Agent.enabled = true;
+            playerManager.Agent.isStopped = false;
+            playerManager.Animator.applyRootMotion = false;
+
+            // Update the NavMeshAgent's position to prevent snapping
+            Vector3 currentPosition = transform.position;
+            currentPosition.y = initialYPosition; // Maintain the original Y position
+            playerManager.Agent.Warp(currentPosition);
+
+            // Disable Rigidbody physics after the roll
+            rb.isKinematic = true;
+
+            rollTimer = 0;
         }
 
         private void OnAnimatorMove()

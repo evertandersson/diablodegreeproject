@@ -68,7 +68,7 @@ namespace Game
         private void Move(InputAction.CallbackContext context)
         {
             // Handle movement input
-            if (PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Rolling)
+            if (PlayerManager.Instance.isInteracting)
             {
                 // Buffer the movement input during a roll
                 playerMovement.BufferInput(PlayerManager.Instance.mouseInput.mouseInputPosition);
@@ -106,20 +106,20 @@ namespace Game
         private void Roll(InputAction.CallbackContext context)
         {
             // Start rolling only if the player is not already rolling
-            if (PlayerManager.Instance.CurrentPlayerState != PlayerManager.State.Rolling)
+            if (PlayerManager.Instance.isInteracting)
             {
-                PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Rolling;
+                playerMovement.BufferRoll();
             }
             else
             {
-                playerMovement.BufferRoll();
+                PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Rolling;
             }
         }
 
         private void Attack(InputAction.CallbackContext context, int attackIndex)
         {
             // Allow attacking during idle or buffered for after rolling
-            if (PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Rolling)
+            if (PlayerManager.Instance.isInteracting)
             {
                 playerMovement.BufferAttack(attackIndex);
                 return;
