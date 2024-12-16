@@ -275,6 +275,7 @@ namespace Game
             base.TakeDamage(damage);
             if (bloodSplashEffect)
                 bloodSplashEffect.Play();
+            SoundManager.PlaySound(SoundType.HURT);
             healthBar.SetHealth(health);
         }
 

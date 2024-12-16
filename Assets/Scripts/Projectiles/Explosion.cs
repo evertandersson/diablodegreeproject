@@ -13,6 +13,7 @@ public class Explosion : MonoBehaviour, IPooledObject
     public void OnObjectSpawn()
     {
         Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+        SoundManager.PlaySound(SoundType.EXPLOSION);
 
         foreach (Enemy enemy in enemies)
         {

@@ -61,6 +61,7 @@ namespace Game
                         PopupText text = ObjectPooling.Instance.SpawnFromPool("PopupText", textSpawnPosition, Quaternion.identity).GetComponent<PopupText>();
                         text.message = "Unlocked door";
                         text.StartCoroutine("Trigger");
+                        SoundManager.PlaySound(SoundType.DOOR);
                         break;
                     }
                 }

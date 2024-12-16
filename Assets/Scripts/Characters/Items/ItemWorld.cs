@@ -25,6 +25,7 @@ namespace Game
                     PopupText text = ObjectPooling.Instance.SpawnFromPool("PopupText", transform.position + offset, Quaternion.identity).GetComponent<PopupText>();
                     text.message = message;
                     text.StartCoroutine("Trigger");
+                    SoundManager.PlaySound(SoundType.PICKUP);
                     Destroy(gameObject); // Destroy item after adding it to inventory
                 }
             }
