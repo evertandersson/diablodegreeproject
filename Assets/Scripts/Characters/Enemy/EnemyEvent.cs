@@ -28,7 +28,7 @@ namespace Game
         public override void OnUpdate()
         {
             float speed = enemy.Agent.velocity.magnitude / enemy.Agent.speed;
-            enemy.Animator.SetFloat("RunSpeed", speed);
+            enemy.CharacterAnimator.SetFloat("RunSpeed", speed);
         }
 
         public override void OnEnd()
@@ -67,7 +67,7 @@ namespace Game
         public bool IsAnimationPlaying(string animationName)
         {
             // Check if the current animation state is the one we are interested in
-            return enemy.Animator.GetCurrentAnimatorStateInfo(0).IsName(animationName);
+            return enemy.CharacterAnimator.GetCurrentAnimatorStateInfo(0).IsName(animationName);
         }
 
         protected bool IsAnyAttackAnimationPlaying()

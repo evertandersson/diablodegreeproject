@@ -17,7 +17,7 @@ namespace Game
 
             currentAttackIndex = 0;
             enemy.Agent.isStopped = true;
-            enemy.Animator.SetTrigger("Attack");
+            enemy.CharacterAnimator.SetTrigger("Attack");
         }
 
         public override void OnUpdate()
@@ -37,7 +37,7 @@ namespace Game
             // If current attack animation is playing
             if (IsAnimationPlaying(enemy.attackAnimNames[currentAttackIndex]))
             {
-                if (enemy.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.7f)
+                if (enemy.CharacterAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.7f)
                 {
                     // If close to player, do the next attack in the list
                     if (IsCloseToPlayer(distance))
@@ -47,7 +47,7 @@ namespace Game
                         {
                             currentAttackIndex = 0;
                         }
-                        enemy.Animator.SetTrigger("Attack"); // Trigger next animation
+                        enemy.CharacterAnimator.SetTrigger("Attack"); // Trigger next animation
                     }
                     else
                     {

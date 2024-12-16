@@ -103,7 +103,6 @@ namespace Game
                 playerManager.Agent.isStopped = true;
                 playerManager.Agent.enabled = false;
             }
-            playerManager.Animator.applyRootMotion = true;
 
             // Enable Rigidbody physics for collisions
             rb.isKinematic = false;
@@ -113,7 +112,7 @@ namespace Game
             playerManager.transform.rotation = Quaternion.LookRotation(rollDirection);
 
             // Trigger the roll animation
-            playerManager.Animator.SetTrigger("Roll");
+            playerManager.CharacterAnimator.SetTrigger("Roll");
         }
 
         public void HandleEndRolling()
@@ -140,7 +139,6 @@ namespace Game
             // Re-enable NavMeshAgent and disable root motion after the roll
             playerManager.Agent.enabled = true;
             playerManager.Agent.isStopped = false;
-            playerManager.Animator.applyRootMotion = false;
 
             // Update the NavMeshAgent's position to prevent snapping
             Vector3 currentPosition = transform.position;
@@ -159,7 +157,7 @@ namespace Game
                 return;
 
             // Apply root motion position, but lock the Y position
-            Vector3 newPosition = transform.position + playerManager.Animator.deltaPosition;
+            Vector3 newPosition = transform.position + playerManager.CharacterAnimator.deltaPosition;
             newPosition.y = initialYPosition; // Maintain the original Y position
             transform.position = newPosition;
 

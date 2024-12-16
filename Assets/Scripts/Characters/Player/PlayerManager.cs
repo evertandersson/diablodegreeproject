@@ -186,7 +186,7 @@ namespace Game
 
             UpdateActionSlots();
 
-            Animator = GetComponentInChildren<Animator>();
+            CharacterAnimator = GetComponentInChildren<Animator>();
 
             //Health setup
             base.Start();
@@ -241,14 +241,8 @@ namespace Game
                 playerMovement.HandleEndRolling();
             }
 
-            if (isRolling || isAttacking)
-            {
-                isInteracting = true;
-            }
-            else
-            {
-                isInteracting = false;
-            }
+            isInteracting = isRolling || isAttacking;
+
 
             if (currentObject != null)
             {
@@ -301,13 +295,13 @@ namespace Game
 
                         if (actionItem is AttackTypeSO attackTypeAction)
                         {
-                            attackTypeAction.PerformAction(Animator);
+                            attackTypeAction.PerformAction(CharacterAnimator);
                             IsAttacking = true;
                             projectileSpawner.projectile = attackTypeAction.projectile;
                         }
                         if (actionItem is PotionSO potionSO)
                         {
-                            potionSO.PerformAction(Animator);
+                            potionSO.PerformAction(CharacterAnimator);
                             slotManager.actionSlots[attackIndex].itemAmount -= 1;
                             slotManager.actionSlots[attackIndex].UpdateItemAmountText();
                         }

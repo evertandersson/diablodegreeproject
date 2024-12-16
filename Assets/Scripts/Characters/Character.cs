@@ -55,7 +55,7 @@ public abstract class Character : MonoBehaviour
 
     public NavMeshAgent Agent { get; protected set; }
 
-    public Animator Animator { get; protected set; }
+    public Animator CharacterAnimator { get; protected set; }
 
     #endregion
 
@@ -153,8 +153,8 @@ public abstract class Character : MonoBehaviour
 
     public bool IsAnimationPlaying(string animationName)
     {
-        var currentState = Animator.GetCurrentAnimatorStateInfo(0);
-        var nextState = Animator.GetNextAnimatorStateInfo(0);
+        var currentState = CharacterAnimator.GetCurrentAnimatorStateInfo(0);
+        var nextState = CharacterAnimator.GetNextAnimatorStateInfo(0);
 
         return currentState.IsName(animationName) || nextState.IsName(animationName);
     }

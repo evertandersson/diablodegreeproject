@@ -9,7 +9,7 @@ namespace Game
             base.OnBegin(firstTime);
 
             enemy.Agent.isStopped = true;
-            enemy.Animator.SetTrigger("IsHit");
+            enemy.CharacterAnimator.SetTrigger("IsHit");
             Debug.Log("Enemy took damage");
         }
 
@@ -20,7 +20,7 @@ namespace Game
             if (IsAnimationPlaying(enemy.damageAnimName))
             {
                 // When the animation is done, destroy the enemy object
-                if (enemy.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f)
+                if (enemy.CharacterAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f)
                 {
                     isDone = true;
                     Debug.Log("IsDone");

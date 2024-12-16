@@ -45,7 +45,7 @@ namespace Game
         {
             // Cache components on Awake
             base.Awake();
-            Animator = GetComponent<Animator>();
+            CharacterAnimator = GetComponent<Animator>();
             EnemyEventHandler = EventHandler.CreateEventHandler();
             capsuleCollider = GetComponent<CapsuleCollider>();
             EnableRagdoll(false);
@@ -124,8 +124,8 @@ namespace Game
 
         public void EnableRagdoll(bool enable)
         {
-            if (Animator != null)
-                Animator.enabled = !enable;
+            if (CharacterAnimator != null)
+                CharacterAnimator.enabled = !enable;
 
             capsuleCollider.enabled = !enable;
             Agent.enabled = !enable;
