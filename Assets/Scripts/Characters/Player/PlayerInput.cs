@@ -133,13 +133,13 @@ namespace Game
             if (PlayerManager.Instance.CurrentPlayerState != PlayerManager.State.Inventory)
             {
                 // Show inventory
-                PlayerManager.Instance.inventory = Popup.Create<Inventory>();
+                PlayerManager.Instance.Inventory = Popup.Create<Inventory>();
                 PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Inventory;
             }
             else
             {
                 // Hide inventory
-                PlayerManager.Instance.inventory.OnCancel();
+                PlayerManager.Instance.Inventory.OnCancel();
                 PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Idle;
             }
         }

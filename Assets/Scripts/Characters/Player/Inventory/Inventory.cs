@@ -23,8 +23,8 @@ public class Inventory : Popup
         // Add all inventory slots from the inventory panel
         inventory.AddRange(inventoryPanel.GetComponentsInChildren<InventorySlot>());
 
-        PlayerManager.Instance.slotManager.GetActionSlots();
-        PlayerManager.Instance.slotManager.SetUpSlots();
+        PlayerManager.Instance.SlotManager.GetActionSlots();
+        PlayerManager.Instance.SlotManager.SetUpSlots();
 
         InventorySaver.Instance.Load();
     }

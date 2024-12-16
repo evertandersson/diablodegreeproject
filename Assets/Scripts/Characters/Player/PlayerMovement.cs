@@ -82,7 +82,7 @@ namespace Game
             playerManager.Agent.SetDestination(destinationPosition);
         }
 
-        public void StartRolling()
+        public void StartRolling(Vector3 mouseInputPosition)
         {
             playerManager.ClearAttack();
             rollTimer = 0;
@@ -90,11 +90,8 @@ namespace Game
             // Store the initial Y position
             initialYPosition = transform.position.y;
 
-            // Use the mouseInputPosition from the MouseInput script
-            Vector3 mouseWorldPosition = playerManager.mouseInput.mouseInputPosition;
-
             // Calculate the direction from the player to the mouse position
-            rollDirection = (mouseWorldPosition - transform.position).normalized;
+            rollDirection = (mouseInputPosition - transform.position).normalized;
             rollDirection.y = 0; // Ensure movement is constrained to the XZ plane
 
             // Disable NavMeshAgent and enable root motion for rolling
