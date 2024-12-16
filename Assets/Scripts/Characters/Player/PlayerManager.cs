@@ -1,40 +1,63 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Game
 {
     public class PlayerManager : Character
     {
-        public enum State { Idle, Attack, Rolling, Inventory, GoToDoor }
+        public enum State
+        {
+            Idle,
+            Attack,
+            Rolling,
+            Inventory,
+            GoToDoor
+        }
 
         private static PlayerManager _instance;
 
-        // Events
+        //Events
         public event Action<float> OnYValueChanged;
 
-        // Serialized fields
-        [SerializeField] private LevelProgressBar progressBar;
-        [SerializeField] private MouseInput mouseInput;
-        [SerializeField] private HealthBar healthBar;
+        private float lastYPosition;
 
-        // Components and fields
+        public LevelSystem levelSystem { get; private set; }
+        [SerializeField] private LevelProgressBar progressBar;
+
+        //Components and fields
         private PlayerAnimator playerAnimator;
+        public PlayerInput playerInput;
         private PlayerMovement playerMovement;
-        private PlayerInput playerInput;
         private ProjectileSpawner projectileSpawner;
 
-        private float lastYPosition;
-        private float attackTimer;
-        private bool isAttacking;
-        private bool isRolling;
-        private bool canAttack = true;
+        [SerializeField]
+        public MouseInput mouseInput;
 
-        private Interactable currentObject;
+        private State currentPlayerState;
+
+        public SlotManager slotManager;
+        public Inventory inventory;
+        private StatsDisplay statsDisplay;
+
         private ActionItemSO currentAction;
 
-        public LevelSystem LevelSystem { get; private set; }
-        public SlotManager SlotManager { get; private set; }
-        public Inventory Inventory { get; private set; }
+        [SerializeField]
+        private HealthBar healthBar;
+
+        public bool isInteracting;
+
+        private bool isAttacking;
+        private bool canAttack = true;
+        private bool isRolling;
+
+        private Interactable currentObject = null;
+
+        [SerializeField]
+        private float attackTimer;
+
+        #region Properties
 
         public static PlayerManager Instance
         {
@@ -48,7 +71,61 @@ namespace Game
             }
         }
 
-        public State CurrentPlayerState { get; private set; }
+        public State CurrentPlayerState
+        {
+            get => currentPlayerState;
+            set
+            {
+                if (currentPlayerState == value) return; // Avoid redundant updates
+
+                currentPlayerState = value;
+
+                // Execute behavior based on the new state
+                switch (value)
+                {
+                    case State.Idle:
+                        isRolling = false;
+                        CanAttack = true;
+                        break;
+
+                    case State.Attack:
+                        break;
+
+                    case State.Rolling:
+                        playerMovement.StartRolling();
+                        isRolling = true;
+                        CanAttack = false;
+                        break;
+
+                    case State.Inventory:
+                        CanAttack = false;
+                        break;
+
+                    // Handle other states as needed
+                    default:
+                        CanAttack = false;
+                        break;
+                }
+            }
+        }
+
+        public ActionItemSO CurrentAction
+        {
+            get => currentAction;
+            set
+            {
+                if (currentAction == value) return; // No need to reassign if the value hasn't changed
+
+                ActionItemSO previousAction = currentAction;
+                currentAction = value;
+
+                // Reset the attack timer if the action changes
+                if (previousAction != currentAction)
+                {
+                    attackTimer = 0;
+                }
+            }
+        }
 
         public bool IsAttacking
         {
@@ -56,20 +133,26 @@ namespace Game
             private set
             {
                 isAttacking = value;
-                if (value)
+                if (value == true)
                 {
-                    CurrentPlayerState = State.Attack;
+                    currentPlayerState = State.Attack;
                 }
             }
         }
 
+        public bool IsRolling => isRolling;
+
         public bool CanAttack
         {
             get => canAttack;
-            set => canAttack = value;
+            set
+            {
+                canAttack = value;
+            }
         }
 
-        public bool IsRolling => isRolling;
+        #endregion
+
 
         protected override void Awake()
         {
@@ -83,37 +166,56 @@ namespace Game
             _instance = this;
             DontDestroyOnLoad(gameObject);
 
-            InitializeComponents();
-            InitializeLevelSystem();
+            statsDisplay = GetComponentInChildren<StatsDisplay>(true);
+
+            // Level setup
+            levelSystem = new LevelSystem();
+            progressBar.SetLevelSystem(levelSystem);
+
+            SetStats();
+
             base.Awake();
         }
 
         protected override void Start()
         {
-            base.Start();
-            InitializeHealthBar();
-            LevelSystem.OnLevelChanged += UpgradeStats;
-        }
-
-        private void InitializeComponents()
-        {
             playerAnimator = GetComponent<PlayerAnimator>();
             playerInput = GetComponent<PlayerInput>();
             playerMovement = GetComponent<PlayerMovement>();
             projectileSpawner = GetComponentInChildren<ProjectileSpawner>();
-            SlotManager = GetComponent<SlotManager>();
-        }
 
-        private void InitializeLevelSystem()
-        {
-            LevelSystem = new LevelSystem();
-            progressBar.SetLevelSystem(LevelSystem);
-            SetStats();
-        }
+            UpdateActionSlots();
 
-        private void InitializeHealthBar()
-        {
+            CharacterAnimator = GetComponentInChildren<Animator>();
+
+            //Health setup
+            base.Start();
             healthBar.SetMaxHealth(maxHealth);
+
+            levelSystem.OnLevelChanged += UpgradeStats;
+        }
+
+        protected override void SetStats()
+        {
+            base.SetStats();
+            statsDisplay.UpdateStatsText();
+            levelSystem.SetLevel(level);
+        }
+
+        private void UpgradeStats(object sender, EventArgs e)
+        {
+            level = levelSystem.GetCurrentLevel();
+            if (level > 1)
+            {
+                float statsMultiplier = 1.5f;
+                maxHealth = Mathf.RoundToInt(maxHealth * statsMultiplier);
+                health = maxHealth;
+                damage = Mathf.RoundToInt(damage * statsMultiplier);
+                defense = Mathf.RoundToInt(defense * statsMultiplier);
+                healthBar.SetMaxHealth(maxHealth);
+            }
+
+            statsDisplay.UpdateStatsText();
         }
 
         public void Heal(int amount)
@@ -122,35 +224,10 @@ namespace Game
             healthBar.SetHealth(health);
         }
 
-        protected override void SetStats()
-        {
-            base.SetStats();
-            LevelSystem.SetLevel(level);
-        }
-
-        private void UpgradeStats(object sender, EventArgs e)
-        {
-            level = LevelSystem.GetCurrentLevel();
-            if (level > 1)
-            {
-                ApplyLevelUpStats();
-            }
-        }
-
-        private void ApplyLevelUpStats()
-        {
-            float multiplier = 1.5f;
-            maxHealth = Mathf.RoundToInt(maxHealth * multiplier);
-            health = maxHealth;
-            damage = Mathf.RoundToInt(damage * multiplier);
-            defense = Mathf.RoundToInt(defense * multiplier);
-            healthBar.SetMaxHealth(maxHealth);
-        }
-
-        private void Update()
+        public void Update()
         {
             HandleAttackDelay();
-            SlotManager.HandleCooldowns();
+            slotManager.HandleCooldowns();
             playerAnimator.HandleAnimations(IsAttacking);
 
             if (IsAttacking)
@@ -164,27 +241,27 @@ namespace Game
                 playerMovement.HandleEndRolling();
             }
 
-            HandleInteraction();
-            CheckYPositionChange();
-        }
+            isInteracting = isRolling || isAttacking;
 
-        private void HandleInteraction()
-        {
-            if (currentObject != null && Vector3.Distance(transform.position, currentObject.GetCenterPoint()) < 2)
+
+            if (currentObject != null)
             {
-                currentObject.Trigger();
-                currentObject = null;
-                Agent.isStopped = true;
-            }
-        }
+                var interactableTransform = (currentObject as MonoBehaviour)?.transform;
 
-        private void CheckYPositionChange()
-        {
+                if (Vector3.Distance(transform.position, interactableTransform.position) < 2)
+                {
+                    currentObject.Trigger();
+                    currentObject = null;
+                    Agent.isStopped = true;
+                }
+            }
+
+            // Check if the Y position has changed
             float currentYPosition = transform.position.y;
             if (Mathf.Abs(currentYPosition - lastYPosition) > Mathf.Epsilon)
             {
                 lastYPosition = currentYPosition;
-                OnYValueChanged?.Invoke(currentYPosition);
+                OnYValueChanged?.Invoke(currentYPosition); // Trigger the event
             }
         }
 
@@ -196,55 +273,71 @@ namespace Game
         public override void TakeDamage(int damage)
         {
             base.TakeDamage(damage);
+            if (bloodSplashEffect)
+                bloodSplashEffect.Play();
             healthBar.SetHealth(health);
         }
 
+
         public override void Attack(int attackIndex)
         {
-            if (!CanAttack || attackIndex < 0 || attackIndex >= SlotManager.actionSlots.Length)
+            if (CanAttack)
             {
-                Debug.Log("Invalid attack index.");
-                return;
-            }
+                // Check if the index is valid
+                if (attackIndex >= 0 && attackIndex < slotManager.actionSlots.Length)
+                {
+                    // Get the item from the corresponding action slot
+                    ActionItemSO actionItem = slotManager.actionSlots[attackIndex].item as ActionItemSO;
 
-            ActionItemSO actionItem = SlotManager.actionSlots[attackIndex].item as ActionItemSO;
-            if (actionItem != null && actionItem.timerCooldown >= actionItem.cooldown)
-            {
-                PerformAction(actionItem, attackIndex);
+                    if (actionItem != null && actionItem.timerCooldown >= actionItem.cooldown)
+                    {
+                        CurrentAction = actionItem;
+
+                        if (actionItem is AttackTypeSO attackTypeAction)
+                        {
+                            attackTypeAction.PerformAction(CharacterAnimator);
+                            IsAttacking = true;
+                            projectileSpawner.projectile = attackTypeAction.projectile;
+                        }
+                        if (actionItem is PotionSO potionSO)
+                        {
+                            potionSO.PerformAction(CharacterAnimator);
+                            slotManager.actionSlots[attackIndex].itemAmount -= 1;
+                            slotManager.actionSlots[attackIndex].UpdateItemAmountText();
+                        }
+                    }
+                }
+                else
+                {
+                    Debug.Log("Not a valid index");
+                }
             }
         }
 
-        private void PerformAction(ActionItemSO actionItem, int attackIndex)
+
+        public void UpdateActionSlots()
         {
-            currentAction = actionItem;
-
-            if (actionItem is AttackTypeSO attackType)
-            {
-                attackType.PerformAction(CharacterAnimator);
-                IsAttacking = true;
-                projectileSpawner.projectile = attackType.projectile;
-            }
-            else if (actionItem is PotionSO potion)
-            {
-                potion.PerformAction(CharacterAnimator);
-                SlotManager.actionSlots[attackIndex].itemAmount -= 1;
-                SlotManager.actionSlots[attackIndex].UpdateItemAmountText();
-            }
+            slotManager.SetUpSlots(); // Refresh UI slots
         }
+
 
         private void HandleAttackDelay()
         {
-            if (!IsAttacking || currentAction == null) return;
-
-            if (currentAction is AttackTypeSO attackType && attackTimer > attackType.attackDelay)
+            if (IsAttacking && currentAction != null)
             {
-                ClearAttack();
-                CurrentPlayerState = State.Idle;
-                playerMovement.ProcessBufferedInput();
-            }
-            else
-            {
-                attackTimer += Time.deltaTime;
+                if (currentAction is AttackTypeSO attackTypeAction)
+                {
+                    if (attackTimer <= attackTypeAction.attackDelay)
+                    {
+                        attackTimer += Time.deltaTime;
+                    }
+                    else
+                    {
+                        ClearAttack();
+                        currentPlayerState = State.Idle;
+                        playerMovement.ProcessBufferedInput();
+                    }
+                }
             }
         }
 
@@ -260,4 +353,5 @@ namespace Game
             Debug.Log("Player is dead");
         }
     }
+
 }
