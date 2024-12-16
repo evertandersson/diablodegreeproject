@@ -13,6 +13,7 @@ public class FireAttackSO : AttackTypeSO
     public override void PerformAction(Animator animator)
     {
         Debug.Log("Fire Attack");
+        SoundManager.PlaySound(SoundType.FIREATTACK);
         animator.SetTrigger(attackTrigger);
         timerCooldown = 0;
     }

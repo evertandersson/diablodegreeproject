@@ -14,6 +14,7 @@ public class LightningAttackSO : AttackTypeSO
     public override void PerformAction(Animator animator)
     {
         Debug.Log("Lightning Attack");
+        SoundManager.PlaySound(SoundType.LIGHTNINGATTACK);
         animator.SetTrigger(attackTrigger);
         timerCooldown = 0;
     }
