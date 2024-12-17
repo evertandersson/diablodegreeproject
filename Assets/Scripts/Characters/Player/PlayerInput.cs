@@ -16,6 +16,7 @@ namespace Game
         InputAction roll;
         InputAction[] attacks;  // Array to store all attack actions
         InputAction openInventory;
+        InputAction openSkillTree;
 
         private void Awake()
         {
@@ -44,6 +45,10 @@ namespace Game
             openInventory = playerInputSystem.UI.OpenInventory;
             openInventory.Enable();
             openInventory.performed += OpenInventory;
+
+            openSkillTree = playerInputSystem.UI.OpenSkillTree;
+            openSkillTree.Enable();
+            openSkillTree.performed += OpenSkillTree;
 
             // Subscribe to each attack action
             for (int i = 0; i < attacks.Length; i++)
@@ -140,6 +145,22 @@ namespace Game
             {
                 // Hide inventory
                 PlayerManager.Instance.inventory.OnCancel();
+                PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Idle;
+            }
+        }
+
+        private void OpenSkillTree(InputAction.CallbackContext context)
+        {
+            if (PlayerManager.Instance.CurrentPlayerState != PlayerManager.State.Inventory)
+            {
+                // Show inventory
+                PlayerManager.Instance.skillTree = Popup.Create<SkillTree>();
+                PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Inventory;
+            }
+            else
+            {
+                // Hide inventory
+                PlayerManager.Instance.skillTree.OnCancel();
                 PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Idle;
             }
         }

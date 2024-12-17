@@ -40,6 +40,7 @@ namespace Game
         public SlotManager slotManager;
         public Inventory inventory;
         private StatsDisplay statsDisplay;
+        public SkillTree skillTree;
 
         private ActionItemSO currentAction;
 
