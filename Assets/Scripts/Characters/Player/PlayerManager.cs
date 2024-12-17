@@ -35,6 +35,7 @@ namespace Game
         [SerializeField]
         public MouseInput mouseInput;
 
+        [SerializeField]
         private State currentPlayerState;
 
         public SlotManager slotManager;
@@ -93,7 +94,7 @@ namespace Game
                         break;
 
                     case State.Rolling:
-                        playerMovement.StartRolling();
+                        playerMovement.RollStart();
                         isRolling = true;
                         CanAttack = false;
                         break;
@@ -239,7 +240,7 @@ namespace Game
 
             if (isRolling)
             {
-                playerMovement.HandleEndRolling();
+                playerMovement.RollUpdate();
             }
 
             isInteracting = isRolling || isAttacking;

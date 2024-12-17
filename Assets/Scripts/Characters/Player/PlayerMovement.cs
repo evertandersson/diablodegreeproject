@@ -54,24 +54,31 @@ namespace Game
         {
             if (hasBufferedMovement && !playerManager.IsAttacking)
             {
-                HandleAgentAfterRoll();
+                RollEnd();
                 SetDestination(bufferedDestination);
-                hasBufferedMovement = false;
+                ResetBufferedInput();
             }
 
             if (hasBufferedAttack)
             {
-                HandleAgentAfterRoll();
+                RollEnd();
                 PlayerManager.Instance.Attack(bufferedAttackIndex);
-                hasBufferedAttack = false;
+                ResetBufferedInput();
             }
 
             if (hasBufferedRoll)
             {
-                HandleAgentAfterRoll();
                 PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Rolling;
-                hasBufferedRoll = false;
+                RollStart();
+                ResetBufferedInput();
             }
+        }
+
+        private void ResetBufferedInput()
+        {
+            hasBufferedMovement = false;
+            hasBufferedAttack = false;
+            hasBufferedRoll = false;
         }
 
         public void SetDestination(Vector3 destinationPosition)
@@ -82,7 +89,7 @@ namespace Game
             playerManager.Agent.SetDestination(destinationPosition);
         }
 
-        public void StartRolling()
+        public void RollStart()
         {
             playerManager.ClearAttack();
             rollTimer = 0;
@@ -117,26 +124,44 @@ namespace Game
             playerManager.CharacterAnimator.SetTrigger("Roll");
         }
 
-        public void HandleEndRolling()
+        public void RollUpdate()
         {
             rollTimer += Time.deltaTime;
+
             if (rollTimer > 0.4f)
             {
-                if (hasBufferedMovement || hasBufferedAttack || hasBufferedRoll)
+                // If has buffered roll, perform another roll and return
+                if (hasBufferedRoll)
+                {
+                    ProcessBufferedInput();
+                    return;
+                }
+
+                // If has other buffered movement, set state to idle then perform it
+                if (hasBufferedMovement)
                 {
                     playerManager.CurrentPlayerState = PlayerManager.State.Idle;
                     ProcessBufferedInput();
+                    return;
+                }
+
+                // Same for buffered attack, but perform when timer is 0.5 instead
+                if (hasBufferedAttack && rollTimer > 0.5f)
+                {
+                    playerManager.CurrentPlayerState = PlayerManager.State.Idle;
+                    ProcessBufferedInput();
+                    return;
                 }
 
                 if (!playerManager.IsAnimationPlaying("Roll"))
                 {
-                    HandleAgentAfterRoll();
+                    RollEnd();
                     playerManager.CurrentPlayerState = PlayerManager.State.Idle;
                 }
             }
         }
 
-        private void HandleAgentAfterRoll()
+        private void RollEnd()
         {
             // Re-enable NavMeshAgent and disable root motion after the roll
             playerManager.Agent.enabled = true;
@@ -155,19 +180,15 @@ namespace Game
 
         private void OnAnimatorMove()
         {
-            if (playerManager.CurrentPlayerState == PlayerManager.State.Rolling
-                || playerManager.IsAnimationPlaying("Roll"))
-            {
-                // Apply root motion position, but lock the Y position
-                Vector3 newPosition = transform.position + playerManager.CharacterAnimator.deltaPosition;
-                newPosition.y = initialYPosition; // Maintain the original Y position
-                transform.position = newPosition;
+            if (playerManager.CurrentPlayerState != PlayerManager.State.Rolling) return;
+            
+            // Apply root motion position, but lock the Y position
+            Vector3 newPosition = transform.position + playerManager.CharacterAnimator.deltaPosition;
+            newPosition.y = initialYPosition; // Maintain the original Y position
+            transform.position = newPosition;
 
-                // Force rotation to stay aligned with rollDirection
-                playerManager.transform.rotation = Quaternion.LookRotation(rollDirection);
-            }
-
-
+            // Force rotation to stay aligned with rollDirection
+            playerManager.transform.rotation = Quaternion.LookRotation(rollDirection);
         }
     }
 }
