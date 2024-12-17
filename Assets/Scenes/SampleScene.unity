@@ -25662,10 +25662,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2925374488890722608, guid: e36f78db816620d428e793016e941dd2, type: 3}
-      propertyPath: skillTree
-      value: 
-      objectReference: {fileID: 1653662402}
-    - target: {fileID: 2925374488890722608, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: mouseInput
       value: 
       objectReference: {fileID: 1781394463}
@@ -25752,14 +25748,6 @@ PrefabInstance:
     - target: {fileID: 6442339686111073801, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6945633573909133152, guid: e36f78db816620d428e793016e941dd2, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 1065.2504
-      objectReference: {fileID: 0}
-    - target: {fileID: 6945633573909133152, guid: e36f78db816620d428e793016e941dd2, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -601.5004
       objectReference: {fileID: 0}
     - target: {fileID: 7213633746035584642, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_AnchorMax.y
@@ -33884,17 +33872,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 936655011711060175, guid: 5e10be2f5a748844dbd0b2b7e6fafd4a, type: 3}
   m_PrefabInstance: {fileID: 1650654078}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1653662402 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4526031383759848027, guid: e36f78db816620d428e793016e941dd2, type: 3}
-  m_PrefabInstance: {fileID: 1236405804}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bb6a2400f93aa045a99263b00555025, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1656000661
 PrefabInstance:
   m_ObjectHideFlags: 0

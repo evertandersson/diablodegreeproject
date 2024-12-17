@@ -93,6 +93,8 @@ namespace Game
             // Use the mouseInputPosition from the MouseInput script
             Vector3 mouseWorldPosition = playerManager.mouseInput.mouseInputPosition;
 
+            if (mouseWorldPosition == transform.position) mouseWorldPosition = transform.forward;
+
             // Calculate the direction from the player to the mouse position
             rollDirection = (mouseWorldPosition - transform.position).normalized;
             rollDirection.y = 0; // Ensure movement is constrained to the XZ plane
@@ -153,16 +155,19 @@ namespace Game
 
         private void OnAnimatorMove()
         {
-            if (playerManager.CurrentPlayerState != PlayerManager.State.Rolling)
-                return;
+            if (playerManager.CurrentPlayerState == PlayerManager.State.Rolling
+                || playerManager.IsAnimationPlaying("Roll"))
+            {
+                // Apply root motion position, but lock the Y position
+                Vector3 newPosition = transform.position + playerManager.CharacterAnimator.deltaPosition;
+                newPosition.y = initialYPosition; // Maintain the original Y position
+                transform.position = newPosition;
 
-            // Apply root motion position, but lock the Y position
-            Vector3 newPosition = transform.position + playerManager.CharacterAnimator.deltaPosition;
-            newPosition.y = initialYPosition; // Maintain the original Y position
-            transform.position = newPosition;
+                // Force rotation to stay aligned with rollDirection
+                playerManager.transform.rotation = Quaternion.LookRotation(rollDirection);
+            }
 
-            // Force rotation to stay aligned with rollDirection
-            playerManager.transform.rotation = Quaternion.LookRotation(rollDirection);
+
         }
     }
 }
