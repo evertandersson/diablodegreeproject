@@ -11,6 +11,7 @@ namespace Game
         private float rollTimer = 0;
         private Vector3 rollDirection; // To store the roll direction
         private float initialYPosition; // To store the initial Y position
+        private Vector3 offset = new Vector3(0, 1.2f, 0);
 
         // Buffer variables:
         private Vector3 bufferedDestination;
@@ -52,27 +53,68 @@ namespace Game
 
         public void ProcessBufferedInput()
         {
-            if (hasBufferedMovement && !playerManager.IsAttacking)
-            {
-                RollEnd();
-                SetDestination(bufferedDestination);
-                ResetBufferedInput();
-            }
-
-            if (hasBufferedAttack)
-            {
-                RollEnd();
-                PlayerManager.Instance.Attack(bufferedAttackIndex);
-                ResetBufferedInput();
-            }
-
             if (hasBufferedRoll)
             {
                 PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Rolling;
                 RollStart();
                 ResetBufferedInput();
+                return;
+            }
+
+            if (hasBufferedMovement && !playerManager.IsAttacking)
+            {
+                playerManager.CurrentPlayerState = PlayerManager.State.Idle;
+                RollEnd();
+                SetDestination(bufferedDestination);
+                ResetBufferedInput();
+                return;
+            }
+
+            if (hasBufferedAttack)
+            {
+                playerManager.CurrentPlayerState = PlayerManager.State.Idle;
+                RollEnd();
+                PlayerManager.Instance.Attack(bufferedAttackIndex);
+                ResetBufferedInput();
+                return;
             }
         }
+
+        private void FixedUpdate()
+        {
+            if (playerManager.CurrentPlayerState == PlayerManager.State.Rolling)
+            {
+                if (IsCollidingWithWall())
+                {
+                    RollEnd();
+                    playerManager.CurrentPlayerState = PlayerManager.State.Idle;
+                }
+            }
+        }
+
+        private bool IsCollidingWithWall()
+        {
+            float collisionRadius = 0.5f;
+            Vector3 position = transform.position + offset;
+
+            return Physics.CheckSphere(position, collisionRadius, LayerMask.GetMask("Wall"))
+                   || IsLookingTowardsWall();
+        }
+
+        private bool IsLookingTowardsWall()
+        {
+            RaycastHit hit;
+            float checkDistance = 0.5f; // Adjust based on how close the player can be to the wall
+
+            if (Physics.Raycast(transform.position, GetRollDirection(), out hit, checkDistance))
+            {
+                string layerName = LayerMask.LayerToName(hit.transform.gameObject.layer);
+                return layerName == "Wall";
+            }
+
+            return false;
+        }
+
 
         private void ResetBufferedInput()
         {
@@ -97,14 +139,7 @@ namespace Game
             // Store the initial Y position
             initialYPosition = transform.position.y;
 
-            // Use the mouseInputPosition from the MouseInput script
-            Vector3 mouseWorldPosition = playerManager.mouseInput.mouseInputPosition;
-
-            if (mouseWorldPosition == transform.position) mouseWorldPosition = transform.forward;
-
-            // Calculate the direction from the player to the mouse position
-            rollDirection = (mouseWorldPosition - transform.position).normalized;
-            rollDirection.y = 0; // Ensure movement is constrained to the XZ plane
+            rollDirection = GetRollDirection();
 
             // Disable NavMeshAgent and enable root motion for rolling
             if (playerManager.Agent.enabled)
@@ -124,23 +159,28 @@ namespace Game
             playerManager.CharacterAnimator.SetTrigger("Roll");
         }
 
+        private Vector3 GetRollDirection()
+        {
+            // Use the mouseInputPosition from the MouseInput script
+            Vector3 mouseWorldPosition = playerManager.mouseInput.mouseInputPosition;
+
+            if (mouseWorldPosition == transform.position) mouseWorldPosition = transform.forward;
+
+            // Calculate the direction from the player to the mouse position
+            Vector3 direction = (mouseWorldPosition - transform.position).normalized;
+            direction.y = 0; // Ensure movement is constrained to the XZ plane
+
+            return direction;
+        }
+
         public void RollUpdate()
         {
             rollTimer += Time.deltaTime;
 
             if (rollTimer > 0.4f)
             {
-                // If has buffered roll, perform another roll and return
-                if (hasBufferedRoll)
+                if (hasBufferedRoll || hasBufferedMovement)
                 {
-                    ProcessBufferedInput();
-                    return;
-                }
-
-                // If has other buffered movement, set state to idle then perform it
-                if (hasBufferedMovement)
-                {
-                    playerManager.CurrentPlayerState = PlayerManager.State.Idle;
                     ProcessBufferedInput();
                     return;
                 }
@@ -148,7 +188,6 @@ namespace Game
                 // Same for buffered attack, but perform when timer is 0.5 instead
                 if (hasBufferedAttack && rollTimer > 0.5f)
                 {
-                    playerManager.CurrentPlayerState = PlayerManager.State.Idle;
                     ProcessBufferedInput();
                     return;
                 }
@@ -181,7 +220,7 @@ namespace Game
         private void OnAnimatorMove()
         {
             if (playerManager.CurrentPlayerState != PlayerManager.State.Rolling) return;
-            
+
             // Apply root motion position, but lock the Y position
             Vector3 newPosition = transform.position + playerManager.CharacterAnimator.deltaPosition;
             newPosition.y = initialYPosition; // Maintain the original Y position
