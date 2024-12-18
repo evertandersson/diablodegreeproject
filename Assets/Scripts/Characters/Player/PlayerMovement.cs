@@ -98,7 +98,7 @@ namespace Game
             Vector3 position = transform.position + offset;
 
             return Physics.CheckSphere(position, collisionRadius, LayerMask.GetMask("Wall"))
-                   || IsLookingTowardsWall();
+                   && IsLookingTowardsWall();
         }
 
         private bool IsLookingTowardsWall()
