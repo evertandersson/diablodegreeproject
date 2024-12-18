@@ -4884,7 +4884,7 @@ GameObject:
   m_Component:
   - component: {fileID: 170697074}
   - component: {fileID: 170697073}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cutscene Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33086,7 +33086,7 @@ GameObject:
   - component: {fileID: 1495861978}
   - component: {fileID: 1495861980}
   - component: {fileID: 1495861981}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Timeline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
