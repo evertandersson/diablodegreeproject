@@ -97,8 +97,9 @@ namespace Game
             float collisionRadius = 0.5f;
             Vector3 position = transform.position + offset;
 
-            return Physics.CheckSphere(position, collisionRadius, LayerMask.GetMask("Wall"))
-                   && IsLookingTowardsWall();
+            return (Physics.CheckSphere(position, collisionRadius, LayerMask.GetMask("Wall")) ||
+                    Physics.CheckSphere(position, collisionRadius, LayerMask.GetMask("Obstacle")))
+                    && IsLookingTowardsWall();
         }
 
         private bool IsLookingTowardsWall()
@@ -109,7 +110,7 @@ namespace Game
             if (Physics.Raycast(transform.position, GetRollDirection(), out hit, checkDistance))
             {
                 string layerName = LayerMask.LayerToName(hit.transform.gameObject.layer);
-                return layerName == "Wall";
+                return layerName == "Wall" || layerName == "Obstacle";
             }
 
             return false;

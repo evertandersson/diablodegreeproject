@@ -12,8 +12,7 @@ namespace Game
             Idle,
             Attack,
             Rolling,
-            Inventory,
-            GoToDoor
+            Inventory
         }
 
         private static PlayerManager _instance;
