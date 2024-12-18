@@ -105,7 +105,7 @@ namespace Game
         private bool IsLookingTowardsWall()
         {
             RaycastHit hit;
-            float checkDistance = 0.5f; // Adjust based on how close the player can be to the wall
+            float checkDistance = 0.5f;
 
             if (Physics.Raycast(transform.position, GetRollDirection(), out hit, checkDistance))
             {

@@ -40,7 +40,7 @@ namespace Game
         public SlotManager slotManager;
         public Inventory inventory;
         private StatsDisplay statsDisplay;
-        public SkillTree skillTree;
+        public SkillTreeManager skillTree;
 
         private ActionItemSO currentAction;
 
@@ -193,7 +193,7 @@ namespace Game
             base.Start();
             healthBar.SetMaxHealth(maxHealth);
 
-            levelSystem.OnLevelChanged += UpgradeStats;
+            levelSystem.OnLevelChanged += UpgradeLevel;
         }
 
         protected override void SetStats()
@@ -203,18 +203,19 @@ namespace Game
             levelSystem.SetLevel(level);
         }
 
-        private void UpgradeStats(object sender, EventArgs e)
+        private void UpgradeLevel(object sender, System.EventArgs e)
         {
             level = levelSystem.GetCurrentLevel();
-            if (level > 1)
-            {
-                float statsMultiplier = 1.5f;
-                maxHealth = Mathf.RoundToInt(maxHealth * statsMultiplier);
-                health = maxHealth;
-                damage = Mathf.RoundToInt(damage * statsMultiplier);
-                defense = Mathf.RoundToInt(defense * statsMultiplier);
-                healthBar.SetMaxHealth(maxHealth);
-            }
+            statsDisplay.UpdateStatsText();
+        }
+
+        public void ApplySkillPoint(SkillSO skill)
+        {
+            maxHealth += skill.healthIncrease;
+            health = maxHealth;
+            damage += skill.damageIncrease;
+            defense += skill.defenceIncrease;
+            healthBar.SetMaxHealth(maxHealth);
 
             statsDisplay.UpdateStatsText();
         }

@@ -243,9 +243,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5349695518277721907}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bb6a2400f93aa045a99263b00555025, type: 3}
+  m_Script: {fileID: 11500000, guid: 2dee4f98cd918d3469dec4e4ba3c5ee7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allSkills: []
+  unlockedSkills: []
+  skillPoints: 5
 --- !u!222 &8532453981724565008
 CanvasRenderer:
   m_ObjectHideFlags: 0

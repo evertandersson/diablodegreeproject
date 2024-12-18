@@ -154,7 +154,7 @@ namespace Game
             if (PlayerManager.Instance.CurrentPlayerState != PlayerManager.State.Inventory)
             {
                 // Show inventory
-                PlayerManager.Instance.skillTree = Popup.Create<SkillTree>();
+                PlayerManager.Instance.skillTree = Popup.Create<SkillTreeManager>();
                 PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Inventory;
             }
             else
