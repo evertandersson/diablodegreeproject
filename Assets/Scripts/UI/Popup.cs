@@ -25,6 +25,8 @@ namespace Game
 
             isDone = false;
             gameObject.SetActive(true);
+            group.interactable = true;
+            group.blocksRaycasts = true;
         }
 
         public override void OnUpdate()
