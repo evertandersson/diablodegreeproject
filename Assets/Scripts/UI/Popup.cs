@@ -1,4 +1,3 @@
-using Events;
 using UnityEngine;
 
 namespace Game
@@ -48,6 +47,12 @@ namespace Game
         {
             isDone = true;
             group.interactable = false;
+        }
+
+        public override void OnEnd()
+        {
+            base.OnEnd();
+            SlotManager.Instance.SetFirstInLayer();
         }
 
         public override bool IsDone()

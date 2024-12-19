@@ -171,7 +171,6 @@ namespace Game
 
             // Level setup
             levelSystem = new LevelSystem();
-            progressBar.SetLevelSystem(levelSystem);
 
             SetStats();
 
@@ -188,6 +187,8 @@ namespace Game
             UpdateActionSlots();
 
             CharacterAnimator = GetComponentInChildren<Animator>();
+
+            progressBar.SetLevelSystem(levelSystem);
 
             //Health setup
             base.Start();

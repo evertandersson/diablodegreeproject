@@ -1,4 +1,3 @@
-using Events;
 using UnityEngine;
 
 namespace Game
@@ -31,7 +30,7 @@ namespace Game
         #endregion
 
         private void OnEnable()
-        {
+        { 
             // Ensure there is only one instance of GameManager
             if (_instance != null && _instance != this)
             {

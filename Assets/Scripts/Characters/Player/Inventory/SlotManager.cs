@@ -5,11 +5,26 @@ namespace Game
 {
     public class SlotManager : MonoBehaviour
     {
+        public static SlotManager Instance;
+
         public ActionSlot[] actionSlots;
+        [SerializeField] private RectTransform actionPanel;
+
+        private void Awake()
+        {
+            Instance = this;
+
+            SetFirstInLayer();
+        }
 
         public void GetActionSlots()
         {
             actionSlots = GetComponentsInChildren<ActionSlot>();
+        }
+
+        public void SetFirstInLayer()
+        {
+            actionPanel.SetAsLastSibling();
         }
 
         public void SetUpSlots()

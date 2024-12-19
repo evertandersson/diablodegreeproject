@@ -1,6 +1,5 @@
 using Game;
 using System.Linq;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 namespace Game
@@ -9,7 +8,7 @@ namespace Game
     {
         private float standStillTimer = 0;
 
-        public override void OnBegin(bool firstTime)
+        public override void OnBegin(bool firstTime) 
         {
             base.OnBegin(firstTime);
             standStillTimer = 0; // Reset timer when idle begins

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Game
 {
-    public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
     {
         public ItemSO item;  // The item this slot holds
         public int itemAmount;  // The amount of this item
@@ -17,6 +17,7 @@ namespace Game
         private Transform originalParent;  // Slot's original parent
         private RectTransform artworkRectTransform;  // To manipulate artwork's position
         private float originalZPosition;  // To store the original z position
+        private RectTransform rectTransform;
 
         private Canvas artworkCanvas;  // Canvas for the artwork
 
@@ -32,6 +33,8 @@ namespace Game
             artwork.raycastTarget = false;
 
             artworkCanvas = artwork.GetComponentInParent<Canvas>();
+
+            rectTransform = GetComponent<RectTransform>();
         }
 
         private void Start()
@@ -79,7 +82,7 @@ namespace Game
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (item != null)
+            if (IsInteractable())
             {
                 originalParent = artwork.transform.parent;
                 artwork.transform.SetParent(artworkCanvas.transform);
@@ -89,7 +92,7 @@ namespace Game
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (item != null)
+            if (IsInteractable())
             {
                 Vector3 newPosition = eventData.position;
                 newPosition.z = originalZPosition;
@@ -99,7 +102,7 @@ namespace Game
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (item != null)
+            if (IsInteractable())
             {
                 artwork.transform.SetParent(originalParent);
 
@@ -202,6 +205,30 @@ namespace Game
             this.item = null;
             this.itemAmount = 0;
             this.UpdateItemAmountText();
+        }
+
+        //Handle hovering mouse over item
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            if (IsInteractable())
+            {
+                InfoWindow.Instance.ShowInfoWindow(transform.position, 
+                    rectTransform.rect.height, 
+                    rectTransform.rect.height,
+                    item.itemName,
+                    item.itemDescription);
+            }
+        }
+
+        //Handle exiting hover mouse over item
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            InfoWindow.Instance.HideInfoWindow();   
+        }
+
+        private bool IsInteractable()
+        {
+            return item != null && EventHandler.Main.CurrentEvent is Inventory;
         }
     }
 }
