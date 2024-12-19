@@ -27,6 +27,9 @@ namespace Game
             gameObject.SetActive(true);
             group.interactable = true;
             group.blocksRaycasts = true;
+
+            // Move this popup to the top of the hierarchy
+            transform.SetAsLastSibling();
         }
 
         public override void OnUpdate()

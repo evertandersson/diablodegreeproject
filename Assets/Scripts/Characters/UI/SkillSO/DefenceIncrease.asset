@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: Defence Increase
   skillDescription: 
-  skillIcon: {fileID: 2800000, guid: 2e87876b19af3de43947a0cb28d5a578, type: 3}
+  skillIcon: {fileID: 2800000, guid: d96f6aabc43915a45a05d6df44c42f8d, type: 3}
   skillCost: 1
   healthIncrease: 0
   damageIncrease: 0
