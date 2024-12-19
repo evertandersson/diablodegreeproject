@@ -1,6 +1,7 @@
 using Game;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class SkillTreeManager : Popup
@@ -9,6 +10,7 @@ public class SkillTreeManager : Popup
     public List<SkillButton> unlockedSkills;
 
     public int skillPoints = 0;
+    [SerializeField] private TextMeshProUGUI skillPointsText;
 
     private void Start()
     {
@@ -22,11 +24,25 @@ public class SkillTreeManager : Popup
                 UnlockSkill(skillButton);
             }
         }
+
+        UpdateSkillPointsText();
     }
 
     private void AddSkillPoint(object sender, System.EventArgs e)
     {
         skillPoints++;
+        UpdateSkillPointsText();
+    }
+
+    private void RemoveSkillPoint()
+    {
+        skillPoints--;
+        UpdateSkillPointsText();
+    }
+
+    private void UpdateSkillPointsText()
+    {
+        skillPointsText.text = "Skill points: " + skillPoints;
     }
 
     public bool CanUnlock(SkillButton skill)
@@ -52,7 +68,7 @@ public class SkillTreeManager : Popup
         if (CanUnlock(skill) && skillPoints > 0)
         {
             skill.isUnlocked = true;
-            skillPoints--;
+            RemoveSkillPoint();
             unlockedSkills.Add(skill); // Add to unlockedSkills, not allSkills
             foreach (SkillButton skillButton in allSkills)
             {

@@ -12332,6 +12332,10 @@ PrefabInstance:
       propertyPath: standStill
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8073677023320427492, guid: fdc6d01e773f558459a5049125bc51a9, type: 3}
+      propertyPath: experienceOnDeath
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 8291553588303632322, guid: fdc6d01e773f558459a5049125bc51a9, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -15604,6 +15608,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 97971082227609321, guid: 44fb04c21ec7779439c37e357960eb80, type: 3}
+      propertyPath: enemiesToSpawn.Array.data[0].count
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 97971082227609321, guid: 44fb04c21ec7779439c37e357960eb80, type: 3}
+      propertyPath: enemiesToSpawn.Array.data[1].count
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2220985384071130770, guid: 44fb04c21ec7779439c37e357960eb80, type: 3}
       propertyPath: m_Name
       value: EnemySpawner
@@ -27565,8 +27577,16 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4406179912984069138, guid: e36f78db816620d428e793016e941dd2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4526031383759848027, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: skillPoints
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4577714208459007027, guid: e36f78db816620d428e793016e941dd2, type: 3}
+      propertyPath: m_Alpha
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5251107426523682287, guid: e36f78db816620d428e793016e941dd2, type: 3}
@@ -27684,6 +27704,10 @@ PrefabInstance:
     - target: {fileID: 7940719953895527930, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 7940719953895527930, guid: e36f78db816620d428e793016e941dd2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8641268994968025551, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_AnchorMax.y

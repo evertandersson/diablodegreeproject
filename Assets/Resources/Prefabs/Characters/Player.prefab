@@ -2900,6 +2900,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8403907645435266068, guid: 49200478650886d4dba9fb5aa0acfa37, type: 3}
+      propertyPath: skillPointsText
+      value: 
+      objectReference: {fileID: 7068955261144503418}
     - target: {fileID: 8728662155120187798, guid: 49200478650886d4dba9fb5aa0acfa37, type: 3}
       propertyPath: m_Name
       value: HealthSkillButton
