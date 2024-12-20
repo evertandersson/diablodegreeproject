@@ -339,7 +339,7 @@ namespace Game
                     {
                         ClearAttack();
                         currentPlayerState = State.Idle;
-                        playerMovement.ProcessBufferedInput();
+                        playerMovement.ProcessBufferedInput(true);
                     }
                 }
             }
