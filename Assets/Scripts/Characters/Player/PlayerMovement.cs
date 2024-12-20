@@ -51,7 +51,7 @@ namespace Game
             hasBufferedRoll = true;
         }
 
-        public void ProcessBufferedInput()
+        public void ProcessBufferedInput(bool previousActionIsAttack = false)
         {
             if (hasBufferedRoll)
             {
@@ -64,7 +64,7 @@ namespace Game
             if (hasBufferedMovement && !playerManager.IsAttacking)
             {
                 playerManager.CurrentPlayerState = PlayerManager.State.Idle;
-                RollEnd();
+                if (!previousActionIsAttack) RollEnd();
                 SetDestination(bufferedDestination);
                 ResetBufferedInput();
                 return;
@@ -73,7 +73,7 @@ namespace Game
             if (hasBufferedAttack)
             {
                 playerManager.CurrentPlayerState = PlayerManager.State.Idle;
-                RollEnd();
+                if (!previousActionIsAttack) RollEnd();
                 PlayerManager.Instance.Attack(bufferedAttackIndex);
                 ResetBufferedInput();
                 return;

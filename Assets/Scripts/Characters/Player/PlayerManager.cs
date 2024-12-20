@@ -85,6 +85,7 @@ namespace Game
                 switch (value)
                 {
                     case State.Idle:
+                        Agent.enabled = true;
                         isRolling = false;
                         CanAttack = true;
                         break;
@@ -235,7 +236,7 @@ namespace Game
 
             if (IsAttacking)
             {
-                Agent.isStopped = true;
+                Agent.enabled = false;
                 HandleRotation(mouseInput.mouseInputPosition);
             }
 
@@ -285,37 +286,39 @@ namespace Game
 
         public override void Attack(int attackIndex)
         {
-            if (CanAttack)
+            if (!CanAttack)
+                return;
+
+            // Check if the index is valid
+            if (attackIndex >= 0 && attackIndex < slotManager.actionSlots.Length)
             {
-                // Check if the index is valid
-                if (attackIndex >= 0 && attackIndex < slotManager.actionSlots.Length)
+                // Get the item from the corresponding action slot
+                ActionItemSO actionItem = slotManager.actionSlots[attackIndex].item as ActionItemSO;
+
+                if (actionItem != null && actionItem.timerCooldown >= actionItem.cooldown)
                 {
-                    // Get the item from the corresponding action slot
-                    ActionItemSO actionItem = slotManager.actionSlots[attackIndex].item as ActionItemSO;
+                    CurrentAction = actionItem;
 
-                    if (actionItem != null && actionItem.timerCooldown >= actionItem.cooldown)
+                    if (actionItem is AttackTypeSO attackTypeAction)
                     {
-                        CurrentAction = actionItem;
-
-                        if (actionItem is AttackTypeSO attackTypeAction)
-                        {
-                            attackTypeAction.PerformAction(CharacterAnimator);
-                            IsAttacking = true;
-                            projectileSpawner.projectile = attackTypeAction.projectile;
-                        }
-                        if (actionItem is PotionSO potionSO)
-                        {
-                            potionSO.PerformAction(CharacterAnimator);
-                            slotManager.actionSlots[attackIndex].itemAmount -= 1;
-                            slotManager.actionSlots[attackIndex].UpdateItemAmountText();
-                        }
+                        attackTimer = 0;
+                        attackTypeAction.PerformAction(CharacterAnimator);
+                        IsAttacking = true;
+                        projectileSpawner.projectile = attackTypeAction.projectile;
+                    }
+                    if (actionItem is PotionSO potionSO)
+                    {
+                        potionSO.PerformAction(CharacterAnimator);
+                        slotManager.actionSlots[attackIndex].itemAmount -= 1;
+                        slotManager.actionSlots[attackIndex].UpdateItemAmountText();
                     }
                 }
-                else
-                {
-                    Debug.Log("Not a valid index");
-                }
             }
+            else
+            {
+                Debug.Log("Not a valid index");
+            }
+            
         }
 
 
@@ -339,7 +342,7 @@ namespace Game
                     {
                         ClearAttack();
                         currentPlayerState = State.Idle;
-                        playerMovement.ProcessBufferedInput();
+                        playerMovement.ProcessBufferedInput(true);
                     }
                 }
             }
