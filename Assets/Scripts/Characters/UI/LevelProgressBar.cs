@@ -13,6 +13,8 @@ public class LevelProgressBar : Bar
     {
         experienceText = transform.Find("ExperienceText").GetComponent<TextMeshProUGUI>();
         levelText = transform.Find("LevelText").GetComponent<TextMeshProUGUI>();
+        slider = GetComponent<Slider>();
+        backgroundSlider = transform.Find("Background Fill Area").GetComponent<Slider>();
     }
 
     public void SetExperienceToNextLevel(int amount, int level)
