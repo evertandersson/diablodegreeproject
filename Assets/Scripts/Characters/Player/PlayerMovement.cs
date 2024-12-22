@@ -34,6 +34,11 @@ namespace Game
             Physics.IgnoreLayerCollision(playerLayer, enemyLayer, true);
         }
 
+        public bool ReadyForAnotherInput()
+        {
+            return rollTimer > 0.2f && PlayerManager.Instance.isInteracting;
+        }
+
         public void BufferInput(Vector3 destination)
         {
             bufferedDestination = destination;

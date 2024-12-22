@@ -110,6 +110,8 @@ namespace Game
             }
         }
 
+        public Interactable CurrentObject { get => currentObject; set => currentObject = value; }
+
         public ActionItemSO CurrentAction
         {
             get => currentAction;

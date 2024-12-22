@@ -73,7 +73,7 @@ namespace Game
         private void Move(InputAction.CallbackContext context)
         {
             // Handle movement input
-            if (PlayerManager.Instance.isInteracting)
+            if (playerMovement.ReadyForAnotherInput())
             {
                 // Buffer the movement input during a roll
                 playerMovement.BufferInput(PlayerManager.Instance.mouseInput.mouseInputPosition);
@@ -111,7 +111,7 @@ namespace Game
         private void Roll(InputAction.CallbackContext context)
         {
             // Start rolling only if the player is not already rolling
-            if (PlayerManager.Instance.isInteracting)
+            if (playerMovement.ReadyForAnotherInput())
             {
                 playerMovement.BufferRoll();
             }
@@ -124,7 +124,7 @@ namespace Game
         private void Attack(InputAction.CallbackContext context, int attackIndex)
         {
             // Allow attacking during idle or buffered for after rolling
-            if (PlayerManager.Instance.isInteracting)
+            if (playerMovement.ReadyForAnotherInput())
             {
                 playerMovement.BufferAttack(attackIndex);
                 return;
@@ -154,8 +154,12 @@ namespace Game
             else
             {
                 // Close the popup
-                popupInstance.OnCancel();
-                popupInstance = null;
+                if (popupInstance != null)
+                {
+                    popupInstance.OnCancel();
+                }
+                // Do NOT immediately set popupInstance to null
+                // Let Popup.OnEnd() handle cleanup
             }
         }
     }
