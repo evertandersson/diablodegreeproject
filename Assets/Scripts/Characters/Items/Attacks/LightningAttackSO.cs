@@ -7,7 +7,8 @@ public class LightningAttackSO : AttackTypeSO
     LightningAttackSO()
     {
         cooldown = 2.0f;
-        attackDelay = 1.3f;
+        nextAttackDelay = 1.3f;
+        bufferedInputDelay = 0.7f;
         timerCooldown = cooldown;
     }
 

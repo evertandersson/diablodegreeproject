@@ -80,10 +80,23 @@ namespace Game
                 return 0;
         }
 
+        private float GetWaitForNextBufferedInputTimer()
+        {
+            if (PlayerManager.Instance.IsAttacking)
+            {
+                AttackTypeSO attack = PlayerManager.Instance.CurrentAction as AttackTypeSO;
+                return attack.bufferedInputDelay;
+            }
+            else if (PlayerManager.Instance.IsRolling)
+                return 0.2f;
+            else
+                return 0;
+        }
+
         private void Move(InputAction.CallbackContext context)
         {
             // Handle movement input
-            if (playerMovement.ReadyForAnotherInput(GetCurrentTimer(), 0.2f))
+            if (playerMovement.ReadyForAnotherInput(GetCurrentTimer(), GetWaitForNextBufferedInputTimer()))
             {
                 // Buffer the movement input during a roll
                 playerMovement.BufferInput(PlayerManager.Instance.mouseInput.mouseInputPosition);
@@ -121,7 +134,7 @@ namespace Game
         private void Roll(InputAction.CallbackContext context)
         {
             // Start rolling only if the player is not already rolling
-            if (playerMovement.ReadyForAnotherInput(GetCurrentTimer(), 0.2f))
+            if (playerMovement.ReadyForAnotherInput(GetCurrentTimer(), GetWaitForNextBufferedInputTimer()))
             {
                 playerMovement.BufferRoll();
             }
@@ -134,7 +147,7 @@ namespace Game
         private void Attack(InputAction.CallbackContext context, int attackIndex)
         {
             // Allow attacking during idle or buffered for after rolling
-            if (playerMovement.ReadyForAnotherInput(GetCurrentTimer(), 0.2f))
+            if (playerMovement.ReadyForAnotherInput(GetCurrentTimer(), GetWaitForNextBufferedInputTimer()))
             {
                 playerMovement.BufferAttack(attackIndex);
                 return;

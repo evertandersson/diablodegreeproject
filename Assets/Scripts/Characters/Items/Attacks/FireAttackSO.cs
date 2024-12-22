@@ -6,7 +6,8 @@ public class FireAttackSO : AttackTypeSO
     FireAttackSO()
     {
         cooldown = 2.0f;
-        attackDelay = 1.0f;
+        nextAttackDelay = 1.0f;
+        bufferedInputDelay = 0.5f;
         timerCooldown = cooldown;
     }
 

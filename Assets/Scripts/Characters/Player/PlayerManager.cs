@@ -332,7 +332,7 @@ namespace Game
             {
                 if (currentAction is AttackTypeSO attackTypeAction)
                 {
-                    if (attackTimer <= attackTypeAction.attackDelay)
+                    if (attackTimer <= attackTypeAction.nextAttackDelay)
                     {
                         attackTimer += Time.deltaTime;
                     }
