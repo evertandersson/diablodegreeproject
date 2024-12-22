@@ -135,7 +135,7 @@ namespace Game
 
         private void OpenInventory(InputAction.CallbackContext context)
         {
-            if (PlayerManager.Instance.CurrentPlayerState != PlayerManager.State.Inventory)
+            if (EventHandler.Main.CurrentEvent is not Inventory)
             {
                 // Show inventory
                 PlayerManager.Instance.inventory = Popup.Create<Inventory>();
@@ -151,7 +151,7 @@ namespace Game
 
         private void OpenSkillTree(InputAction.CallbackContext context)
         {
-            if (PlayerManager.Instance.CurrentPlayerState != PlayerManager.State.Inventory)
+            if (EventHandler.Main.CurrentEvent is not SkillTreeManager)
             {
                 // Show inventory
                 PlayerManager.Instance.skillTree = Popup.Create<SkillTreeManager>();

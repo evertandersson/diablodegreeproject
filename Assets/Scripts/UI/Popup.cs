@@ -56,7 +56,7 @@ namespace Game
             group.blocksRaycasts = false;
             group.alpha = 0.0f; // Fully fade out when done
 
-            SlotManager.Instance.SetFirstInLayer();
+            SlotManager.Instance.SetFirstInLayer();            
         }   
 
         public override bool IsDone()
