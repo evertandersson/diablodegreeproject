@@ -8,7 +8,7 @@ namespace Game
         PlayerManager playerManager;
         Rigidbody rb;
 
-        private float rollTimer = 0;
+        public float rollTimer = 0;
         private Vector3 rollDirection; // To store the roll direction
         private float initialYPosition; // To store the initial Y position
         private Vector3 offset = new Vector3(0, 1.2f, 0);
@@ -34,9 +34,9 @@ namespace Game
             Physics.IgnoreLayerCollision(playerLayer, enemyLayer, true);
         }
 
-        public bool ReadyForAnotherInput()
+        public bool ReadyForAnotherInput(float timer, float targetTime)
         {
-            return rollTimer > 0.2f && PlayerManager.Instance.isInteracting;
+            return timer > targetTime && PlayerManager.Instance.isInteracting;
         }
 
         public void BufferInput(Vector3 destination)

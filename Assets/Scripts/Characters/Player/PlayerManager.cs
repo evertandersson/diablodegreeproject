@@ -55,8 +55,7 @@ namespace Game
 
         private Interactable currentObject = null;
 
-        [SerializeField]
-        private float attackTimer;
+        public float attackTimer;
 
         #region Properties
 

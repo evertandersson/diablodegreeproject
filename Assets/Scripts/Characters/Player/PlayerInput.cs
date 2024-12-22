@@ -70,17 +70,27 @@ namespace Game
             }
         }
 
+        private float GetCurrentTimer()
+        {
+            if (PlayerManager.Instance.IsAttacking)
+                return PlayerManager.Instance.attackTimer;
+            else if (PlayerManager.Instance.IsRolling)
+                return playerMovement.rollTimer;
+            else
+                return 0;
+        }
+
         private void Move(InputAction.CallbackContext context)
         {
             // Handle movement input
-            if (playerMovement.ReadyForAnotherInput())
+            if (playerMovement.ReadyForAnotherInput(GetCurrentTimer(), 0.2f))
             {
                 // Buffer the movement input during a roll
                 playerMovement.BufferInput(PlayerManager.Instance.mouseInput.mouseInputPosition);
                 return;
             }
 
-            if (PlayerManager.Instance.CurrentPlayerState != PlayerManager.State.Inventory)
+            if (PlayerManager.Instance.CurrentPlayerState != PlayerManager.State.Inventory && !PlayerManager.Instance.isInteracting)
             {
                 if (PlayerManager.Instance.mouseInput.hit.transform != null)
                 {
@@ -111,11 +121,11 @@ namespace Game
         private void Roll(InputAction.CallbackContext context)
         {
             // Start rolling only if the player is not already rolling
-            if (playerMovement.ReadyForAnotherInput())
+            if (playerMovement.ReadyForAnotherInput(GetCurrentTimer(), 0.2f))
             {
                 playerMovement.BufferRoll();
             }
-            else
+            else if (!PlayerManager.Instance.isInteracting)
             {
                 PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Rolling;
             }
@@ -124,13 +134,15 @@ namespace Game
         private void Attack(InputAction.CallbackContext context, int attackIndex)
         {
             // Allow attacking during idle or buffered for after rolling
-            if (playerMovement.ReadyForAnotherInput())
+            if (playerMovement.ReadyForAnotherInput(GetCurrentTimer(), 0.2f))
             {
                 playerMovement.BufferAttack(attackIndex);
                 return;
             }
-
-            PlayerManager.Instance.Attack(attackIndex);
+            else if (!PlayerManager.Instance.isInteracting)
+            {
+                PlayerManager.Instance.Attack(attackIndex);
+            }
         }
 
         private void OpenInventory(InputAction.CallbackContext context)
