@@ -64,7 +64,7 @@ namespace Game
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.K))
+            if (Input.GetKeyDown(KeyCode.X))
                 SaveReset();
 
             if (Input.GetKeyDown(KeyCode.S))

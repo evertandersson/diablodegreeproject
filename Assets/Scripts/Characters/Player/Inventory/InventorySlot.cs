@@ -87,6 +87,7 @@ namespace Game
                 originalParent = artwork.transform.parent;
                 artwork.transform.SetParent(artworkCanvas.transform);
                 canvasGroup.blocksRaycasts = false;
+                artwork.raycastTarget = false; // Ensure it doesn't block raycasts
             }
         }
 

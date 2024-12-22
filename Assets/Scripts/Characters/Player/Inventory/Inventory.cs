@@ -12,7 +12,7 @@ public class Inventory : Popup
 
     private void Start()
     {
-        SetUpInventory();   
+        SetUpInventory();
     }
 
 
