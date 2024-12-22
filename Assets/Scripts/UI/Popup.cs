@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game
@@ -9,6 +10,8 @@ namespace Game
         private CanvasGroup group = null;
 
         private float fadeSpeed = 5.0f;
+
+        public static Stack<Popup> activePopups = new Stack<Popup>();
 
         private void OnEnable()
         {
@@ -29,6 +32,11 @@ namespace Game
 
             // Move this popup to the top of the hierarchy
             transform.SetAsLastSibling();
+
+            if (!activePopups.Contains(this))
+            {
+                activePopups.Push(this); // Push the popup onto the stack
+            }
         }
 
         public override void OnUpdate()
@@ -56,7 +64,15 @@ namespace Game
             group.blocksRaycasts = false;
             group.alpha = 0.0f; // Fully fade out when done
 
-            SlotManager.Instance.SetFirstInLayer();            
+            if (activePopups.Count > 0 && activePopups.Peek() == this)
+            {
+                activePopups.Pop(); // Remove the popup from the stack if it's the top one
+            }
+
+            // Check remaining active popups
+            PlayerManager.Instance.CurrentPlayerState = activePopups.Count > 0 ? PlayerManager.State.Inventory : PlayerManager.State.Idle;
+
+            if (PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Idle) SlotManager.Instance.SetFirstInLayer();            
         }   
 
         public override bool IsDone()
@@ -64,7 +80,7 @@ namespace Game
             return isDone && group.alpha < 0.001f;
         }
 
-        public static T Create<T>() where T : MonoBehaviour, EventHandler.IEvent
+        public static T Create<T>() where T : Popup, EventHandler.IEvent
         {
             // Look for an existing object of type T in the scene
             T existingObject = FindFirstObjectByType<T>();

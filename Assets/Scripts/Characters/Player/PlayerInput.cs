@@ -135,33 +135,27 @@ namespace Game
 
         private void OpenInventory(InputAction.CallbackContext context)
         {
-            if (EventHandler.Main.CurrentEvent is not Inventory)
-            {
-                // Show inventory
-                PlayerManager.Instance.inventory = Popup.Create<Inventory>();
-                PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Inventory;
-            }
-            else
-            {
-                // Hide inventory
-                PlayerManager.Instance.inventory.OnCancel();
-                PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Idle;
-            }
+            TogglePopup(ref PlayerManager.Instance.inventory, PlayerManager.State.Inventory);
         }
 
         private void OpenSkillTree(InputAction.CallbackContext context)
         {
-            if (EventHandler.Main.CurrentEvent is not SkillTreeManager)
+            TogglePopup(ref PlayerManager.Instance.skillTree, PlayerManager.State.Inventory);
+        }
+
+        private void TogglePopup<T>(ref T popupInstance, PlayerManager.State activeState) where T : Popup
+        {
+            if (EventHandler.Main.CurrentEvent is not T)
             {
-                // Show inventory
-                PlayerManager.Instance.skillTree = Popup.Create<SkillTreeManager>();
-                PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Inventory;
+                // Open the popup
+                popupInstance = Popup.Create<T>();
+                PlayerManager.Instance.CurrentPlayerState = activeState;
             }
             else
             {
-                // Hide inventory
-                PlayerManager.Instance.skillTree.OnCancel();
-                PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Idle;
+                // Close the popup
+                popupInstance.OnCancel();
+                popupInstance = null;
             }
         }
     }
