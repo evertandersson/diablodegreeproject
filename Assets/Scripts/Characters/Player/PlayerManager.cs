@@ -167,7 +167,7 @@ namespace Game
             }
 
             _instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
 
             statsDisplay = GetComponentInChildren<StatsDisplay>(true);
 
@@ -359,6 +359,7 @@ namespace Game
         {
             EnableRagdoll(true);
             currentPlayerState = State.Dead;
+            Popup.Create<DeathScreen>();
         }
     }
 

@@ -43,7 +43,7 @@ namespace Game
         {
             base.OnUpdate();
 
-            group.alpha = Mathf.MoveTowards(group.alpha, isDone ? 0.0f : 1.0f, fadeSpeed * Time.deltaTime);
+            if (group) group.alpha = Mathf.MoveTowards(group.alpha, isDone ? 0.0f : 1.0f, fadeSpeed * Time.deltaTime);
         }
 
         public virtual void OnOkay()

@@ -49,7 +49,7 @@ namespace Game
 
         protected void SetNewDestination(Vector3 pos)
         {
-            for (int i = 0; i < 10; i++) // Try up to 10 random positions
+            for (int i = 0; i < 3; i++) // Try up to 3 random positions
             {
                 if (IsValidDestination(pos))
                 {

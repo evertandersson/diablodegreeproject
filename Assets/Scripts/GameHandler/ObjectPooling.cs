@@ -2,6 +2,7 @@ using Game;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ObjectPooling : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class ObjectPooling : MonoBehaviour
     public List<Pool> pools;
     public Dictionary<string, Queue<GameObject>> poolDictionary;
 
+    private bool isInitialized = false; // Prevents OnSceneLoaded from interfering with Start
+
     private void Awake()
     {
         // Singleton setup
@@ -33,10 +36,25 @@ public class ObjectPooling : MonoBehaviour
 
     private void Start()
     {
+        if (!isInitialized)
+        {
+            InitializePools();
+            isInitialized = true;
+        }
+    }
+
+    private void InitializePools()
+    {
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
         foreach (Pool pool in pools)
         {
+            if (pool.prefab == null)
+            {
+                Debug.LogError($"Pool '{pool.tag}' has a null prefab!");
+                continue;
+            }
+
             Queue<GameObject> objectPool = new Queue<GameObject>();
 
             for (int i = 0; i < pool.size; i++)
@@ -45,7 +63,6 @@ public class ObjectPooling : MonoBehaviour
                 DespawnObject(obj);
                 objectPool.Enqueue(obj);
 
-                // If object is enemy, then initialize
                 Enemy enemy = obj.GetComponent<Enemy>();
                 if (enemy != null) enemy.Initialize();
             }
@@ -58,11 +75,17 @@ public class ObjectPooling : MonoBehaviour
     {
         if (!poolDictionary.ContainsKey(tag))
         {
-            Debug.LogWarning("Pool with tag " + tag + " doesn't exist.");
+            Debug.LogWarning($"Pool with tag {tag} doesn't exist.");
             return null;
         }
 
         GameObject objectToSpawn = poolDictionary[tag].Dequeue();
+
+        if (objectToSpawn == null)
+        {
+            Debug.LogError($"Spawned object from pool {tag} is null!");
+            return null;
+        }
 
         objectToSpawn.SetActive(true);
         objectToSpawn.transform.position = position;
@@ -84,5 +107,34 @@ public class ObjectPooling : MonoBehaviour
     {
         objectToDespawn.transform.position = new Vector3(1000, 1000, 1000);
         objectToDespawn.SetActive(false);
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (!isInitialized)
+        {
+            return; // Avoid running during the initial Play mode load
+        }
+
+        foreach (var pool in poolDictionary)
+        {
+            foreach (var obj in pool.Value)
+            {
+                if (obj != null) Destroy(obj);
+            }
+        }
+
+        poolDictionary.Clear();
+        InitializePools();
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

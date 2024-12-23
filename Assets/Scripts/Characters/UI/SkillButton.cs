@@ -30,7 +30,8 @@ public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void UpdateButtonState(SkillButton skillButton)
     {
-        button.interactable = skillTreeManager.CanUnlock(skillButton);
+        if (EventHandler.Main.CurrentEvent is SkillTreeManager)
+            button.interactable = skillTreeManager.CanUnlock(skillButton);
     }
 
     public void UnlockSkill()
