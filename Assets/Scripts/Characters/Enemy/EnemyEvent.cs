@@ -15,6 +15,10 @@ namespace Game
 
         Vector3 offset = new Vector3(0, 1.2f, 0);
 
+        float animationCheckDelay = 0.2f; // Delay for checking animations
+        float animationTimer = 0;
+        protected bool isAttackAnimationPlaying = false; // Cached result for animation check
+
         private void Start()
         {
             enemy = GetComponent<Enemy>();
@@ -22,6 +26,7 @@ namespace Game
 
         public override void OnBegin(bool firstTime)
         {
+            animationTimer = 0f; // Reset animation timer
             isDone = false;
         }
 
@@ -68,6 +73,16 @@ namespace Game
             NavMeshPath path = new NavMeshPath();
             enemy.Agent.CalculatePath(position, path);
             return path.status == NavMeshPathStatus.PathComplete;
+        }
+
+        protected void CheckAnimationInterval()
+        {
+            animationTimer += Time.deltaTime;
+            if (animationTimer >= animationCheckDelay)
+            {
+                isAttackAnimationPlaying = IsAnyAttackAnimationPlaying();
+                animationTimer = 0;
+            }
         }
 
         public bool IsAnimationPlaying(int animationHash)

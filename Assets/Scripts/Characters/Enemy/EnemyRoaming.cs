@@ -9,17 +9,11 @@ namespace Game
         private float roamingTimeout = 5f; // Max time to attempt roaming
         private float elapsedRoamingTime = 0f; // Timer for roaming timeout
 
-        private float animationCheckDelay = 0.2f; // Delay for animation checks
-        private float animationTimer = 0f; // Timer for animation checks
-        private bool isAttackAnimationPlaying = false; // Cached animation state
-
-
         public override void OnBegin(bool firstTime)
         {
             base.OnBegin(firstTime);
             enemy.Agent.isStopped = false;
             elapsedRoamingTime = 0f; // Reset timeout
-            animationTimer = 0f; // Reset animation timer
             isAttackAnimationPlaying = false; // Reset animation state
 
             SetNewDestination(GetRandomPosition()); // Set the first destination
@@ -30,12 +24,7 @@ namespace Game
             base.OnUpdate();
 
             // Update animation timer
-            animationTimer += Time.deltaTime;
-            if (animationTimer >= animationCheckDelay)
-            {
-                isAttackAnimationPlaying = IsAnyAttackAnimationPlaying();
-                animationTimer = 0f;
-            }
+            CheckAnimationInterval();
 
             // Skip if an attack animation is playing
             if (isAttackAnimationPlaying)
