@@ -3,6 +3,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "FireAttack", menuName = "Attacks/Fire")]
 public class FireAttackSO : AttackTypeSO
 {
+    [HideInInspector] public int attackTriggerHash = Animator.StringToHash("FireAttack");
+
     FireAttackSO()
     {
         cooldown = 2.0f;
@@ -15,7 +17,7 @@ public class FireAttackSO : AttackTypeSO
     {
         Debug.Log("Fire Attack");
         SoundManager.PlaySound(SoundType.FIREATTACK);
-        animator.SetTrigger(attackTrigger);
+        animator.SetTrigger(attackTriggerHash);
         timerCooldown = 0;
     }
 }
