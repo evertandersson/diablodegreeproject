@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,25 +7,41 @@ namespace Game
     {
         private float walkingRange = 20f;
         private float roamingTimeout = 5f; // Max time to attempt roaming
+        private float elapsedRoamingTime = 0f; // Timer for roaming timeout
+
+        private float animationCheckDelay = 0.2f; // Delay for animation checks
+        private float animationTimer = 0f; // Timer for animation checks
+        private bool isAttackAnimationPlaying = false; // Cached animation state
+
 
         public override void OnBegin(bool firstTime)
         {
-            base.OnBegin(firstTime);            
+            base.OnBegin(firstTime);
             enemy.Agent.isStopped = false;
-            elapsedTime = 0f; // Reset timeout
-            SetNewDestination(GetRandomPosition()); // Set the first destination
-            
+            elapsedRoamingTime = 0f; // Reset timeout
+            animationTimer = 0f; // Reset animation timer
+            isAttackAnimationPlaying = false; // Reset animation state
 
+            SetNewDestination(GetRandomPosition()); // Set the first destination
         }
 
         public override void OnUpdate()
         {
             base.OnUpdate();
 
-            if (IsAnyAttackAnimationPlaying())
+            // Update animation timer
+            animationTimer += Time.deltaTime;
+            if (animationTimer >= animationCheckDelay)
+            {
+                isAttackAnimationPlaying = IsAnyAttackAnimationPlaying();
+                animationTimer = 0f;
+            }
+
+            // Skip if an attack animation is playing
+            if (isAttackAnimationPlaying)
                 return;
 
-            //If enemy can see player, remove this event and add FollowTarget event
+            // If the enemy can see the player, switch to FollowTarget event
             if (enemy.CanSeeTarget(PlayerManager.Instance.transform, Vector3.zero))
             {
                 isDone = true;
@@ -34,23 +49,23 @@ namespace Game
                 enemy.SetNewEvent<EnemyFollowTarget>();
             }
 
-
+            // Wait for the NavMeshAgent to calculate the path
             if (enemy.Agent.pathPending)
-                return; // Wait until the NavMeshAgent finishes calculating the path
+                return;
 
+            // Check if the enemy has reached the destination
             if (enemy.Agent.remainingDistance <= enemy.Agent.stoppingDistance && !enemy.Agent.pathPending)
             {
                 isDone = true; // Mark roaming as done
             }
 
             // Timeout logic
-            elapsedTime += Time.deltaTime;
-            if (elapsedTime > roamingTimeout)
+            elapsedRoamingTime += Time.deltaTime;
+            if (elapsedRoamingTime > roamingTimeout)
             {
                 isDone = true;
             }
         }
-
 
         private Vector3 GetRandomPosition()
         {
@@ -68,8 +83,6 @@ namespace Game
 
             return transform.position; // Default to current position if invalid
         }
-
-
 
         public override void OnEnd()
         {

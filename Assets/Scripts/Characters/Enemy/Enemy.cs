@@ -18,8 +18,12 @@ namespace Game
         public bool isAggro = false;
 
         // Animation names:
-        public string damageAnimName = "damage";
-        public string[] attackAnimNames = { "Attack1", "Attack2" };
+        public int damageAnim = Animator.StringToHash("damage");
+        public int[] attackAnims = { Animator.StringToHash("Attack1"), Animator.StringToHash("Attack2") };
+
+        // Trigger names:
+        public int attackTrigger = Animator.StringToHash("Attack");
+        public int isHitTrigger = Animator.StringToHash("IsHit");
 
         public EventHandler EnemyEventHandler { get; private set; }
         public List<EnemyEvent> Events { get; private set; } 

@@ -17,7 +17,7 @@ namespace Game
 
             currentAttackIndex = 0;
             enemy.Agent.isStopped = true;
-            enemy.CharacterAnimator.SetTrigger("Attack");
+            enemy.CharacterAnimator.SetTrigger(enemy.attackTrigger);
         }
 
         public override void OnUpdate()
@@ -31,11 +31,11 @@ namespace Game
         private void HandleAnimationCombo()
         {
             // Don't attack while in take damage animation
-            if (IsAnimationPlaying(enemy.damageAnimName))
+            if (IsAnimationPlaying(enemy.damageAnim))
                 return;
 
             // If current attack animation is playing
-            if (IsAnimationPlaying(enemy.attackAnimNames[currentAttackIndex]))
+            if (IsAnimationPlaying(enemy.attackAnims[currentAttackIndex]))
             {
                 if (enemy.CharacterAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.7f)
                 {
@@ -43,16 +43,15 @@ namespace Game
                     if (IsCloseToPlayer(distance))
                     {
                         currentAttackIndex++;
-                        if (currentAttackIndex >= enemy.attackAnimNames.Length)
+                        if (currentAttackIndex >= enemy.attackAnims.Length)
                         {
                             currentAttackIndex = 0;
                         }
-                        enemy.CharacterAnimator.SetTrigger("Attack"); // Trigger next animation
+                        enemy.CharacterAnimator.SetTrigger(enemy.attackTrigger); // Trigger next animation
                     }
                     else
                     {
                         isDone = true; // End combo if not close to the player
-                        Debug.Log("IsDone");
                     }
                 }
             }

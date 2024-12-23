@@ -70,22 +70,22 @@ namespace Game
             return path.status == NavMeshPathStatus.PathComplete;
         }
 
-        public bool IsAnimationPlaying(string animationName)
+        public bool IsAnimationPlaying(int animationHash)
         {
-            // Check if the current animation state is the one we are interested in
-            return enemy.CharacterAnimator.GetCurrentAnimatorStateInfo(0).IsName(animationName);
+            AnimatorStateInfo stateInfo = enemy.CharacterAnimator.GetCurrentAnimatorStateInfo(0);
+            return stateInfo.shortNameHash == animationHash && stateInfo.normalizedTime < 1.0f;
         }
 
         protected bool IsAnyAttackAnimationPlaying()
         {
-            foreach (var animationName in enemy.attackAnimNames)
+            foreach (int attackAnim in enemy.attackAnims)
             {
-                if (enemy.IsAnimationPlaying(animationName))
+                if (IsAnimationPlaying(attackAnim))
                 {
                     return true;
                 }
             }
-            return false; // No animations are playing
+            return false; // No attack animations are playing
         }
 
         protected bool IsCloseToPlayer(float distance)
