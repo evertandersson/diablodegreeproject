@@ -20,6 +20,9 @@ namespace Game
         private bool hasBufferedAttack;
         private bool hasBufferedRoll;
 
+        // Animation names:
+        private int rollTrigger = Animator.StringToHash("Roll");
+
         private void Start()
         {
             playerManager = PlayerManager.Instance;
@@ -163,7 +166,7 @@ namespace Game
             playerManager.transform.rotation = Quaternion.LookRotation(rollDirection);
 
             // Trigger the roll animation
-            playerManager.CharacterAnimator.SetTrigger("Roll");
+            playerManager.CharacterAnimator.SetTrigger(rollTrigger);
         }
 
         private Vector3 GetRollDirection()
@@ -199,7 +202,7 @@ namespace Game
                     return;
                 }
 
-                if (!playerManager.IsAnimationPlaying("Roll"))
+                if (!playerManager.IsAnimationPlaying(rollTrigger))
                 {
                     RollEnd();
                     playerManager.CurrentPlayerState = PlayerManager.State.Idle;

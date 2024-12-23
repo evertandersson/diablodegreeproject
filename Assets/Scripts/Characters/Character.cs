@@ -159,12 +159,12 @@ public abstract class Character : MonoBehaviour
         return false;
     }
 
-    public bool IsAnimationPlaying(string animationName)
+    public bool IsAnimationPlaying(int animationHash)
     {
         var currentState = CharacterAnimator.GetCurrentAnimatorStateInfo(0);
         var nextState = CharacterAnimator.GetNextAnimatorStateInfo(0);
 
-        return currentState.IsName(animationName) || nextState.IsName(animationName);
+        return currentState.shortNameHash == animationHash || nextState.shortNameHash == animationHash;
     }
 
     public virtual void EnableRagdoll(bool enable)
