@@ -12,7 +12,8 @@ namespace Game
             Idle,
             Attack,
             Rolling,
-            Inventory
+            Inventory,
+            Dead
         }
 
         private static PlayerManager _instance;
@@ -156,7 +157,7 @@ namespace Game
         #endregion
 
 
-        protected override void Awake()
+        protected void Awake()
         {
             // Singleton setup
             if (_instance != null && _instance != this)
@@ -175,7 +176,7 @@ namespace Game
 
             SetStats();
 
-            base.Awake();
+            Initialize();
         }
 
         protected override void Start()
@@ -196,6 +197,7 @@ namespace Game
             healthBar.SetMaxHealth(maxHealth);
 
             levelSystem.OnLevelChanged += UpgradeLevel;
+            EnableRagdoll(false);
         }
 
         protected override void SetStats()
@@ -355,7 +357,8 @@ namespace Game
 
         protected override void Die()
         {
-            Debug.Log("Player is dead");
+            EnableRagdoll(true);
+            currentPlayerState = State.Dead;
         }
     }
 

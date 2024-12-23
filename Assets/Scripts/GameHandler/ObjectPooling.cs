@@ -1,3 +1,4 @@
+using Game;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,6 +44,10 @@ public class ObjectPooling : MonoBehaviour
                 GameObject obj = Instantiate(pool.prefab);
                 DespawnObject(obj);
                 objectPool.Enqueue(obj);
+
+                // If object is enemy, then initialize
+                Enemy enemy = obj.GetComponent<Enemy>();
+                if (enemy != null) enemy.Initialize();
             }
 
             poolDictionary.Add(pool.tag, objectPool);

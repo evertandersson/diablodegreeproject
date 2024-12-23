@@ -29,6 +29,12 @@ namespace Game
         {
             float speed = enemy.Agent.velocity.magnitude / enemy.Agent.speed;
             enemy.CharacterAnimator.SetFloat("RunSpeed", speed);
+
+            if (enemy.isAggro && enemy.EnemyEventHandler.CurrentEvent is not EnemyTakeDamage)
+            {
+                enemy.SetNewEvent<EnemyFollowTarget>();
+                enemy.isAggro = false;
+            }
         }
 
         public override void OnEnd()

@@ -95,6 +95,8 @@ namespace Game
 
         private void Move(InputAction.CallbackContext context)
         {
+            if (PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead) return;
+
             // Handle movement input
             if (playerMovement.ReadyForAnotherInput(GetCurrentTimer(), GetWaitForNextBufferedInputTimer()))
             {
@@ -133,6 +135,8 @@ namespace Game
 
         private void Roll(InputAction.CallbackContext context)
         {
+            if (PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead) return;
+
             // Start rolling only if the player is not already rolling
             if (playerMovement.ReadyForAnotherInput(GetCurrentTimer(), GetWaitForNextBufferedInputTimer()))
             {
@@ -146,6 +150,8 @@ namespace Game
 
         private void Attack(InputAction.CallbackContext context, int attackIndex)
         {
+            if (PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead) return;
+
             // Allow attacking during idle or buffered for after rolling
             if (playerMovement.ReadyForAnotherInput(GetCurrentTimer(), GetWaitForNextBufferedInputTimer()))
             {
@@ -160,11 +166,13 @@ namespace Game
 
         private void OpenInventory(InputAction.CallbackContext context)
         {
+            if (PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead) return;
             TogglePopup(ref PlayerManager.Instance.inventory, PlayerManager.State.Inventory);
         }
 
         private void OpenSkillTree(InputAction.CallbackContext context)
         {
+            if (PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead) return;
             TogglePopup(ref PlayerManager.Instance.skillTree, PlayerManager.State.Inventory);
         }
 

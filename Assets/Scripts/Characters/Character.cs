@@ -36,6 +36,11 @@ public abstract class Character : MonoBehaviour
     private Color flashColor = Color.red;
     private float flashDuration = 0.1f;
 
+    protected CapsuleCollider capsuleCollider;
+    private Rigidbody[] rigidbodies;
+    private Collider[] colliders;
+
+
     [SerializeField] private float visionAngle = 45f; // Half of the total field of view
     [SerializeField] public float visionRange = 10f; // Distance the character can see
     [SerializeField] public LayerMask detectionMask; // Layers the character can "see" (e.g., player)
@@ -59,9 +64,12 @@ public abstract class Character : MonoBehaviour
 
     #endregion
 
-    protected virtual void Awake()
+    public void Initialize()
     {
-        Agent = GetComponent<NavMeshAgent>();
+        if (!Agent) Agent = GetComponent<NavMeshAgent>();
+        if (!capsuleCollider) capsuleCollider = GetComponent<CapsuleCollider>();
+        if (rigidbodies == null) rigidbodies = GetComponentsInChildren<Rigidbody>(true);
+        if (colliders == null) colliders = GetComponentsInChildren<Collider>(true);
     }
 
     protected virtual void Start()
@@ -157,6 +165,26 @@ public abstract class Character : MonoBehaviour
         var nextState = CharacterAnimator.GetNextAnimatorStateInfo(0);
 
         return currentState.IsName(animationName) || nextState.IsName(animationName);
+    }
+
+    public virtual void EnableRagdoll(bool enable)
+    {
+        if (CharacterAnimator != null)
+            CharacterAnimator.enabled = !enable;
+
+        Agent.enabled = !enable;
+
+        foreach (Rigidbody rb in rigidbodies)
+        {
+            rb.isKinematic = !enable;
+            rb.useGravity = enable;
+        }
+
+        foreach (Collider c in colliders)
+        {
+            c.enabled = enable;
+        }
+        capsuleCollider.enabled = !enable;
     }
 
     protected abstract void Die();

@@ -32,6 +32,7 @@ namespace Game
 
             // Ignore collisions between Player and Enemy layers
             Physics.IgnoreLayerCollision(playerLayer, enemyLayer, true);
+            Physics.IgnoreLayerCollision(playerLayer, playerLayer, true);
         }
 
         public bool ReadyForAnotherInput(float timer, float targetTime)

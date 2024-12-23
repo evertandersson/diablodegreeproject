@@ -13,9 +13,9 @@ namespace Game
         [SerializeField] private int experienceOnDeath = 20;
 
         private Transform player; // Reference to the player
-        private CapsuleCollider capsuleCollider;
 
         public bool standStill = false;
+        public bool isAggro = false;
 
         // Animation names:
         public string damageAnimName = "damage";
@@ -41,13 +41,12 @@ namespace Game
             SetNewEvent<EnemyIdle>();
         }
 
-        protected override void Awake()
+        protected void Awake()
         {
             // Cache components on Awake
-            base.Awake();
+            Initialize();
             CharacterAnimator = GetComponent<Animator>();
             EnemyEventHandler = EventHandler.CreateEventHandler();
-            capsuleCollider = GetComponent<CapsuleCollider>();
             EnableRagdoll(false);
 
             if (EnemyEventHandler == null)
@@ -122,21 +121,9 @@ namespace Game
 
         }
 
-        public void EnableRagdoll(bool enable)
+        public override void EnableRagdoll(bool enable)
         {
-            if (CharacterAnimator != null)
-                CharacterAnimator.enabled = !enable;
-
-            capsuleCollider.enabled = !enable;
-            Agent.enabled = !enable;
-
-            Rigidbody[] rigidbodies = GetComponentsInChildren<Rigidbody>();
-            foreach (Rigidbody rb in rigidbodies)
-            {
-                rb.isKinematic = !enable;
-                rb.useGravity = enable;
-            }
-
+            base.EnableRagdoll(enable);
             DetachWeapons(enable);
         }
 

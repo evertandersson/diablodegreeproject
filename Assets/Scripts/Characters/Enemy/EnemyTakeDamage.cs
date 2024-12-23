@@ -10,7 +10,7 @@ namespace Game
 
             enemy.Agent.isStopped = true;
             enemy.CharacterAnimator.SetTrigger("IsHit");
-            Debug.Log("Enemy took damage");
+            enemy.isAggro = true;
         }
 
         public override void OnUpdate()
