@@ -13,7 +13,7 @@ namespace Game
         protected Vector3 targetPosition;
         protected float elapsedTime = 0f;
 
-        Vector3 offset = new Vector3(0, 1.2f, 0);
+        protected Vector3 offset = new Vector3(0, 1.2f, 0);
 
         float animationCheckDelay = 0.2f; // Delay for checking animations
         float animationTimer = 0;

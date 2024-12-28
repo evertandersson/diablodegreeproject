@@ -160,7 +160,7 @@ namespace Game
 
         public override void Attack(int attackIndex = 0)
         {
-            SetNewEvent<EnemyAttack>();
+            SetNewEvent<EnemyMeleeAttack>();
         }
 
         protected override void Die()
@@ -171,7 +171,7 @@ namespace Game
             PlayerManager.Instance.levelSystem.AddExperience(experienceOnDeath);
         }
 
-        /*private void OnGUI()
+        private void OnGUI()
         {
 
 #if UNITY_EDITOR
@@ -190,22 +190,22 @@ namespace Game
 #endif
         }
 
-        private void OnDrawGizmos()
-        {
-            // Draw the vision range
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, visionRange);
-
-            // Draw the vision cone
-            Vector3 forward = transform.forward * visionRange;
-            Vector3 leftBoundary = Quaternion.Euler(0, -visionAngle, 0) * forward;
-            Vector3 rightBoundary = Quaternion.Euler(0, visionAngle, 0) * forward;
-
-            Gizmos.color = Color.red;
-            Gizmos.DrawRay(transform.position, leftBoundary);
-            Gizmos.DrawRay(transform.position, rightBoundary);
-        }
-        */
+       // private void OnDrawGizmos()
+       // {
+       //     // Draw the vision range
+       //     Gizmos.color = Color.yellow;
+       //     Gizmos.DrawWireSphere(transform.position, visionRange);
+       //
+       //     // Draw the vision cone
+       //     Vector3 forward = transform.forward * visionRange;
+       //     Vector3 leftBoundary = Quaternion.Euler(0, -visionAngle, 0) * forward;
+       //     Vector3 rightBoundary = Quaternion.Euler(0, visionAngle, 0) * forward;
+       //
+       //     Gizmos.color = Color.red;
+       //     Gizmos.DrawRay(transform.position, leftBoundary);
+       //     Gizmos.DrawRay(transform.position, rightBoundary);
+       // }
+        
 
     }
 }

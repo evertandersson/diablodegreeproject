@@ -9,7 +9,7 @@ namespace Game
 
         public GameObject explosion;
 
-        private bool hasHit;
+        protected bool hasHit;
 
         [SerializeField]
         float lifeTime = 5.0f;
@@ -21,7 +21,7 @@ namespace Game
             timer = 0;
         }
 
-        private void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
             transform.position += transform.forward * moveSpeed * Time.fixedDeltaTime;
 
@@ -32,7 +32,7 @@ namespace Game
             }
         }
 
-        private void OnTriggerEnter(Collider other)
+        protected virtual void OnTriggerEnter(Collider other)
         {
             if (hasHit == false)
             {

@@ -1,15 +1,15 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Game
 {
     public class EnemyAttack : EnemyEvent
     {
-        private int currentAttackIndex;
-        float distance = 2.0f;
+        protected int currentAttackIndex;
 
         public override void OnBegin(bool firstTime)
         {
-            if (!IsCloseToPlayer(enemy.distanceToAttack))
+            if (!IsCloseToPlayer(enemy.distanceToAttack + 0.5f))
             {
                 isDone = true;
                 return;
@@ -28,7 +28,7 @@ namespace Game
             HandleAnimationCombo();
         }
 
-        private void HandleAnimationCombo()
+        protected void HandleAnimationCombo()
         {
             // Don't attack while in take damage animation
             if (IsAnimationPlaying(enemy.damageAnim))
@@ -40,7 +40,7 @@ namespace Game
                 if (enemy.CharacterAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.7f)
                 {
                     // If close to player, do the next attack in the list
-                    if (IsCloseToPlayer(distance))
+                    if (IsCloseToPlayer(enemy.distanceToAttack + 0.5f))
                     {
                         currentAttackIndex++;
                         if (currentAttackIndex >= enemy.attackAnims.Length)
@@ -57,14 +57,6 @@ namespace Game
             }
         }
 
-        public void DealDamage()
-        {
-            if (IsCloseToPlayer(distance) && IsTargetedAtPlayer())
-            {
-                PlayerManager.Instance.TakeDamage(enemy.Damage);
-            }
-        }
-
         public override void OnEnd()
         {
             base.OnEnd();
@@ -75,4 +67,5 @@ namespace Game
             return isDone;
         }
     }
+
 }

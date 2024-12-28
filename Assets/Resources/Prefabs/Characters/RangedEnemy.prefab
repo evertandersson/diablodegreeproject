@@ -361,14 +361,14 @@ GameObject:
   m_Component:
   - component: {fileID: 7512959232865010981}
   - component: {fileID: 3120307258029321989}
-  - component: {fileID: 8073677023320427492}
+  - component: {fileID: 226474005153621231}
   - component: {fileID: 8388076702170604132}
   - component: {fileID: 4221154618234213713}
   - component: {fileID: 8292932150625689165}
   - component: {fileID: 8763008119268560673}
   - component: {fileID: 2819347443306166850}
   - component: {fileID: 4353724023389315179}
-  - component: {fileID: 1458445710052063764}
+  - component: {fileID: 7323900863692286402}
   m_Layer: 8
   m_Name: RangedEnemy
   m_TagString: Untagged
@@ -416,7 +416,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &8073677023320427492
+--- !u!114 &226474005153621231
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -425,25 +425,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 1682753497815864180}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2879aaaf0924224aa59db02230eacbf, type: 3}
+  m_Script: {fileID: 11500000, guid: e98b86239b7fb7346a3581125a3b270a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   health: 0
-  level: 1
+  level: 0
   maxHealth: 20
   damage: 5
   defense: 2
   bloodSplashEffect: {fileID: 6474922961284132634}
   renderers: []
   visionAngle: 45
-  visionRange: 30
+  visionRange: 10
   detectionMask:
     serializedVersion: 2
     m_Bits: 128
-  experienceOnDeath: 100
+  experienceOnDeath: 20
   standStill: 0
   isAggro: 0
-  distanceToAttack: 20
+  distanceToAttack: 10
   damageAnim: 298341484
   attackAnims: 22ff2dfd98ae2464
   attackTrigger: 1080829965
@@ -542,7 +542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b632c577051ec74bb3b47d4aa543301, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1458445710052063764
+--- !u!114 &7323900863692286402
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -551,9 +551,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1682753497815864180}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 971186c8fbe888b4f8ebc3e7c7ee663b, type: 3}
+  m_Script: {fileID: 11500000, guid: 5f3adbfa7e9afa34a9ac670910098112, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: 5048752434976709204, guid: 83f83607ea95b0b4482d4d80eaa75f95, type: 3}
 --- !u!1 &1917962044480378917
 GameObject:
   m_ObjectHideFlags: 0
