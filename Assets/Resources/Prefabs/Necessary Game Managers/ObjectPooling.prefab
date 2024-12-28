@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1361394936062643983
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8662873588976893853}
+  - component: {fileID: 3056851477996016524}
+  m_Layer: 0
+  m_Name: ObjectPooling
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8662873588976893853
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361394936062643983}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3056851477996016524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361394936062643983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fe77bae05390ea499b03bd1dbcdaf3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pools:
+  - tag: Fireball
+    prefab: {fileID: 5048752434976709204, guid: c0e6fdf5328564d4f8ff41348ac69144, type: 3}
+    size: 5
+  - tag: Explosion
+    prefab: {fileID: 2825708195889961966, guid: 875f70afee49f2043b53c89c081f20ac, type: 3}
+    size: 5
+  - tag: LightningAttack
+    prefab: {fileID: 9030057087606249886, guid: 9883230eb71304045a4e87d071eb38b0, type: 3}
+    size: 3
+  - tag: Lightning
+    prefab: {fileID: 9027514048236820045, guid: effb650189dc5714e9e9801b1cfb3991, type: 3}
+    size: 10
+  - tag: Goblin
+    prefab: {fileID: 1682753497815864180, guid: fdc6d01e773f558459a5049125bc51a9, type: 3}
+    size: 7
+  - tag: Skeleton
+    prefab: {fileID: 2308764870061390477, guid: 13317d869e25e2040a1cc1041cca7054, type: 3}
+    size: 3
+  - tag: PopupText
+    prefab: {fileID: 2816734092957503766, guid: c3398771151c29c44b9b7dcd230326dd, type: 3}
+    size: 3

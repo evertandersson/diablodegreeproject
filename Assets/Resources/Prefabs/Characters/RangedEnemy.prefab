@@ -443,7 +443,7 @@ MonoBehaviour:
   experienceOnDeath: 100
   standStill: 0
   isAggro: 0
-  distance: 20
+  distanceToAttack: 20
   damageAnim: 298341484
   attackAnims: 22ff2dfd98ae2464
   attackTrigger: 1080829965
