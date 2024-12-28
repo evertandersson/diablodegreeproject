@@ -9,7 +9,7 @@ namespace Game
 
         public override void OnBegin(bool firstTime)
         {
-            if (!IsCloseToPlayer(distance))
+            if (!IsCloseToPlayer(enemy.distanceToAttack))
             {
                 isDone = true;
                 return;

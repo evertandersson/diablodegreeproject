@@ -17,6 +17,8 @@ namespace Game
         public bool standStill = false;
         public bool isAggro = false;
 
+        public float distanceToAttack = 1.5f;
+
         // Animation names:
         public int damageAnim = Animator.StringToHash("damage");
         public int[] attackAnims = { Animator.StringToHash("Attack1"), Animator.StringToHash("Attack2") };
@@ -156,9 +158,9 @@ namespace Game
             }
         }
 
-        public override void Attack(int attackIndex)
+        public override void Attack(int attackIndex = 0)
         {
-            throw new System.NotImplementedException();
+            SetNewEvent<EnemyAttack>();
         }
 
         protected override void Die()

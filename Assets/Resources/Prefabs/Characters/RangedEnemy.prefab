@@ -436,13 +436,14 @@ MonoBehaviour:
   bloodSplashEffect: {fileID: 6474922961284132634}
   renderers: []
   visionAngle: 45
-  visionRange: 10
+  visionRange: 30
   detectionMask:
     serializedVersion: 2
     m_Bits: 128
   experienceOnDeath: 100
   standStill: 0
   isAggro: 0
+  distance: 20
   damageAnim: 298341484
   attackAnims: 22ff2dfd98ae2464
   attackTrigger: 1080829965
