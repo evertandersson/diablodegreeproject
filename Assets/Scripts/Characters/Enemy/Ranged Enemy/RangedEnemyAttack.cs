@@ -16,8 +16,6 @@ namespace Game
 
             // Instantiate the projectile and set its rotation
             GameObject projectile = Instantiate(projectilePrefab, spawnPosition, Quaternion.LookRotation(direction));
-            EnemyProjectile enemyProjectile = projectile.GetComponent<EnemyProjectile>();
-            enemyProjectile.SetEnemy(enemy);
         }
     }
 

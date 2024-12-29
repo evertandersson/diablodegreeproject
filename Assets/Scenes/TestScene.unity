@@ -624,22 +624,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ObjectPooling
       objectReference: {fileID: 0}
-    - target: {fileID: 3056851477996016524, guid: 7bcb649e0c329d04db0d68f36d3818bb, type: 3}
-      propertyPath: pools.Array.size
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 3056851477996016524, guid: 7bcb649e0c329d04db0d68f36d3818bb, type: 3}
-      propertyPath: pools.Array.data[7].tag
-      value: LightningExplosion
-      objectReference: {fileID: 0}
-    - target: {fileID: 3056851477996016524, guid: 7bcb649e0c329d04db0d68f36d3818bb, type: 3}
-      propertyPath: pools.Array.data[7].size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3056851477996016524, guid: 7bcb649e0c329d04db0d68f36d3818bb, type: 3}
-      propertyPath: pools.Array.data[7].prefab
-      value: 
-      objectReference: {fileID: 2825708195889961966, guid: 7561a403346c0c4469dcfeba00bf857c, type: 3}
     - target: {fileID: 8662873588976893853, guid: 7bcb649e0c329d04db0d68f36d3818bb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
