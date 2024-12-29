@@ -4,6 +4,13 @@ namespace Game
 {
     public class EnemyProjectile : Fireball
     {
+        private Enemy parentEnemy;
+
+        public void SetEnemy(Enemy enemy)
+        {
+            parentEnemy = enemy;
+        }
+
         protected override void OnTriggerEnter(Collider other)
         {
             if (!hasHit)
@@ -17,7 +24,10 @@ namespace Game
                 if (explosion != null)
                 {
                     Debug.Log(other);
-                    ObjectPooling.Instance.SpawnFromPool("Explosion", transform.position, Quaternion.identity);
+                    GameObject explosion = ObjectPooling.Instance.SpawnFromPool("LightningExplosion", transform.position, Quaternion.identity);
+                    EnemyExplosion enemyExplosion = explosion.GetComponent<EnemyExplosion>();
+                    enemyExplosion.SetEnemy(parentEnemy);
+
                     ObjectPooling.Instance.DespawnObject(this.gameObject);
                     hasHit = true;
                 }

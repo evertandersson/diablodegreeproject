@@ -9,7 +9,7 @@ AssetOrigin:
   serializedVersion: 1
   productId: 109565
   packageName: Cartoon FX Remaster Free
-  packageVersion: R 1.4.1
-  assetPath: Assets/JMO Assets/Cartoon FX Remaster/CFXR Prefabs/Liquids/CFXR Water
-    Ripples.prefab
-  uploadId: 693350
+  packageVersion: R 1.4.2
+  assetPath: Assets/Imports/JMO Assets/Cartoon FX Remaster/CFXR Prefabs/Liquids/CFXR
+    Water Ripples.prefab
+  uploadId: 717883
