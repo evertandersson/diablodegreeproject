@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
-  explosion: {fileID: 2825708195889961966, guid: 875f70afee49f2043b53c89c081f20ac, type: 3}
+  explosion: {fileID: 2825708195889961966, guid: 5dfad4e0c352f4a4383fc5ecc810de1c, type: 3}
   lifeTime: 5
 --- !u!136 &753768016069722840
 CapsuleCollider:

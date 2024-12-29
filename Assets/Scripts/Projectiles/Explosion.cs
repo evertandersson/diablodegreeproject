@@ -10,7 +10,7 @@ public class Explosion : MonoBehaviour, IPooledObject
         explosionParticle = GetComponentInChildren<ParticleSystem>();
     } 
 
-    public void OnObjectSpawn()
+    public virtual void OnObjectSpawn()
     {
         Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
         SoundManager.PlaySound(SoundType.EXPLOSION);
