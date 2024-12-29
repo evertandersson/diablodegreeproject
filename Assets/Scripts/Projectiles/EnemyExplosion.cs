@@ -22,7 +22,7 @@ public class EnemyExplosion : Explosion
     {
         yield return new WaitForEndOfFrame();
 
-        if (Vector3.Distance(transform.position, PlayerManager.Instance.transform.position) < 1)
+        if (Vector3.Distance(transform.position, PlayerManager.Instance.transform.position) < 2)
         {
             PlayerManager.Instance.TakeDamage(parentEnemy.Damage);
             parentEnemy = null;
