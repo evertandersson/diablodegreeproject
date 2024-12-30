@@ -89,6 +89,7 @@ namespace Game
                 artwork.transform.SetParent(artworkCanvas.transform);
                 canvasGroup.blocksRaycasts = false;
                 artwork.raycastTarget = false; // Ensure it doesn't block raycasts
+                EquipmentManager.Instance.ShowEquipmentSlots();
             }
         }
 
@@ -266,6 +267,16 @@ namespace Game
 
         private void SwapItems(InventorySlot targetSlot)
         {
+            if (this.item == targetSlot.item && item.isStackable)
+            {
+                int totalAmount = this.itemAmount + targetSlot.itemAmount;
+                targetSlot.itemAmount = totalAmount;
+                targetSlot.UpdateItemAmountText();
+
+                RemoveItem();
+                return;
+            }
+
             // Unequip both the current item and the target item
             if (this is EquipmentSlot && this.item is EquipmentSO thisEquipment)
             {

@@ -15,6 +15,7 @@ namespace Game
 
         private SerializableListString inventoryList = new SerializableListString();
         private SerializableListString actionSlotList = new SerializableListString();
+        private SerializableListString equipmentList = new SerializableListString();
 
         public static InventorySaver Instance
         {
@@ -88,9 +89,11 @@ namespace Game
         {
             inventoryList.serializableList.Clear(); // Clear previous data
             actionSlotList.serializableList.Clear();
+            equipmentList.serializableList.Clear();
 
             SaveSlotsToSerializableList(PlayerManager.Instance.inventory.inventory, inventoryList);
             SaveSlotsToSerializableList(PlayerManager.Instance.slotManager.actionSlots, actionSlotList);
+            SaveSlotsToSerializableList(EquipmentManager.Instance.equipmentSlots, equipmentList);
         }
 
         private void SaveSlotsToSerializableList(IEnumerable<InventorySlot> slots, SerializableListString targetList)
@@ -117,6 +120,7 @@ namespace Game
 
             string filepath = Application.persistentDataPath + "/inventory_save.json";
             string actionFilePath = Application.persistentDataPath + "/action_slots_save.json";
+            string equipmentFilePath = Application.persistentDataPath + "/equipment_slots_save.json";
 
             // Save inventory
             string inventoryJson = JSON.Serialize(inventoryList).CreatePrettyString();
@@ -126,6 +130,10 @@ namespace Game
             string actionSlotJson = JSON.Serialize(actionSlotList).CreatePrettyString();
             File.WriteAllText(actionFilePath, actionSlotJson);
 
+            // Save equipment slots
+            string equipmentSlotJson = JSON.Serialize(equipmentList).CreatePrettyString();
+            File.WriteAllText(equipmentFilePath, equipmentSlotJson);
+
             Debug.Log("Save completed.");
         }
 
@@ -134,10 +142,12 @@ namespace Game
             // Clear existing data for both inventories
             ClearSlots(PlayerManager.Instance.inventory.inventory);
             ClearSlots(PlayerManager.Instance.slotManager.actionSlots);
+            ClearSlots(EquipmentManager.Instance.equipmentSlots);
 
             // Load data into inventory and action slots
             LoadSlots(PlayerManager.Instance.inventory.inventory, inventoryList);
             LoadSlots(PlayerManager.Instance.slotManager.actionSlots, actionSlotList);
+            LoadSlots(EquipmentManager.Instance.equipmentSlots, equipmentList);
         }
 
         private void ClearSlots(IEnumerable<InventorySlot> slots)
@@ -188,6 +198,7 @@ namespace Game
 
             string filepath = Application.persistentDataPath + "/inventory_save.json";
             string actionFilePath = Application.persistentDataPath + "/action_slots_save.json";
+            string equipmentFilePath = Application.persistentDataPath + "/equipment_slots_save.json";
 
             // Load inventory
             if (File.Exists(filepath))
@@ -201,6 +212,13 @@ namespace Game
             {
                 string actionSlotJson = File.ReadAllText(actionFilePath);
                 actionSlotList = JSON.ParseString(actionSlotJson).Deserialize<SerializableListString>();
+            }
+
+            // Load equipment slots
+            if (File.Exists(equipmentFilePath))
+            {
+                string equipmentSlotJson = File.ReadAllText(equipmentFilePath);
+                equipmentList = JSON.ParseString(equipmentSlotJson).Deserialize<SerializableListString>();
             }
 
             Debug.Log("Load completed.");
