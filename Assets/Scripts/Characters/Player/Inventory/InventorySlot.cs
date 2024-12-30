@@ -111,7 +111,6 @@ namespace Game
                 finalLocalPosition.z = originalZPosition;
                 artworkRectTransform.localPosition = finalLocalPosition;
 
-                // Initialize targetSlot as null
                 InventorySlot targetSlot = null;
 
                 // Try to get the slot from the pointerEnter first
@@ -128,7 +127,6 @@ namespace Game
 
                     foreach (RaycastResult result in results)
                     {
-                        // Look for an InventorySlot or ActionSlot in the raycast results
                         targetSlot = result.gameObject.GetComponent<InventorySlot>();
                         if (targetSlot != null)
                         {
@@ -139,31 +137,58 @@ namespace Game
 
                 if (targetSlot != null && targetSlot != this)
                 {
-                    // If the target is an ActionSlot and the item is an ActionItem
-                    if (targetSlot is ActionSlot && item is ActionItemSO)
+                    if (targetSlot is ActionSlot)
                     {
-                        if (targetSlot.item != null)
-                            SwapItems(targetSlot);
+                        // Only allow ActionItemSO to be moved into an ActionSlot
+                        if (item is ActionItemSO)
+                        {
+                            if (targetSlot.item != null)
+                                SwapItems(targetSlot);
+                            else
+                                MoveItem(targetSlot);
+                        }
                         else
-                            MoveItem(targetSlot);
+                        {
+                            // Non-action items return to original slot
+                            ReturnToOriginalSlot();
+                        }
                     }
-                    // Handle non-ActionSlot cases
                     else
                     {
+                        // Handle regular inventory slot behavior
                         if (targetSlot.item != null)
-                            SwapItems(targetSlot);
+                        {
+                            if (this is ActionSlot && item is ActionItemSO && targetSlot.item is not ActionItemSO)
+                                ReturnToOriginalSlot();
+                            else
+                                SwapItems(targetSlot);
+                        }
                         else
                             MoveItem(targetSlot);
                     }
+
                     PlayerManager.Instance.UpdateActionSlots();
+                }
+                else
+                {
+                    // If no valid target slot, return to original slot
+                    ReturnToOriginalSlot();
                 }
 
                 canvasGroup.blocksRaycasts = true;
                 artworkRectTransform.anchoredPosition = Vector3.zero;
                 artworkRectTransform.rotation = Quaternion.identity;
             }
-
         }
+
+        // Return item to its original slot
+        private void ReturnToOriginalSlot()
+        {
+            artwork.transform.SetParent(originalParent);
+            artworkRectTransform.localPosition = Vector3.zero;
+            artworkRectTransform.rotation = Quaternion.identity;
+        }
+
 
 
 
