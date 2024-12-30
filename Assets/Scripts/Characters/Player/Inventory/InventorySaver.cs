@@ -45,6 +45,8 @@ namespace Game
         public void Load()
         {
             inventoryList.serializableList.Clear();
+            actionSlotList.serializableList.Clear();
+            equipmentList.serializableList.Clear();
 
             LoadScriptables();
 
@@ -54,6 +56,8 @@ namespace Game
         private void Save()
         {
             inventoryList.serializableList.Clear();
+            actionSlotList.serializableList.Clear();
+            equipmentList.serializableList.Clear();
 
             BuildSaveData();
 
@@ -70,19 +74,6 @@ namespace Game
 
             if (Input.GetKeyDown(KeyCode.S))
                 Save();
-        }
-
-        public void ResetScriptables()
-        {
-            int i = 0;
-            while (File.Exists(Application.persistentDataPath +
-                    string.Format("/{0}.inv", i)))
-            {
-                File.Delete(Application.persistentDataPath +
-                    string.Format("/{0}.inv", i));
-                i++;
-            }
-
         }
 
         private void BuildSaveData()
@@ -166,8 +157,6 @@ namespace Game
                 string name = targetList.serializableList[i].name;
                 int count = targetList.serializableList[i].count;
 
-                Debug.Log($"Attempting to load item: {name} with count: {count} into slot {i}");
-
                 ItemSO obj = itemDB.GetItem(name);
                 if (obj == null)
                 {
@@ -231,7 +220,20 @@ namespace Game
                 itemSlot.item = null;
                 itemSlot.itemAmount = 0;
             }
+            foreach (ActionSlot actionSlot in PlayerManager.Instance.slotManager.actionSlots)
+            {
+                actionSlot.item = null;
+                actionSlot.itemAmount = 0;
+            }
+            foreach (EquipmentSlot equipmentSlot in EquipmentManager.Instance.equipmentSlots)
+            {
+                equipmentSlot.item = null;
+                equipmentSlot.itemAmount = 0;
+            }
             inventoryList.serializableList.Clear();
+            actionSlotList.serializableList.Clear();
+            equipmentList.serializableList.Clear();
+
             BuildSaveData();
             SaveScriptables();
         }

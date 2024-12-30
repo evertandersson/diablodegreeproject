@@ -20,8 +20,14 @@ public class Inventory : Popup
     {
         inventory = new List<InventorySlot>();
 
-        // Add all inventory slots from the inventory panel
-        inventory.AddRange(inventoryPanel.GetComponentsInChildren<InventorySlot>());
+        // Add only slots tagged as "InventorySlot"
+        foreach (var slot in inventoryPanel.GetComponentsInChildren<InventorySlot>())
+        {
+            if (slot is not EquipmentSlot)
+            {
+                inventory.Add(slot);
+            }
+        }
 
         PlayerManager.Instance.slotManager.GetActionSlots();
         PlayerManager.Instance.slotManager.SetUpSlots();
