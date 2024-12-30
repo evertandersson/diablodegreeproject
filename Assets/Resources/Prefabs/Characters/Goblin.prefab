@@ -6433,10 +6433,12 @@ MonoBehaviour:
     m_Bits: 128
   experienceOnDeath: 100
   standStill: 0
-  damageAnimName: damage
-  attackAnimNames:
-  - Attack1
-  - Attack2
+  isAggro: 0
+  distanceToAttack: 1.5
+  damageAnim: 298341484
+  attackAnims: 22ff2dfd98ae2464
+  attackTrigger: 1080829965
+  isHitTrigger: 2006285284
   healthBar: {fileID: 7484332425916425796}
 --- !u!195 &8388076702170604132
 NavMeshAgent:
@@ -6448,7 +6450,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 6
+  m_Speed: 4
   m_Acceleration: 20
   avoidancePriority: 50
   m_AngularSpeed: 1000

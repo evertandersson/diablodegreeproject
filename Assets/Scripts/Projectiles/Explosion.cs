@@ -26,9 +26,12 @@ public class Explosion : MonoBehaviour, IPooledObject
 
     void Update()
     {
-        if (!explosionParticle.isPlaying && explosionParticle.time >= explosionParticle.main.duration)
+        if (explosionParticle != null)
         {
-            ObjectPooling.Instance.DespawnObject(this.gameObject);
+            if (!explosionParticle.IsAlive(true))
+            {
+                ObjectPooling.Instance.DespawnObject(this.gameObject);
+            }
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Game
             EventHandler.Main.RemoveEvent(this);
 
 
-            SceneManager.LoadScene("SampleScene", LoadSceneMode.Single);
+            SceneManager.LoadScene("TheDungeon", LoadSceneMode.Single);
         }
         
         public void OnOptions()
