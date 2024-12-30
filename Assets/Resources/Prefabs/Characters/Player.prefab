@@ -307,8 +307,9 @@ GameObject:
   - component: {fileID: 5895403026399712171}
   - component: {fileID: 8278991748812548718}
   - component: {fileID: 8806266055108127927}
+  - component: {fileID: 8220933567821415359}
   m_Layer: 7
-  m_Name: EquipmentSlot (3)
+  m_Name: FirstHandWeaponSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -369,6 +370,23 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &8220933567821415359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 547517535461679920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7999a1336dbfe046b00a6c9d47920aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 0}
+  itemAmount: 0
+  amountText: {fileID: 0}
+  artwork: {fileID: 4198601533122440889}
+  equipmentType: 3
 --- !u!1 &736707656586682666
 GameObject:
   m_ObjectHideFlags: 0
@@ -2102,8 +2120,9 @@ GameObject:
   - component: {fileID: 552745013000189858}
   - component: {fileID: 49646743577273478}
   - component: {fileID: 1849014328787219340}
+  - component: {fileID: 5848226475508396882}
   m_Layer: 7
-  m_Name: EquipmentSlot (4)
+  m_Name: SecondHandWeaponSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2164,6 +2183,23 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &5848226475508396882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4554004870927080440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7999a1336dbfe046b00a6c9d47920aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 0}
+  itemAmount: 0
+  amountText: {fileID: 0}
+  artwork: {fileID: 5503305661244340546}
+  equipmentType: 4
 --- !u!1 &4900761369126385871
 GameObject:
   m_ObjectHideFlags: 0
@@ -2916,8 +2952,9 @@ GameObject:
   - component: {fileID: 7929219571921817631}
   - component: {fileID: 8010010961541301785}
   - component: {fileID: 8071635614112593474}
+  - component: {fileID: 8545750682099687993}
   m_Layer: 7
-  m_Name: EquipmentSlot
+  m_Name: HelmetSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2978,6 +3015,23 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &8545750682099687993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5978006632032180644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7999a1336dbfe046b00a6c9d47920aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 0}
+  itemAmount: 0
+  amountText: {fileID: 0}
+  artwork: {fileID: 4529881592064494585}
+  equipmentType: 0
 --- !u!1 &6027858899826816325
 GameObject:
   m_ObjectHideFlags: 0
@@ -3336,8 +3390,9 @@ GameObject:
   - component: {fileID: 5246146663358507679}
   - component: {fileID: 8350274282803017066}
   - component: {fileID: 5444815999326406129}
+  - component: {fileID: 1949438515953815959}
   m_Layer: 7
-  m_Name: EquipmentSlot (1)
+  m_Name: 'ArmourSlot '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3398,6 +3453,23 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &1949438515953815959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6813695383522893511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7999a1336dbfe046b00a6c9d47920aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 0}
+  itemAmount: 0
+  amountText: {fileID: 0}
+  artwork: {fileID: 2374080673310489265}
+  equipmentType: 1
 --- !u!1 &7255686237290944832
 GameObject:
   m_ObjectHideFlags: 0
@@ -4054,8 +4126,9 @@ GameObject:
   - component: {fileID: 4126381435992679026}
   - component: {fileID: 6482365241142878042}
   - component: {fileID: 6457371525309241283}
+  - component: {fileID: 6933075167977621826}
   m_Layer: 7
-  m_Name: EquipmentSlot (2)
+  m_Name: BootsSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4116,6 +4189,23 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &6933075167977621826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8206575475705942816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7999a1336dbfe046b00a6c9d47920aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 0}
+  itemAmount: 0
+  amountText: {fileID: 0}
+  artwork: {fileID: 3835832359294535893}
+  equipmentType: 2
 --- !u!1 &8446770670941060600
 GameObject:
   m_ObjectHideFlags: 0

@@ -224,6 +224,16 @@ namespace Game
             statsDisplay.UpdateStatsText();
         }
 
+        public void SetEquipment(EquipmentSO equipment, int apply = 1)
+        {
+            maxHealth += equipment.healthIncrease * apply;
+            damage += equipment.damageIncrease * apply;
+            defense += equipment.defenseIncrease * apply;
+            healthBar.SetMaxHealth(maxHealth);
+
+            statsDisplay.UpdateStatsText();
+        }
+
         public void Heal(int amount)
         {
             health += amount;

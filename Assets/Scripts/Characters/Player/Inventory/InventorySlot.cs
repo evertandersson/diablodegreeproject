@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using UnityEngine.Rendering;
 
 namespace Game
 {
@@ -56,7 +57,7 @@ namespace Game
 
         private void HideItemUI()
         {
-            amountText.enabled = false;
+            if (amountText) amountText.enabled = false;
             artwork.enabled = false;
         }
 
@@ -70,9 +71,9 @@ namespace Game
             if (item != null)
             {
                 artwork.enabled = true;
-                amountText.text = itemAmount.ToString();
+                if (amountText) amountText.text = itemAmount.ToString();
                 artwork.texture = item.itemIcon;
-                amountText.enabled = itemAmount > 1;
+                if (amountText) amountText.enabled = itemAmount > 1;
             }
             else
             {
@@ -137,9 +138,16 @@ namespace Game
 
                 if (targetSlot != null && targetSlot != this)
                 {
+                    // Prevent non-Action items from being placed into ActionSlot
+                    if (targetSlot is ActionSlot && !(item is ActionItemSO))
+                    {
+                        ReturnToOriginalSlot(); // Prevent move to ActionSlot if it's not an ActionItemSO
+                        return;
+                    }
+
+                    // Handle ActionSlot logic (already handled above)
                     if (targetSlot is ActionSlot)
                     {
-                        // Only allow ActionItemSO to be moved into an ActionSlot
                         if (item is ActionItemSO)
                         {
                             if (targetSlot.item != null)
@@ -149,22 +157,69 @@ namespace Game
                         }
                         else
                         {
-                            // Non-action items return to original slot
+                            ReturnToOriginalSlot(); // If item is not an ActionItemSO, return to original slot
+                        }
+                    }
+                    else if (targetSlot is EquipmentSlot equipmentSlot)
+                    {
+                        if (item is EquipmentSO equipment && equipment.equipmentType == equipmentSlot.equipmentType)
+                        {
+                            if (targetSlot.item != null)
+                            {
+                                // Unequip the current item and target item before swapping
+                                if (this.item is EquipmentSO thisEquipment)
+                                {
+                                    PlayerManager.Instance.SetEquipment(thisEquipment, -1); // Unequip current item
+                                }
+
+                                if (targetSlot.item is EquipmentSO targetEquipment)
+                                {
+                                    PlayerManager.Instance.SetEquipment(targetEquipment, -1); // Unequip target item
+                                }
+
+                                // Swap items
+                                SwapItems(targetSlot);
+                            }
+                            else
+                            {
+                                MoveItem(targetSlot); // If the target is empty, move the item
+                            }
+
+                            // Reapply stats for the newly equipped item (both slots)
+                            if (this.item is EquipmentSO newItem)
+                            {
+                                PlayerManager.Instance.SetEquipment(newItem, 1); // Equip the new item
+                            }
+
+                            if (targetSlot.item is EquipmentSO targetNewItem)
+                            {
+                                PlayerManager.Instance.SetEquipment(targetNewItem, 1); // Equip swapped item stats
+                            }
+                        }
+                        else
+                        {
                             ReturnToOriginalSlot();
                         }
                     }
                     else
                     {
-                        // Handle regular inventory slot behavior
+                        // Handle other inventory slots (ActionSlot or general)
                         if (targetSlot.item != null)
                         {
-                            if (this is ActionSlot && item is ActionItemSO && targetSlot.item is not ActionItemSO)
+                            if ((this is ActionSlot && !(targetSlot.item is ActionItemSO)) ||
+                                (this is EquipmentSlot && !(targetSlot.item is EquipmentSO)))
+                            {
                                 ReturnToOriginalSlot();
+                            }
                             else
+                            {
                                 SwapItems(targetSlot);
+                            }
                         }
                         else
+                        {
                             MoveItem(targetSlot);
+                        }
                     }
 
                     PlayerManager.Instance.UpdateActionSlots();
@@ -181,6 +236,8 @@ namespace Game
             }
         }
 
+
+
         // Return item to its original slot
         private void ReturnToOriginalSlot()
         {
@@ -190,35 +247,50 @@ namespace Game
         }
 
 
-
-
         private void SwapItems(InventorySlot targetSlot)
         {
-            if (this.item == targetSlot.item)
+            // Unequip both the current item and the target item
+            if (this is EquipmentSlot && this.item is EquipmentSO thisEquipment)
             {
-                int totalAmount = this.itemAmount + targetSlot.itemAmount;
-                targetSlot.itemAmount = totalAmount;
-                targetSlot.UpdateItemAmountText();
-
-                RemoveItem();
+                PlayerManager.Instance.SetEquipment(thisEquipment, -1); // Unequip current item stats
             }
-            else
+            if (targetSlot is EquipmentSlot && targetSlot.item is EquipmentSO targetEquipment)
             {
-                ItemSO tempItem = targetSlot.item;
-                int tempAmount = targetSlot.itemAmount;
+                PlayerManager.Instance.SetEquipment(targetEquipment, -1); // Unequip target item stats
+            }
 
-                targetSlot.item = this.item;
-                targetSlot.itemAmount = this.itemAmount;
-                targetSlot.UpdateItemAmountText();
+            // Swap the items in the slots
+            ItemSO tempItem = targetSlot.item;
+            int tempAmount = targetSlot.itemAmount;
 
-                this.item = tempItem;
-                this.itemAmount = tempAmount;
-                this.UpdateItemAmountText();
+            targetSlot.item = this.item;
+            targetSlot.itemAmount = this.itemAmount;
+            targetSlot.UpdateItemAmountText();
+
+            this.item = tempItem;
+            this.itemAmount = tempAmount;
+            this.UpdateItemAmountText();
+
+            // Reapply stats for the newly equipped items
+            if (this is EquipmentSlot && this.item is EquipmentSO thisNewEquipment)
+            {
+                PlayerManager.Instance.SetEquipment(thisNewEquipment, 1); // Equip new item stats
+            }
+            if (targetSlot is EquipmentSlot && targetSlot.item is EquipmentSO targetNewEquipment)
+            {
+                PlayerManager.Instance.SetEquipment(targetNewEquipment, 1); // Equip swapped item stats
             }
         }
 
         private void MoveItem(InventorySlot targetSlot)
         {
+            // If the current slot is an EquipmentSlot and has an equipment item, unequip it
+            if (this is EquipmentSlot && this.item is EquipmentSO equipment)
+            {
+                PlayerManager.Instance.SetEquipment(equipment, -1); // Unequip stats
+            }
+
+            // Move the item to the target slot
             targetSlot.item = this.item;
             targetSlot.itemAmount = this.itemAmount;
             targetSlot.UpdateItemAmountText();
