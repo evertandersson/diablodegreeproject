@@ -9113,8 +9113,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c85da4631865f34dba3810d6cc65417, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: fe14c17de9690054894714e346e97a79, type: 2}
-  message: Picked up helmet
+  item: {fileID: 11400000, guid: aa27f7d07cf44b642b2216f1ac99f975, type: 2}
+  message: Picked up armour
 --- !u!65 &409504405
 BoxCollider:
   m_ObjectHideFlags: 0

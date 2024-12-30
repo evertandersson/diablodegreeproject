@@ -145,7 +145,7 @@ namespace Game
                         return;
                     }
 
-                    // Handle ActionSlot logic (already handled above)
+                    // Handle ActionSlot logic
                     if (targetSlot is ActionSlot)
                     {
                         if (item is ActionItemSO)
@@ -162,23 +162,33 @@ namespace Game
                     }
                     else if (targetSlot is EquipmentSlot equipmentSlot)
                     {
+                        // Check if both items are of the same equipment type
                         if (item is EquipmentSO equipment && equipment.equipmentType == equipmentSlot.equipmentType)
                         {
                             if (targetSlot.item != null)
                             {
-                                // Unequip the current item and target item before swapping
-                                if (this.item is EquipmentSO thisEquipment)
+                                EquipmentSO targetEquip = targetSlot.item as EquipmentSO;
+                                // Ensure both items are of the same type before swapping
+                                if (equipment.equipmentType == targetEquip.equipmentType)
                                 {
-                                    PlayerManager.Instance.SetEquipment(thisEquipment, -1); // Unequip current item
-                                }
+                                    // Unequip the current item and target item before swapping
+                                    if (this.item is EquipmentSO thisEquipment)
+                                    {
+                                        PlayerManager.Instance.SetEquipment(thisEquipment, -1); // Unequip current item
+                                    }
 
-                                if (targetSlot.item is EquipmentSO targetEquipment)
+                                    if (targetSlot.item is EquipmentSO targetEquipment)
+                                    {
+                                        PlayerManager.Instance.SetEquipment(targetEquipment, -1); // Unequip target item
+                                    }
+
+                                    // Swap items
+                                    SwapItems(targetSlot);
+                                }
+                                else
                                 {
-                                    PlayerManager.Instance.SetEquipment(targetEquipment, -1); // Unequip target item
+                                    ReturnToOriginalSlot(); // Return to original slot if the types don't match
                                 }
-
-                                // Swap items
-                                SwapItems(targetSlot);
                             }
                             else
                             {
@@ -198,7 +208,7 @@ namespace Game
                         }
                         else
                         {
-                            ReturnToOriginalSlot();
+                            ReturnToOriginalSlot(); // Return to original slot if the equipment types don't match
                         }
                     }
                     else
@@ -206,6 +216,12 @@ namespace Game
                         // Handle other inventory slots (ActionSlot or general)
                         if (targetSlot.item != null)
                         {
+                            if (this is EquipmentSlot && (item as EquipmentSO)?.equipmentType != (targetSlot.item as EquipmentSO)?.equipmentType)
+                            {
+                                ReturnToOriginalSlot();
+                                return;
+                            }
+
                             if ((this is ActionSlot && !(targetSlot.item is ActionItemSO)) ||
                                 (this is EquipmentSlot && !(targetSlot.item is EquipmentSO)))
                             {
@@ -235,6 +251,7 @@ namespace Game
                 artworkRectTransform.rotation = Quaternion.identity;
             }
         }
+
 
 
 
