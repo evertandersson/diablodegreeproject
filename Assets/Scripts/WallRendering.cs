@@ -14,7 +14,8 @@ public class WallRendering : MonoBehaviour
         wallRenderers = new List<Renderer>();
         foreach (Renderer renderer in GetComponentsInChildren<Renderer>())
         {
-            if (renderer.gameObject.layer == LayerMask.NameToLayer("Wall"))
+            if (renderer.gameObject.layer == LayerMask.NameToLayer("Wall") ||
+                renderer.gameObject.CompareTag("Hidable"))
             {
                 wallRenderers.Add(renderer);
             }

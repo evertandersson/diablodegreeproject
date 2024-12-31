@@ -23,6 +23,7 @@ public class DeathScreen : Popup
 
     public void Restart()
     {
+        EventHandler.Main.EventStack.Remove(this);
         OnEnd();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
