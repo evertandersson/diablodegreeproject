@@ -37,6 +37,18 @@ namespace Game
         {
             HideEquipmentSlots();
         }
+
+        public void GetStatsFromArmour()
+        {
+            foreach(EquipmentSlot slot in equipmentSlots)
+            {
+                EquipmentSO equipmentSO = slot.item as EquipmentSO;
+                if (equipmentSO != null)
+                {
+                    PlayerManager.Instance.SetEquipment(equipmentSO);
+                }
+            }
+        }
     }
 
 }

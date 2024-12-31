@@ -138,7 +138,7 @@ namespace Game
             // Load data into inventory and action slots
             LoadSlots(PlayerManager.Instance.inventory.inventory, inventoryList);
             LoadSlots(PlayerManager.Instance.slotManager.actionSlots, actionSlotList);
-            LoadSlots(EquipmentManager.Instance.equipmentSlots, equipmentList);
+            LoadEquipmentSlots(EquipmentManager.Instance.equipmentSlots);
         }
 
         private void ClearSlots(IEnumerable<InventorySlot> slots)
@@ -178,7 +178,39 @@ namespace Game
             }
         }
 
+        private void LoadEquipmentSlots(IList<EquipmentSlot> slots)
+        {
+            for (int i = 0; i < equipmentList.serializableList.Count; i++)
+            {
+                string name = equipmentList.serializableList[i].name;
+                int count = equipmentList.serializableList[i].count;
 
+                EquipmentSO obj = itemDB.GetItem(name) as EquipmentSO;
+                if (obj == null)
+                {
+                    Debug.LogWarning($"Item '{name}' not found in the database. Skipping slot {i}.");
+                    continue;
+                }
+
+                if (i >= slots.Count)
+                {
+                    Debug.LogWarning($"Not enough slots to load item '{name}' at index {i}. Skipping.");
+                    continue;
+                }
+
+                foreach (EquipmentSlot slot in slots)
+                {
+                    if (slot.equipmentType == obj.equipmentType)
+                    {
+                        slot.item = obj;
+                        slot.itemAmount = count;
+                        slot.CheckIfItemNull();
+                        continue;
+                    }
+                }
+            }
+            EquipmentManager.Instance.GetStatsFromArmour();
+        }
 
 
         public void LoadScriptables()
