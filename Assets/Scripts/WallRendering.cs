@@ -1,5 +1,6 @@
 using Game;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class WallRendering : MonoBehaviour
@@ -20,6 +21,7 @@ public class WallRendering : MonoBehaviour
                 wallRenderers.Add(renderer);
             }
         }
+        OnPlayerYValueChanged(PlayerManager.Instance.transform.position.y);
     }
 
     private void Start()
@@ -50,6 +52,21 @@ public class WallRendering : MonoBehaviour
         foreach (Renderer renderer in wallRenderers)
         {
             renderer.enabled = renderer.transform.position.y - 3 <= playerY;
+
+            // Make hidable ground walkable if rendered
+            if (!renderer.gameObject.CompareTag("Hidable")) 
+                continue;
+            
+            if (renderer.enabled)
+            {
+                renderer.gameObject.layer = LayerMask.NameToLayer("Default");
+            }
+            else
+            {
+                renderer.gameObject.layer = LayerMask.NameToLayer("Wall");
+            }
+            
+
         }
     }
 }
