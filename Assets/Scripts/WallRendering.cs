@@ -9,7 +9,7 @@ public class WallRendering : MonoBehaviour
 
     private bool isQuitting = false;
 
-    private void Awake()
+    private void Start()
     {
         // Fetch all Renderer components in child GameObjects and filter for the "Wall" layer
         wallRenderers = new List<Renderer>();
@@ -22,10 +22,7 @@ public class WallRendering : MonoBehaviour
             }
         }
         OnPlayerYValueChanged(PlayerManager.Instance.transform.position.y);
-    }
 
-    private void Start()
-    {
         Application.quitting += OnApplicationQuit;
         if (PlayerManager.Instance != null)
         {
