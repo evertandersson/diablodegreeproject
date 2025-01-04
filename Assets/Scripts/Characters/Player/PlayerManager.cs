@@ -246,6 +246,10 @@ namespace Game
             slotManager.HandleCooldowns();
             playerAnimator.HandleAnimations(IsAttacking);
 
+            // Handle movement
+            if (playerInput.IsMoving()) playerInput.Move();
+
+            // Handle attacking
             if (IsAttacking)
             {
                 Agent.isStopped = true;

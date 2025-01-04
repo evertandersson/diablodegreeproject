@@ -18,6 +18,9 @@ namespace Game
         InputAction openInventory;
         InputAction openSkillTree;
 
+        bool isMoving = false;
+        bool isClickInteraction = false;
+
         private void Awake()
         {
             playerInputSystem = new PlayerInputSystem();
@@ -29,7 +32,8 @@ namespace Game
             // Initialize the move action
             move = playerInputSystem.Player.Move;
             move.Enable();
-            move.performed += Move;
+            move.performed += StartMoving;
+            move.canceled += StopMoving;
 
             roll = playerInputSystem.Player.Roll;
             roll.Enable();
@@ -58,6 +62,7 @@ namespace Game
                 attacks[i].performed += ctx => Attack(ctx, index);
             }
         }
+
 
         private void OnDisable()
         {
@@ -93,45 +98,65 @@ namespace Game
                 return 0;
         }
 
-        private void Move(InputAction.CallbackContext context)
+        #region Movement
+
+        private void StartMoving(InputAction.CallbackContext context)
+        {
+            isMoving = true;
+            isClickInteraction = true;
+        }
+
+        private void StopMoving(InputAction.CallbackContext context) 
+        {
+            isMoving = false;
+            isClickInteraction = false;
+        }
+
+        public bool IsMoving()
+        {
+            return isMoving;
+        }
+
+        public void Move()
         {
             if (PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead) return;
 
-            // Handle movement input
+            if (isClickInteraction)
+            {
+                HandleInteraction();
+                isClickInteraction = false; // Reset interaction state after handling
+                return;
+            }
+
+            // Handle movement input when holding
             if (playerMovement.ReadyForAnotherInput(GetCurrentTimer(), GetWaitForNextBufferedInputTimer()))
             {
-                // Buffer the movement input during a roll
                 playerMovement.BufferInput(PlayerManager.Instance.mouseInput.mouseInputPosition);
                 return;
             }
 
             if (PlayerManager.Instance.CurrentPlayerState != PlayerManager.State.Inventory && !PlayerManager.Instance.isInteracting)
             {
-                if (PlayerManager.Instance.mouseInput.hit.transform != null)
-                {
-                    // Try to get the Interactable interface from the hit object
-                    var interactable = PlayerManager.Instance.mouseInput.hit.transform.GetComponent<Interactable>();
+                playerMovement.SetDestination(PlayerManager.Instance.mouseInput.mouseInputPosition);
+            }
+        }
 
-                    if (interactable != null)
-                    {
-                        playerMovement.SetDestination(interactable.GetCenterPoint());
+        private void HandleInteraction()
+        {
+            if (PlayerManager.Instance.mouseInput.hit.transform != null)
+            {
+                var interactable = PlayerManager.Instance.mouseInput.hit.transform.GetComponent<Interactable>();
 
-                        // Set the current object in the PlayerManager
-                        PlayerManager.Instance.SetCurrentObject(interactable);
-                    }
-                    else
-                    {
-                        // Move to the clicked position if not interactable
-                        playerMovement.SetDestination(PlayerManager.Instance.mouseInput.mouseInputPosition);
-                    }
-                }
-                else
+                if (interactable != null)
                 {
-                    // Default movement to the mouse input position
-                    playerMovement.SetDestination(PlayerManager.Instance.mouseInput.mouseInputPosition);
+                    // Click detected on an interactable
+                    playerMovement.SetDestination(interactable.GetCenterPoint());
+                    PlayerManager.Instance.SetCurrentObject(interactable);
                 }
             }
         }
+
+        #endregion 
 
         private void Roll(InputAction.CallbackContext context)
         {
@@ -191,8 +216,6 @@ namespace Game
                 {
                     popupInstance.OnCancel();
                 }
-                // Do NOT immediately set popupInstance to null
-                // Let Popup.OnEnd() handle cleanup
             }
         }
     }

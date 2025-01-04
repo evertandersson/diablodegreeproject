@@ -62,8 +62,6 @@ public class WallRendering : MonoBehaviour
             {
                 renderer.gameObject.layer = LayerMask.NameToLayer("Wall");
             }
-            
-
         }
     }
 }
