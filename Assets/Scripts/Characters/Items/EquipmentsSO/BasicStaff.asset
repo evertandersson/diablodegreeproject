@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Basic Staff
   itemDescription: This is a basic staff.
   itemIcon: {fileID: 2800000, guid: e30d7baabfb292c4f9687033f726d8a4, type: 3}
-  prefab: {fileID: 0}
+  prefab: {fileID: 6638243990525132539, guid: 1a9e5833b9ef8554db624d98f43dec4b, type: 3}
   isStackable: 0
   equipmentType: 3
   damageIncrease: 3

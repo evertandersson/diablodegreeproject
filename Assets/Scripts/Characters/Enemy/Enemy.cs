@@ -8,6 +8,13 @@ using UnityEngine.AI;
 
 namespace Game
 {
+    [System.Serializable]
+    public class ItemDrop 
+    {
+        public ItemSO item;
+        [Range(0f, 1f)] public float dropRate;
+    }
+
     public class Enemy : Character, IPooledObject
     {
         [SerializeField] private int experienceOnDeath = 20;
@@ -32,6 +39,9 @@ namespace Game
         public Transform Player => player;
 
         [SerializeField] private EnemyHealthBar healthBar;
+
+        [Header("Drop rate")]
+        [SerializeField] private List<ItemDrop> itemDropRates;
 
         public void OnObjectSpawn()
         {
@@ -169,6 +179,19 @@ namespace Game
             EnableRagdoll(true);
             isDead = true;
             PlayerManager.Instance.levelSystem.AddExperience(experienceOnDeath);
+            HandleItemDrops();
+        }
+
+        private void HandleItemDrops()
+        {
+            foreach(ItemDrop itemDrop in itemDropRates)
+            {
+                float rng = Random.Range(0f, 1f);
+                if (rng < itemDrop.dropRate)
+                {
+                    Instantiate(itemDrop.item.prefab, transform.position, Quaternion.identity);
+                }
+            }
         }
 
 //        private void OnGUI()
