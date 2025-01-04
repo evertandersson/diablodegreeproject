@@ -12,8 +12,11 @@ namespace Game
         public override void OnBegin(bool firstTime)
         {
             base.OnBegin(firstTime);
-            enemy.Agent.isStopped = false;
-            SetNewDestination(enemy.Player.position);
+            if (enemy.Agent.enabled)
+            {
+                enemy.Agent.isStopped = false;
+                SetNewDestination(enemy.Player.position);
+            }
         }
 
         public override void OnUpdate()

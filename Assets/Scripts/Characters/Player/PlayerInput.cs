@@ -102,6 +102,8 @@ namespace Game
 
         private void StartMoving(InputAction.CallbackContext context)
         {
+            if (CanNotDoAction()) return;
+
             isMoving = true;
             isClickInteraction = true;
         }
@@ -119,8 +121,6 @@ namespace Game
 
         public void Move()
         {
-            if (PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead) return;
-
             if (isClickInteraction)
             {
                 HandleInteraction();
@@ -160,7 +160,7 @@ namespace Game
 
         private void Roll(InputAction.CallbackContext context)
         {
-            if (PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead) return;
+            if (CanNotDoAction()) return;
 
             // Start rolling only if the player is not already rolling
             if (playerMovement.ReadyForAnotherInput(GetCurrentTimer(), GetWaitForNextBufferedInputTimer()))
@@ -175,7 +175,7 @@ namespace Game
 
         private void Attack(InputAction.CallbackContext context, int attackIndex)
         {
-            if (PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead) return;
+            if (CanNotDoAction()) return;
 
             // Allow attacking during idle or buffered for after rolling
             if (playerMovement.ReadyForAnotherInput(GetCurrentTimer(), GetWaitForNextBufferedInputTimer()))
@@ -191,14 +191,26 @@ namespace Game
 
         private void OpenInventory(InputAction.CallbackContext context)
         {
-            if (PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead) return;
+            if (CanNotOpenMenu()) return;
             TogglePopup(ref PlayerManager.Instance.inventory, PlayerManager.State.Inventory);
         }
 
         private void OpenSkillTree(InputAction.CallbackContext context)
         {
-            if (PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead) return;
+            if (CanNotOpenMenu()) return;
             TogglePopup(ref PlayerManager.Instance.skillTree, PlayerManager.State.Inventory);
+        }
+
+        private bool CanNotDoAction()
+        {
+            return PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead ||
+                PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Inventory;
+        }
+
+        private bool CanNotOpenMenu()
+        {
+            return PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead ||
+                PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Rolling;
         }
 
         private void TogglePopup<T>(ref T popupInstance, PlayerManager.State activeState) where T : Popup

@@ -5550,7 +5550,7 @@ MonoBehaviour:
   detectionMask:
     serializedVersion: 2
     m_Bits: 128
-  experienceOnDeath: 100
+  experienceOnDeath: 15
   standStill: 0
   isAggro: 0
   distanceToAttack: 1.5
@@ -5559,6 +5559,15 @@ MonoBehaviour:
   attackTrigger: 1080829965
   isHitTrigger: 2006285284
   healthBar: {fileID: 5804443648432738237}
+  itemDropRates:
+  - item: {fileID: 11400000, guid: 6e4801fd3aca86b408d7f9bc61e0a694, type: 2}
+    dropRate: 0.05
+  - item: {fileID: 11400000, guid: aa27f7d07cf44b642b2216f1ac99f975, type: 2}
+    dropRate: 0.02
+  - item: {fileID: 11400000, guid: fe14c17de9690054894714e346e97a79, type: 2}
+    dropRate: 0.02
+  - item: {fileID: 11400000, guid: 7fb38002aef152347ac39bde39ea8811, type: 2}
+    dropRate: 0.02
 --- !u!195 &4843719664493087645
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -5569,7 +5578,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.3
-  m_Speed: 6
+  m_Speed: 4
   m_Acceleration: 20
   avoidancePriority: 50
   m_AngularSpeed: 1000

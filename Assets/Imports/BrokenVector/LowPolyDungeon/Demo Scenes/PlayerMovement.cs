@@ -12,10 +12,6 @@ public class PlayerMovement : MonoBehaviour
 
     float speedBoost = 1f;
     Vector3 velocity;
-    void Start()
-    {
-
-    }
 
     void Update()
     {

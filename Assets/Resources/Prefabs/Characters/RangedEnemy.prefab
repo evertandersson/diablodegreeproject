@@ -440,7 +440,7 @@ MonoBehaviour:
   detectionMask:
     serializedVersion: 2
     m_Bits: 128
-  experienceOnDeath: 20
+  experienceOnDeath: 30
   standStill: 0
   isAggro: 0
   distanceToAttack: 10
@@ -449,6 +449,15 @@ MonoBehaviour:
   attackTrigger: 1080829965
   isHitTrigger: 2006285284
   healthBar: {fileID: 7484332425916425796}
+  itemDropRates:
+  - item: {fileID: 11400000, guid: 6e4801fd3aca86b408d7f9bc61e0a694, type: 2}
+    dropRate: 0.15
+  - item: {fileID: 11400000, guid: aa27f7d07cf44b642b2216f1ac99f975, type: 2}
+    dropRate: 0.07
+  - item: {fileID: 11400000, guid: fe14c17de9690054894714e346e97a79, type: 2}
+    dropRate: 0.07
+  - item: {fileID: 11400000, guid: 7fb38002aef152347ac39bde39ea8811, type: 2}
+    dropRate: 0.07
 --- !u!195 &8388076702170604132
 NavMeshAgent:
   m_ObjectHideFlags: 0
