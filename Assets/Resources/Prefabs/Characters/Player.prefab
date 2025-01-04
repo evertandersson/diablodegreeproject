@@ -5443,6 +5443,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 726.6074
       objectReference: {fileID: 0}
+    - target: {fileID: 2755681000757929879, guid: f15896cef99df0e43b9c64e54c96a3eb, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2844223017297745494, guid: f15896cef99df0e43b9c64e54c96a3eb, type: 3}
       propertyPath: m_Layer
       value: 7
