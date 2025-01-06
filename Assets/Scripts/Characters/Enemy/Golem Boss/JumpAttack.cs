@@ -4,6 +4,7 @@ using UnityEngine;
 public class JumpAttack : EnemyEvent
 {
     private float initialYPosition;
+    private Vector3 impactOffset = new Vector3 (0, 0, 1.3f);
 
     public override void OnBegin(bool firstTime)
     {
@@ -55,6 +56,17 @@ public class JumpAttack : EnemyEvent
         {
             enemy.Attack();
         }
+    }
+
+    public void GroundSlam()
+    {
+        Vector3 slamPosition = transform.position + transform.forward * impactOffset.z;
+
+        Quaternion slamRotation = Quaternion.Euler(-90f, transform.eulerAngles.y, 0f);
+
+        // Spawn the effect at the calculated position with the adjusted rotation
+        EnemyExplosion impact = ObjectPooling.Instance.SpawnFromPool("BossImpact", slamPosition, slamRotation).GetComponent<EnemyExplosion>();
+        impact.SetEnemy(enemy);
     }
 
     public override bool IsDone()
