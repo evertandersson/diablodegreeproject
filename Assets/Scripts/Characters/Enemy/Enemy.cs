@@ -43,6 +43,8 @@ namespace Game
         [Header("Drop rate")]
         [SerializeField] private List<ItemDrop> itemDropRates;
 
+        public GolemBoss golem;
+
         public void OnObjectSpawn()
         {
             isDead = false;
@@ -64,6 +66,8 @@ namespace Game
             CharacterAnimator = GetComponent<Animator>();
             EnemyEventHandler = EventHandler.CreateEventHandler();
             EnableRagdoll(false);
+
+            golem = this as GolemBoss;
 
             if (EnemyEventHandler == null)
             {

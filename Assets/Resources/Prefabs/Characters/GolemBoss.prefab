@@ -47,8 +47,9 @@ GameObject:
   - component: {fileID: 1131462942478417869}
   - component: {fileID: -3834180226821586002}
   - component: {fileID: -4010493078266056589}
-  - component: {fileID: 3954456653906581592}
+  - component: {fileID: 6574987112474509211}
   - component: {fileID: 2951084091971137855}
+  - component: {fileID: 3001840136835420031}
   m_Layer: 8
   m_Name: GolemBoss
   m_TagString: Untagged
@@ -131,6 +132,9 @@ MonoBehaviour:
   isHitTrigger: 2006285284
   healthBar: {fileID: 6428004508232907059}
   itemDropRates: []
+  distanceToJumpAttack: 4
+  jumpAttackTrigger: -960097325
+  jumpAttackAnim: -960097325
 --- !u!195 &3707500328194862533
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -200,7 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bf92c22cfd642a4c8396f06e9f88a24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3954456653906581592
+--- !u!114 &6574987112474509211
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -209,7 +213,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 238037516395976969}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b632c577051ec74bb3b47d4aa543301, type: 3}
+  m_Script: {fileID: 11500000, guid: aa4481120bcd13f47bc5e6aa311ad56e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &2951084091971137855
@@ -222,6 +226,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 971186c8fbe888b4f8ebc3e7c7ee663b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3001840136835420031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 238037516395976969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d6a90b7995088f45a63b1266f698ce6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &265411463357316742

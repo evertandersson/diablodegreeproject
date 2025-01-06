@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.Services.Analytics;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -32,8 +33,7 @@ namespace Game
 
         public override void OnUpdate()
         {
-            float speed = enemy.Agent.velocity.magnitude / enemy.Agent.speed;
-            enemy.CharacterAnimator.SetFloat("RunSpeed", speed);
+            SetFloatRunSpeed();
 
             if (enemy.isAggro && enemy.EnemyEventHandler.CurrentEvent is not EnemyTakeDamage)
             {
@@ -50,6 +50,12 @@ namespace Game
         public override bool IsDone()
         {
             return true;
+        }
+
+        public void SetFloatRunSpeed()
+        {
+            float speed = enemy.Agent.velocity.magnitude / enemy.Agent.speed;
+            enemy.CharacterAnimator.SetFloat("RunSpeed", speed);
         }
 
         protected void SetNewDestination(Vector3 pos)
