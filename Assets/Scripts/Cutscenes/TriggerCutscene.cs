@@ -2,15 +2,15 @@ using System;
 using UnityEngine;
 using UnityEngine.Playables;
 
-public class TriggerCutscene : MonoBehaviour
+public abstract class TriggerCutscene : MonoBehaviour
 {
-    PlayableDirector director;
+    protected PlayableDirector director;
     private bool isTriggered = false;
 
-    public static event Action StartCutsceneEvent;
-    public static event Action StopCutsceneEvent;
+    protected abstract Action StartCutsceneAction { get; }
+    protected abstract Action StopCutsceneAction { get; }
 
-    void Awake()
+    protected virtual void Awake()
     {
         director = GetComponent<PlayableDirector>();
         director.extrapolationMode = DirectorWrapMode.None;
@@ -18,13 +18,11 @@ public class TriggerCutscene : MonoBehaviour
 
     private void OnEnable()
     {
-        // Subscribe to PlayableDirector's stopped event
         director.stopped += OnCutsceneStopped;
     }
 
     private void OnDisable()
     {
-        // Unsubscribe to avoid memory leaks
         director.stopped -= OnCutsceneStopped;
     }
 
@@ -32,7 +30,7 @@ public class TriggerCutscene : MonoBehaviour
     {
         if (!isTriggered && other.CompareTag("Player"))
         {
-            StartCutsceneEvent?.Invoke();
+            StartCutsceneAction?.Invoke();
             director.Play();
             isTriggered = true;
         }
@@ -41,6 +39,6 @@ public class TriggerCutscene : MonoBehaviour
     private void OnCutsceneStopped(PlayableDirector obj)
     {
         Debug.Log("Cutscene has ended!");
-        StopCutsceneEvent?.Invoke();
+        StopCutsceneAction?.Invoke();
     }
 }

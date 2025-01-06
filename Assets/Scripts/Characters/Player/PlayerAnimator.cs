@@ -1,3 +1,4 @@
+using Game;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -17,11 +18,7 @@ public class PlayerAnimator : MonoBehaviour
 
     public void HandleAnimations(bool isAttacking)
     {
-        float speed = agent.velocity.magnitude / agent.speed;
-        float currentSpeed = animator.GetFloat(runSpeedHash);
-        float targetSpeed = Mathf.Clamp01(speed);
-        float smoothSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * 5f);
-        animator.SetFloat(runSpeedHash, smoothSpeed);
+        PlayerManager.Instance.SetFloatRunSpeed();
 
         animator.SetBool(isAttackingHash, isAttacking);
     }

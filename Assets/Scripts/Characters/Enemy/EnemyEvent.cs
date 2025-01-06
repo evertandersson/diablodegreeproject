@@ -33,7 +33,7 @@ namespace Game
 
         public override void OnUpdate()
         {
-            SetFloatRunSpeed();
+            enemy.SetFloatRunSpeed();
 
             if (enemy.isAggro && enemy.EnemyEventHandler.CurrentEvent is not EnemyTakeDamage)
             {
@@ -50,19 +50,6 @@ namespace Game
         public override bool IsDone()
         {
             return true;
-        }
-
-        public void SetFloatRunSpeed()
-        {
-            float speed = enemy.Agent.velocity.magnitude / enemy.Agent.speed;
-            float currentSpeed = enemy.CharacterAnimator.GetFloat("RunSpeed");
-            float targetSpeed = Mathf.Clamp01(speed);
-            float smoothSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * 5f);
-            enemy.CharacterAnimator.SetFloat("RunSpeed", smoothSpeed);
-
-
-            //float speed = enemy.Agent.velocity.magnitude / enemy.Agent.speed;
-            //enemy.CharacterAnimator.SetFloat("RunSpeed", speed);
         }
 
         protected void SetNewDestination(Vector3 pos)

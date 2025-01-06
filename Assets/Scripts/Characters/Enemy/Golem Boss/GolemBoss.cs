@@ -10,6 +10,16 @@ namespace Game
         [HideInInspector] public int jumpAttackAnim = Animator.StringToHash("IntroAttack");
 
 
+        protected override void OnEnable()
+        {
+            TriggerCutscene02.StopCutscene02 += StopCutscene;
+        }
+
+        protected override void OnDisable()
+        {
+            TriggerCutscene02.StartCutscene02 -= StopCutscene;
+        }
+
         public override void TakeDamage(int damage)
         {
             if (!IsDead)
@@ -24,6 +34,12 @@ namespace Game
                     Die();
                 }
             }
+        }
+
+        private void StopCutscene()
+        {
+            standStill = false;
+            isAggro = true;
         }
 
         public void JumpAttack()

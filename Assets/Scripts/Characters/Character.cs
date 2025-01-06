@@ -45,6 +45,8 @@ public abstract class Character : MonoBehaviour
     [SerializeField] public float visionRange = 10f; // Distance the character can see
     [SerializeField] public LayerMask detectionMask; // Layers the character can "see" (e.g., player)
 
+    private int runSpeedHash = Animator.StringToHash("RunSpeed");
+
     #region Properties
 
     public int Health
@@ -185,6 +187,15 @@ public abstract class Character : MonoBehaviour
             c.enabled = enable;
         }
         capsuleCollider.enabled = !enable;
+    }
+
+    public void SetFloatRunSpeed()
+    {
+        float speed = Agent.velocity.magnitude / Agent.speed;
+        float currentSpeed = CharacterAnimator.GetFloat(runSpeedHash);
+        float targetSpeed = Mathf.Clamp01(speed);
+        float smoothSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * 5f);
+        CharacterAnimator.SetFloat(runSpeedHash, smoothSpeed);
     }
 
     protected abstract void Die();

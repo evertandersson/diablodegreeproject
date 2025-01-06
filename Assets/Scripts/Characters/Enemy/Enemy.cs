@@ -77,16 +77,20 @@ namespace Game
             Events = new List<EnemyEvent>(GetComponents<EnemyEvent>());
         }
 
-        void OnEnable()
+        protected virtual void OnEnable()
         {
-            TriggerCutscene.StartCutsceneEvent += StartCutscene;
-            TriggerCutscene.StopCutsceneEvent += StopCutscene;
+            TriggerCutscene01.StartCutscene01 += StartCutscene;
+            TriggerCutscene01.StopCutscene01 += StopCutscene;
+            TriggerCutscene02.StartCutscene02 += StartCutscene;
+            TriggerCutscene02.StopCutscene02 += StopCutscene;
         }
 
-        void OnDisable()
+        protected virtual void OnDisable()
         {
-            TriggerCutscene.StartCutsceneEvent -= StartCutscene;
-            TriggerCutscene.StopCutsceneEvent -= StopCutscene;
+            TriggerCutscene01.StartCutscene01 -= StartCutscene;
+            TriggerCutscene01.StopCutscene01 -= StopCutscene;
+            TriggerCutscene02.StartCutscene02 -= StartCutscene;
+            TriggerCutscene02.StopCutscene02 -= StopCutscene;
         }
 
         private void StartCutscene()

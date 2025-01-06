@@ -11,7 +11,7 @@ namespace Game
 
         public override void OnUpdate()
         {
-            SetFloatRunSpeed();
+            enemy.SetFloatRunSpeed();
 
             // Update animation timer
             CheckAnimationInterval();
