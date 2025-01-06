@@ -55,7 +55,14 @@ namespace Game
         public void SetFloatRunSpeed()
         {
             float speed = enemy.Agent.velocity.magnitude / enemy.Agent.speed;
-            enemy.CharacterAnimator.SetFloat("RunSpeed", speed);
+            float currentSpeed = enemy.CharacterAnimator.GetFloat("RunSpeed");
+            float targetSpeed = Mathf.Clamp01(speed);
+            float smoothSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * 5f);
+            enemy.CharacterAnimator.SetFloat("RunSpeed", smoothSpeed);
+
+
+            //float speed = enemy.Agent.velocity.magnitude / enemy.Agent.speed;
+            //enemy.CharacterAnimator.SetFloat("RunSpeed", speed);
         }
 
         protected void SetNewDestination(Vector3 pos)

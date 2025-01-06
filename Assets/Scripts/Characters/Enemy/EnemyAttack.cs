@@ -31,7 +31,7 @@ namespace Game
         protected void HandleAnimationCombo()
         {
             // Don't attack while in take damage animation
-            if (IsAnimationPlaying(enemy.damageAnim) || IsAnimationPlaying(enemy.golem.jumpAttackAnim))
+            if (IsAnimationPlaying(enemy.damageAnim))
                 return;
 
             // If current attack animation is playing

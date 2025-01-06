@@ -13,6 +13,8 @@ public class JumpAttack : EnemyEvent
             return;
         }
 
+        initialYPosition = transform.position.y;
+
         enemy.Agent.isStopped = true;
         enemy.Agent.enabled = false;
         enemy.CharacterAnimator.SetTrigger(enemy.golem.jumpAttackTrigger);
@@ -62,12 +64,15 @@ public class JumpAttack : EnemyEvent
 
     private void OnAnimatorMove()
     {
+        if (enemy.EnemyEventHandler.CurrentEvent is not JumpAttack)
+            return;
+
         // Apply root motion position, but lock the Y position
         Vector3 newPosition = transform.position + enemy.CharacterAnimator.deltaPosition;
         newPosition.y = initialYPosition; // Maintain the original Y position
         transform.position = newPosition;
-    
+
         // Force rotation to stay aligned with rollDirection
-        //enemy.transform.rotation = Quaternion.LookRotation(rollDirection);
+        //enemy.transform.rotation = Quaternion.LookRotation(rollDirection); 
     }
 }

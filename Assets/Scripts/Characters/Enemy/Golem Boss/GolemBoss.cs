@@ -9,6 +9,7 @@ namespace Game
         [HideInInspector] public int jumpAttackTrigger = Animator.StringToHash("IntroAttack");
         [HideInInspector] public int jumpAttackAnim = Animator.StringToHash("IntroAttack");
 
+
         public override void TakeDamage(int damage)
         {
             if (!IsDead)
