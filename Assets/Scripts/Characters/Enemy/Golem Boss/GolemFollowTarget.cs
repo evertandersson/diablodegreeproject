@@ -30,7 +30,7 @@ namespace Game
                 return;
             }
 
-            if (IsCloseToPlayer(enemy.golem.distanceToJumpAttack))
+            if (IsCloseToPlayer(enemy.golem.distanceToJumpAttack) && IsTargetedAtPlayer())
             {
                 enemy.golem.JumpAttack();
                 return;
