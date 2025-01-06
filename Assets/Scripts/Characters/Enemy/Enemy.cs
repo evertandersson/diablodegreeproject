@@ -27,18 +27,18 @@ namespace Game
         public float distanceToAttack = 1.5f;
 
         // Animation names:
-        public int damageAnim = Animator.StringToHash("damage");
-        public int[] attackAnims = { Animator.StringToHash("Attack1"), Animator.StringToHash("Attack2") };
+        [HideInInspector] public int damageAnim = Animator.StringToHash("damage");
+        [HideInInspector] public int[] attackAnims = { Animator.StringToHash("Attack1"), Animator.StringToHash("Attack2") };
 
         // Trigger names:
-        public int attackTrigger = Animator.StringToHash("Attack");
-        public int isHitTrigger = Animator.StringToHash("IsHit");
+        [HideInInspector] public int attackTrigger = Animator.StringToHash("Attack");
+        [HideInInspector] public int isHitTrigger = Animator.StringToHash("IsHit");
 
         public EventHandler EnemyEventHandler { get; private set; }
         public List<EnemyEvent> Events { get; private set; } 
         public Transform Player => player;
 
-        [SerializeField] private EnemyHealthBar healthBar;
+        [SerializeField] protected EnemyHealthBar healthBar;
 
         [Header("Drop rate")]
         [SerializeField] private List<ItemDrop> itemDropRates;
@@ -133,8 +133,6 @@ namespace Game
                     SetNewEvent<EnemyTakeDamage>();
                 }
             }
-
-
         }
 
         public override void EnableRagdoll(bool enable)
@@ -194,40 +192,38 @@ namespace Game
             }
         }
 
-//        private void OnGUI()
-//        {
-//
-//#if UNITY_EDITOR
-//            const float LINE_HEIGHT = 32.0f;
-//            GUI.color = new Color(0.0f, 0.0f, 0.0f, 0.7f);
-//            Rect r = new Rect(0, 0, 250.0f, LINE_HEIGHT * EnemyEventHandler.EventStack.Count);
-//            GUI.DrawTexture(r, Texture2D.whiteTexture);
-//
-//            Rect line = new Rect(10, 0, r.width - 20, LINE_HEIGHT);
-//            for (int i = 0; i < EnemyEventHandler.EventStack.Count; i++)
-//            {
-//                GUI.color = EnemyEventHandler.EventStack[i] == EnemyEventHandler.CurrentEvent ? Color.green : Color.white;
-//                GUI.Label(line, "#" + i + ": " + EnemyEventHandler.EventStack[i].ToString(), i == 0 ? UnityEditor.EditorStyles.boldLabel : UnityEditor.EditorStyles.label);
-//                line.y += line.height;
-//            }
-//#endif
-//        }
+        private void OnGUI()
+        {
 
-       // private void OnDrawGizmos()
-       // {
-       //     // Draw the vision range
-       //     Gizmos.color = Color.yellow;
-       //     Gizmos.DrawWireSphere(transform.position, visionRange);
-       //
-       //     // Draw the vision cone
-       //     Vector3 forward = transform.forward * visionRange;
-       //     Vector3 leftBoundary = Quaternion.Euler(0, -visionAngle, 0) * forward;
-       //     Vector3 rightBoundary = Quaternion.Euler(0, visionAngle, 0) * forward;
-       //
-       //     Gizmos.color = Color.red;
-       //     Gizmos.DrawRay(transform.position, leftBoundary);
-       //     Gizmos.DrawRay(transform.position, rightBoundary);
-       // }
+#if UNITY_EDITOR
+            const float LINE_HEIGHT = 32.0f;
+            GUI.color = new Color(0.0f, 0.0f, 0.0f, 0.7f);
+            Rect r = new Rect(0, 0, 250.0f, LINE_HEIGHT * EnemyEventHandler.EventStack.Count);
+            GUI.DrawTexture(r, Texture2D.whiteTexture);
+
+            Rect line = new Rect(10, 0, r.width - 20, LINE_HEIGHT);
+            for (int i = 0; i < EnemyEventHandler.EventStack.Count; i++)
+            {
+                GUI.color = EnemyEventHandler.EventStack[i] == EnemyEventHandler.CurrentEvent ? Color.green : Color.white;
+                GUI.Label(line, "#" + i + ": " + EnemyEventHandler.EventStack[i].ToString(), i == 0 ? UnityEditor.EditorStyles.boldLabel : UnityEditor.EditorStyles.label);
+                line.y += line.height;
+            }
+#endif
+        }
+
+        private void OnDrawGizmos()
+        {
+            // Draw the vision range
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, visionRange);
+                    // Draw the vision cone
+            Vector3 forward = transform.forward * visionRange;
+            Vector3 leftBoundary = Quaternion.Euler(0, -visionAngle, 0) * forward;
+            Vector3 rightBoundary = Quaternion.Euler(0, visionAngle, 0) * forward;
+                    Gizmos.color = Color.red;
+            Gizmos.DrawRay(transform.position, leftBoundary);
+            Gizmos.DrawRay(transform.position, rightBoundary);
+        }
         
 
     }

@@ -41,7 +41,7 @@ public abstract class Character : MonoBehaviour
     private Collider[] colliders;
 
 
-    [SerializeField] private float visionAngle = 45f; // Half of the total field of view
+    [SerializeField] protected float visionAngle = 45f; // Half of the total field of view
     [SerializeField] public float visionRange = 10f; // Distance the character can see
     [SerializeField] public LayerMask detectionMask; // Layers the character can "see" (e.g., player)
 
