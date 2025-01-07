@@ -124,7 +124,7 @@ MonoBehaviour:
     m_Bits: 128
   experienceOnDeath: 20
   standStill: 0
-  isAggro: 0
+  isAggro: 1
   distanceToAttack: 2
   damageAnim: 298341484
   attackAnims: 22ff2dfd98ae2464

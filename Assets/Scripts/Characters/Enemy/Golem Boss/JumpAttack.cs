@@ -30,7 +30,7 @@ public class JumpAttack : EnemyEvent
         // If current attack animation is playing
         if (IsAnimationPlaying(enemy.golem.jumpAttackAnim))
         {
-            if (enemy.CharacterAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.8f)
+            if (enemy.CharacterAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f)
             {
                 isDone = true;
             }
@@ -47,10 +47,6 @@ public class JumpAttack : EnemyEvent
 
         // Synchronize NavMeshAgent with current Transform position
         enemy.Agent.Warp(transform.position);
-
-        enemy.CharacterAnimator.ResetTrigger(enemy.golem.jumpAttackTrigger);
-        enemy.CharacterAnimator.ResetTrigger(enemy.attackTrigger);
-
 
         if (IsCloseToPlayer(enemy.distanceToAttack))
         {
