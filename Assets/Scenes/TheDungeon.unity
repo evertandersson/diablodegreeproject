@@ -44788,15 +44788,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5251107426523682287, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 28.5
+      value: -16
       objectReference: {fileID: 0}
     - target: {fileID: 5251107426523682287, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5251107426523682287, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -10
+      value: -28
       objectReference: {fileID: 0}
     - target: {fileID: 5251107426523682287, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_LocalRotation.w
@@ -78442,20 +78442,32 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3056851477996016524, guid: 7bcb649e0c329d04db0d68f36d3818bb, type: 3}
       propertyPath: pools.Array.size
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 3056851477996016524, guid: 7bcb649e0c329d04db0d68f36d3818bb, type: 3}
       propertyPath: pools.Array.data[7].tag
       value: LightningExplosion
       objectReference: {fileID: 0}
     - target: {fileID: 3056851477996016524, guid: 7bcb649e0c329d04db0d68f36d3818bb, type: 3}
+      propertyPath: pools.Array.data[8].tag
+      value: BossImpact
+      objectReference: {fileID: 0}
+    - target: {fileID: 3056851477996016524, guid: 7bcb649e0c329d04db0d68f36d3818bb, type: 3}
       propertyPath: pools.Array.data[7].size
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3056851477996016524, guid: 7bcb649e0c329d04db0d68f36d3818bb, type: 3}
+      propertyPath: pools.Array.data[8].size
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3056851477996016524, guid: 7bcb649e0c329d04db0d68f36d3818bb, type: 3}
       propertyPath: pools.Array.data[7].prefab
       value: 
       objectReference: {fileID: 2825708195889961966, guid: 5dfad4e0c352f4a4383fc5ecc810de1c, type: 3}
+    - target: {fileID: 3056851477996016524, guid: 7bcb649e0c329d04db0d68f36d3818bb, type: 3}
+      propertyPath: pools.Array.data[8].prefab
+      value: 
+      objectReference: {fileID: 3432958286849152088, guid: 87ee7299dd44ed747af24dbb91bcd33b, type: 3}
     - target: {fileID: 8662873588976893853, guid: 7bcb649e0c329d04db0d68f36d3818bb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
