@@ -23,8 +23,8 @@ namespace Game
 
         private float lastYPosition;
 
-        public LevelSystem levelSystem { get; private set; }
-        [SerializeField] private LevelProgressBar progressBar;
+        public LevelSystem levelSystem { get; set; }
+        public LevelProgressBar progressBar;
 
         //Components and fields
         private PlayerAnimator playerAnimator;
@@ -172,9 +172,9 @@ namespace Game
             statsDisplay = GetComponentInChildren<StatsDisplay>(true);
 
             // Level setup
-            levelSystem = new LevelSystem();
+            //levelSystem = new LevelSystem();
 
-            SetStats();
+            //SetStats();
 
             Initialize();
         }
@@ -190,21 +190,19 @@ namespace Game
 
             CharacterAnimator = GetComponentInChildren<Animator>();
 
-            progressBar.SetLevelSystem(levelSystem);
-
             //Health setup
             base.Start();
             healthBar.SetMaxHealth(maxHealth);
 
             levelSystem.OnLevelChanged += UpgradeLevel;
+
             EnableRagdoll(false);
         }
 
-        protected override void SetStats()
+        public override void SetStats()
         {
             base.SetStats();
             statsDisplay.UpdateStatsText();
-            levelSystem.SetLevel(level);
         }
 
         private void UpgradeLevel(object sender, System.EventArgs e)

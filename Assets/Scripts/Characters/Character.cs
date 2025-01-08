@@ -82,7 +82,7 @@ public abstract class Character : MonoBehaviour
     }
 
 
-    protected virtual void SetStats()
+    public virtual void SetStats()
     {
         if (level > 1)
         {

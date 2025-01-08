@@ -6,13 +6,20 @@ using UnityEngine;
 
 public class SkillTreeManager : Popup
 {
+    public static SkillTreeManager Instance;
+
     public List<SkillButton> allSkills;
     public List<SkillButton> unlockedSkills;
 
     public int skillPoints = 0;
     [SerializeField] private TextMeshProUGUI skillPointsText;
 
-    private void Start()
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+    public void Initialize()
     {
         allSkills = new List<SkillButton>(GetComponentsInChildren<SkillButton>(true));
         PlayerManager.Instance.levelSystem.OnLevelChanged += AddSkillPoint;

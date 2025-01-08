@@ -1,9 +1,8 @@
 using Leguar.TotalJSON;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Game
 {
@@ -16,6 +15,9 @@ namespace Game
         private SerializableListString inventoryList = new SerializableListString();
         private SerializableListString actionSlotList = new SerializableListString();
         private SerializableListString equipmentList = new SerializableListString();
+
+        private int playerLevel;
+        private int playerExperience;
 
         public static InventorySaver Instance
         {
@@ -42,6 +44,11 @@ namespace Game
             DontDestroyOnLoad(gameObject);
         }
 
+        private void Start()
+        {
+            
+        }
+
         public void Load()
         {
             inventoryList.serializableList.Clear();
@@ -49,7 +56,6 @@ namespace Game
             equipmentList.serializableList.Clear();
 
             LoadScriptables();
-
             ImportSaveData();
         }
 
@@ -60,11 +66,9 @@ namespace Game
             equipmentList.serializableList.Clear();
 
             BuildSaveData();
-
             SaveScriptables();
 
-            Debug.Log("OnDisable called: Saving data...");
-
+            Debug.Log("Data saved successfully.");
         }
 
         private void Update()
@@ -78,13 +82,17 @@ namespace Game
 
         private void BuildSaveData()
         {
-            inventoryList.serializableList.Clear(); // Clear previous data
+            inventoryList.serializableList.Clear();
             actionSlotList.serializableList.Clear();
             equipmentList.serializableList.Clear();
 
             SaveSlotsToSerializableList(PlayerManager.Instance.inventory.inventory, inventoryList);
             SaveSlotsToSerializableList(PlayerManager.Instance.slotManager.actionSlots, actionSlotList);
             SaveSlotsToSerializableList(EquipmentManager.Instance.equipmentSlots, equipmentList);
+
+            //Save level and xp
+            playerLevel = PlayerManager.Instance.levelSystem.GetCurrentLevel();
+            playerExperience = PlayerManager.Instance.levelSystem.GetExperience();
         }
 
         private void SaveSlotsToSerializableList(IEnumerable<InventorySlot> slots, SerializableListString targetList)
@@ -104,41 +112,58 @@ namespace Game
             }
         }
 
-
         public void SaveScriptables()
         {
             Debug.Log("Saving to: " + Application.persistentDataPath);
 
-            string filepath = Application.persistentDataPath + "/inventory_save.json";
-            string actionFilePath = Application.persistentDataPath + "/action_slots_save.json";
-            string equipmentFilePath = Application.persistentDataPath + "/equipment_slots_save.json";
+            string filepath = Application.persistentDataPath + "/player_save.json";
 
-            // Save inventory
-            string inventoryJson = JSON.Serialize(inventoryList).CreatePrettyString();
-            File.WriteAllText(filepath, inventoryJson);
+            SaveData saveData = new SaveData
+            {
+                inventory = inventoryList,
+                actionSlots = actionSlotList,
+                equipmentSlots = equipmentList,
 
-            // Save action slots
-            string actionSlotJson = JSON.Serialize(actionSlotList).CreatePrettyString();
-            File.WriteAllText(actionFilePath, actionSlotJson);
+                level = PlayerManager.Instance.levelSystem.GetCurrentLevel(),
+                experience = PlayerManager.Instance.levelSystem.GetExperience()
+            };
 
-            // Save equipment slots
-            string equipmentSlotJson = JSON.Serialize(equipmentList).CreatePrettyString();
-            File.WriteAllText(equipmentFilePath, equipmentSlotJson);
+            string saveJson = JSON.Serialize(saveData).CreatePrettyString();
+            File.WriteAllText(filepath, saveJson);
 
             Debug.Log("Save completed.");
         }
 
         private void ImportSaveData()
         {
-            // Clear existing data for both inventories
             ClearSlots(PlayerManager.Instance.inventory.inventory);
             ClearSlots(PlayerManager.Instance.slotManager.actionSlots);
             ClearSlots(EquipmentManager.Instance.equipmentSlots);
 
-            // Load data into inventory and action slots
             LoadSlots(PlayerManager.Instance.inventory.inventory, inventoryList);
             LoadSlots(PlayerManager.Instance.slotManager.actionSlots, actionSlotList);
             LoadEquipmentSlots(EquipmentManager.Instance.equipmentSlots);
+
+            // Ensure LevelSystem exists
+            if (PlayerManager.Instance.levelSystem == null)
+            {
+                PlayerManager.Instance.levelSystem = new LevelSystem();
+            }
+
+            // Apply Level and XP from save data
+            LevelSystem levelSystem = PlayerManager.Instance.levelSystem;
+
+            levelSystem.SetLevel(playerLevel); // Set Level First
+            levelSystem.AddExperience(playerExperience); // Add Experience Next
+
+            // Debugging Loaded Values
+            Debug.Log($"Applied Level: {levelSystem.GetCurrentLevel()}, XP: {levelSystem.GetExperience()}");
+
+            // Update the UI
+            PlayerManager.Instance.SetStats();
+            PlayerManager.Instance.progressBar.SetLevelSystem(levelSystem);
+
+            SkillTreeManager.Instance.Initialize();
         }
 
         private void ClearSlots(IEnumerable<InventorySlot> slots)
@@ -172,7 +197,7 @@ namespace Game
 
                 slots[i].item = obj;
                 slots[i].itemAmount = count;
-                slots[i].CheckIfItemNull(); // Ensure UI updates correctly
+                slots[i].CheckIfItemNull();
 
                 Debug.Log($"Loaded item '{obj.name}' with count {count} into slot {i}.");
             }
@@ -192,12 +217,6 @@ namespace Game
                     continue;
                 }
 
-                if (i >= slots.Count)
-                {
-                    Debug.LogWarning($"Not enough slots to load item '{name}' at index {i}. Skipping.");
-                    continue;
-                }
-
                 foreach (EquipmentSlot slot in slots)
                 {
                     if (slot.equipmentType == obj.equipmentType)
@@ -205,69 +224,108 @@ namespace Game
                         slot.item = obj;
                         slot.itemAmount = count;
                         slot.CheckIfItemNull();
-                        continue;
+                        break;
                     }
                 }
             }
             EquipmentManager.Instance.GetStatsFromArmour();
         }
 
-
         public void LoadScriptables()
         {
             Debug.Log("Loading from: " + Application.persistentDataPath);
 
-            string filepath = Application.persistentDataPath + "/inventory_save.json";
-            string actionFilePath = Application.persistentDataPath + "/action_slots_save.json";
-            string equipmentFilePath = Application.persistentDataPath + "/equipment_slots_save.json";
+            string filepath = Application.persistentDataPath + "/player_save.json";
 
-            // Load inventory
             if (File.Exists(filepath))
             {
-                string inventoryJson = File.ReadAllText(filepath);
-                inventoryList = JSON.ParseString(inventoryJson).Deserialize<SerializableListString>();
-            }
+                string saveJson = File.ReadAllText(filepath);
+                SaveData saveData = JSON.ParseString(saveJson).Deserialize<SaveData>();
 
-            // Load action slots
-            if (File.Exists(actionFilePath))
+                inventoryList = saveData.inventory;
+                actionSlotList = saveData.actionSlots;
+                equipmentList = saveData.equipmentSlots;
+
+                playerLevel = saveData.level;
+                playerExperience = saveData.experience;
+
+                Debug.Log($"Loaded Inventory: {inventoryList.serializableList.Count} items");
+                Debug.Log($"Loaded Action Slots: {actionSlotList.serializableList.Count} items");
+                Debug.Log($"Loaded Equipment Slots: {equipmentList.serializableList.Count} items");
+                Debug.Log($"Loaded Level: {playerLevel}, XP: {playerExperience}");
+            }
+            else
             {
-                string actionSlotJson = File.ReadAllText(actionFilePath);
-                actionSlotList = JSON.ParseString(actionSlotJson).Deserialize<SerializableListString>();
+                Debug.LogWarning("Save file not found.");
             }
 
-            // Load equipment slots
-            if (File.Exists(equipmentFilePath))
-            {
-                string equipmentSlotJson = File.ReadAllText(equipmentFilePath);
-                equipmentList = JSON.ParseString(equipmentSlotJson).Deserialize<SerializableListString>();
-            }
-
-            Debug.Log("Load completed.");
+            Debug.Log("Load completed from player_save.json.");
         }
+
 
         public void SaveReset()
         {
+            // Reset Inventory Slots
             foreach (InventorySlot itemSlot in PlayerManager.Instance.inventory.inventory)
             {
                 itemSlot.item = null;
                 itemSlot.itemAmount = 0;
             }
+
+            // Reset Action Slots
             foreach (ActionSlot actionSlot in PlayerManager.Instance.slotManager.actionSlots)
             {
                 actionSlot.item = null;
                 actionSlot.itemAmount = 0;
             }
+
+            // Reset Equipment Slots
             foreach (EquipmentSlot equipmentSlot in EquipmentManager.Instance.equipmentSlots)
             {
                 equipmentSlot.item = null;
                 equipmentSlot.itemAmount = 0;
             }
+
+            // Clear Serializable Lists
             inventoryList.serializableList.Clear();
             actionSlotList.serializableList.Clear();
             equipmentList.serializableList.Clear();
 
+            // Reset Level and Experience
+            if (PlayerManager.Instance.levelSystem == null)
+            {
+                PlayerManager.Instance.levelSystem = new LevelSystem();
+            }
+
+            PlayerManager.Instance.levelSystem.SetLevel(1); // Reset to Level 1
+            PlayerManager.Instance.levelSystem.AddExperience(-PlayerManager.Instance.levelSystem.GetExperience()); // Reset XP to 0
+
+            playerLevel = 1; // Ensure save data reflects reset
+            playerExperience = 0;
+
+            // Update UI and other dependent systems
+            PlayerManager.Instance.SetStats();
+            PlayerManager.Instance.progressBar.SetLevelSystem(PlayerManager.Instance.levelSystem);
+
+            // Clear any skill tree progress
+            SkillTreeManager.Instance.Initialize();
+
+            // Save Reset Data
             BuildSaveData();
             SaveScriptables();
+
+            Debug.Log("Game state has been reset: Inventory, Action Slots, Equipment, Level, and Experience.");
         }
+
+    }
+
+    [System.Serializable]
+    public class SaveData
+    {
+        public SerializableListString inventory;
+        public SerializableListString actionSlots;
+        public SerializableListString equipmentSlots;
+        public int level;
+        public int experience;
     }
 }
