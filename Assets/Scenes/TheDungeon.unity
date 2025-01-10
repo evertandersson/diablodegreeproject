@@ -27827,7 +27827,6 @@ GameObject:
   m_Component:
   - component: {fileID: 689827213}
   - component: {fileID: 689827211}
-  - component: {fileID: 689827210}
   - component: {fileID: 689827214}
   - component: {fileID: 689827215}
   m_Layer: 2
@@ -27837,18 +27836,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &689827210
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 689827209}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b61c10afde23bd247a7d01177dab6115, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &689827211
 BoxCollider:
   m_ObjectHideFlags: 0
