@@ -163,6 +163,8 @@ namespace Game
             PlayerManager.Instance.SetStats();
             PlayerManager.Instance.progressBar.SetLevelSystem(levelSystem);
 
+            levelSystem.OnLevelChanged += PlayerManager.Instance.UpgradeLevel;
+
             SkillTreeManager.Instance.Initialize();
         }
 

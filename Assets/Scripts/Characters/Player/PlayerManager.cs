@@ -194,8 +194,6 @@ namespace Game
             base.Start();
             healthBar.SetMaxHealth(maxHealth);
 
-            levelSystem.OnLevelChanged += UpgradeLevel;
-
             EnableRagdoll(false);
         }
 
@@ -205,7 +203,7 @@ namespace Game
             statsDisplay.UpdateStatsText();
         }
 
-        private void UpgradeLevel(object sender, System.EventArgs e)
+        public void UpgradeLevel(object sender, System.EventArgs e)
         {
             level = levelSystem.GetCurrentLevel();
             statsDisplay.UpdateStatsText();
