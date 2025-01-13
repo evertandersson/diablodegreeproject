@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 namespace Game
 {
@@ -57,6 +58,8 @@ namespace Game
         private Interactable currentObject = null;
 
         public float attackTimer;
+
+        [SerializeField] private RawImage attackIndicator;
 
         #region Properties
 
@@ -171,10 +174,7 @@ namespace Game
 
             statsDisplay = GetComponentInChildren<StatsDisplay>(true);
 
-            // Level setup
-            //levelSystem = new LevelSystem();
-
-            //SetStats();
+            attackIndicator.enabled = false;
 
             Initialize();
         }
@@ -245,6 +245,8 @@ namespace Game
             // Handle movement
             if (playerInput.IsMoving()) playerInput.Move();
 
+            attackIndicator.enabled = IsAttacking;
+            
             // Handle attacking
             if (IsAttacking)
             {
