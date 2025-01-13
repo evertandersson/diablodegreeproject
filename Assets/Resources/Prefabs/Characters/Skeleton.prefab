@@ -5556,11 +5556,15 @@ MonoBehaviour:
   distanceToAttack: 1.5
   damageAnim: 298341484
   attackAnims: 22ff2dfd98ae2464
+  rangedAttackAnim: -1396498931
   attackTrigger: 1080829965
   isHitTrigger: 2006285284
+  rangedAttackTrigger: -608183251
   healthBar: {fileID: 5804443648432738237}
   itemDropRates:
   - item: {fileID: 11400000, guid: 6e4801fd3aca86b408d7f9bc61e0a694, type: 2}
+    dropRate: 0.05
+  - item: {fileID: 11400000, guid: abffb18af624c484087d3b5059047740, type: 2}
     dropRate: 0.05
   - item: {fileID: 11400000, guid: aa27f7d07cf44b642b2216f1ac99f975, type: 2}
     dropRate: 0.02
@@ -5568,6 +5572,7 @@ MonoBehaviour:
     dropRate: 0.02
   - item: {fileID: 11400000, guid: 7fb38002aef152347ac39bde39ea8811, type: 2}
     dropRate: 0.02
+  golem: {fileID: 0}
 --- !u!195 &4843719664493087645
 NavMeshAgent:
   m_ObjectHideFlags: 0

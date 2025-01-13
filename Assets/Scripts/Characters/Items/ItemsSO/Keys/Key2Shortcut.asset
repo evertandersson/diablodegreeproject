@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e14a47a7bb911ce44a3d62ffa0c19a6c, type: 3}
+  m_Name: Key2Shortcut
+  m_EditorClassIdentifier: 
+  itemName: Key2Shortcut
+  itemDescription: 
+  itemIcon: {fileID: 2800000, guid: 1e04413f5a56d6d419d951306f4bbd3e, type: 3}
+  prefab: {fileID: 8527437691338737799, guid: df5e73daebb2ce346afd472936e4bcc5, type: 3}
+  isStackable: 0

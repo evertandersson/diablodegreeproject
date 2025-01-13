@@ -15,5 +15,5 @@ MonoBehaviour:
   itemName: Key1
   itemDescription: 
   itemIcon: {fileID: 2800000, guid: 1e04413f5a56d6d419d951306f4bbd3e, type: 3}
-  prefab: {fileID: 0}
+  prefab: {fileID: 8527437691338737799, guid: 1fb2ee85bdf657d4f9e87a0a480bf597, type: 3}
   isStackable: 0
