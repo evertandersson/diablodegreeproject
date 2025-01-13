@@ -4571,6 +4571,8 @@ MonoBehaviour:
   skillTree: {fileID: 4526031383759848027}
   healthBar: {fileID: 5539486029914443312}
   manaBar: {fileID: 4473243979194775367}
+  maxMana: 50
+  manaRegeneration: 2
   isInteracting: 0
   attackTimer: 0
   attackIndicator: {fileID: 2518692381757254345}
@@ -6091,7 +6093,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 567426875922396769, guid: f15896cef99df0e43b9c64e54c96a3eb, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1490.6366
+      value: 1490
       objectReference: {fileID: 0}
     - target: {fileID: 567426875922396769, guid: f15896cef99df0e43b9c64e54c96a3eb, type: 3}
       propertyPath: m_AnchoredPosition.y

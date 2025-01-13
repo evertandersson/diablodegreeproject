@@ -42,7 +42,10 @@ namespace Game
             // Array for all attacks
             attacks = new InputAction[] {
                 playerInputSystem.Player.Attack1,
-                playerInputSystem.Player.Attack2
+                playerInputSystem.Player.Attack2,
+                playerInputSystem.Player.Attack3,
+                playerInputSystem.Player.Attack4,
+                playerInputSystem.Player.Attack5
             };
 
             // Initialize the open inventory action
