@@ -46,5 +46,10 @@ namespace Game
         {
             SetNewEvent<JumpAttack>();
         }
+
+        public void RangedAttack()
+        {
+            SetNewEvent<GolemRangedAttack>();
+        }
     }
 }

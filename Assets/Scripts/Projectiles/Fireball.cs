@@ -5,15 +5,15 @@ namespace Game
     public class Fireball : MonoBehaviour, IPooledObject
     {
         [SerializeField]
-        private float moveSpeed = 10;
+        protected float moveSpeed = 10;
 
         public GameObject explosion;
 
         protected bool hasHit;
 
         [SerializeField]
-        float lifeTime = 5.0f;
-        float timer;
+        protected float lifeTime = 5.0f;
+        protected float timer;
 
         public void OnObjectSpawn()
         {
@@ -36,8 +36,7 @@ namespace Game
         {
             if (hasHit == false)
             {
-                if (explosion != null
-                    && !other.gameObject.GetComponent<PlayerManager>()
+                if (!other.gameObject.GetComponent<PlayerManager>()
                     && !other.gameObject.CompareTag("Projectile"))
                 {
                     ObjectPooling.Instance.SpawnFromPool("Explosion", transform.position, Quaternion.identity);

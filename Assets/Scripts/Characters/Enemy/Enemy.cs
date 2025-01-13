@@ -29,10 +29,12 @@ namespace Game
         // Animation names:
         [HideInInspector] public int damageAnim = Animator.StringToHash("damage");
         [HideInInspector] public int[] attackAnims = { Animator.StringToHash("Attack1"), Animator.StringToHash("Attack2") };
+        [HideInInspector] public int rangedAttackAnim = Animator.StringToHash("Battlecry");
 
         // Trigger names:
         [HideInInspector] public int attackTrigger = Animator.StringToHash("Attack");
         [HideInInspector] public int isHitTrigger = Animator.StringToHash("IsHit");
+        [HideInInspector] public int rangedAttackTrigger = Animator.StringToHash("RangedAttack");
 
         public EventHandler EnemyEventHandler { get; private set; }
         public List<EnemyEvent> Events { get; private set; } 

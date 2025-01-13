@@ -20,6 +20,7 @@ namespace Game
             if (isAttackAnimationPlaying)
                 return;
 
+
             // Update target timer
             targetTimer += Time.deltaTime;
 
@@ -32,8 +33,18 @@ namespace Game
 
             if (IsCloseToPlayer(enemy.golem.distanceToJumpAttack) && IsTargetedAtPlayer())
             {
-                enemy.golem.JumpAttack();
-                return;
+                int attackToPerform = Random.Range(0, 2);
+                if (attackToPerform == 0 || attackToPerform == 2)
+                {
+                    enemy.golem.RangedAttack();
+                    return;
+                }
+                else
+                {
+                    enemy.golem.JumpAttack();
+                    return;
+                }
+
             }
 
             if (targetTimer > updateTargetDelay)

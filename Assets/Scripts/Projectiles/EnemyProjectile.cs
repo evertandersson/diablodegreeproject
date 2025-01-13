@@ -21,16 +21,14 @@ namespace Game
                     return; // Ignore collision with owner and unwanted objects
                 }
 
-                if (explosion != null)
-                {
-                    Debug.Log(other);
-                    GameObject explosion = ObjectPooling.Instance.SpawnFromPool("LightningExplosion", transform.position, Quaternion.identity);
-                    EnemyExplosion enemyExplosion = explosion.GetComponent<EnemyExplosion>();
-                    enemyExplosion.SetEnemy(parentEnemy);
+                Debug.Log(other);
+                GameObject explosion = ObjectPooling.Instance.SpawnFromPool("LightningExplosion", transform.position, Quaternion.identity);
+                EnemyExplosion enemyExplosion = explosion.GetComponent<EnemyExplosion>();
+                enemyExplosion.SetEnemy(parentEnemy);
 
-                    ObjectPooling.Instance.DespawnObject(this.gameObject);
-                    hasHit = true;
-                }
+                ObjectPooling.Instance.DespawnObject(this.gameObject);
+                hasHit = true;
+                
             }
         }
     }

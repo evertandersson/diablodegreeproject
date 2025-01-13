@@ -100,6 +100,10 @@ namespace Game
                     return true;
                 }
             }
+            if (IsAnimationPlaying(enemy.rangedAttackAnim) || IsAnimationPlaying(enemy.golem.jumpAttackAnim))
+            {
+                return true;
+            }
             return false; // No attack animations are playing
         }
 

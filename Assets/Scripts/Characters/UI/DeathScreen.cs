@@ -43,6 +43,7 @@ public class DeathScreen : Popup
             EventHandler.Main.EventStack.Remove(ev);
         }
 
+        // Clear all popups
         activePopups.Clear();
 
         // Trigger end logic

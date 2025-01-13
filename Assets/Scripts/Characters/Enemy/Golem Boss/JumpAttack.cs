@@ -25,8 +25,6 @@ public class JumpAttack : EnemyEvent
     {
         base.OnUpdate();
 
-        //enemy.HandleRotation(PlayerManager.Instance.transform.position);
-
         // If current attack animation is playing
         if (IsAnimationPlaying(enemy.golem.jumpAttackAnim))
         {

@@ -10,13 +10,13 @@ public class LevelSystem
     private int level;
     private int experience;
     private int experienceToNextLevel;
-    private float experienceMultiplier = 1.5f;
+    private float experienceMultiplier = 2.5f;
 
     public LevelSystem() 
     {
         level = 1;
         experience = 0;
-        experienceToNextLevel = 100;
+        experienceToNextLevel = 500;
     }
 
     public void AddExperience(int amount)
