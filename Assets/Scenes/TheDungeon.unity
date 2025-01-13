@@ -44344,6 +44344,10 @@ PrefabInstance:
       propertyPath: mouseInput
       value: 
       objectReference: {fileID: 1781394463}
+    - target: {fileID: 2925374488890722608, guid: e36f78db816620d428e793016e941dd2, type: 3}
+      propertyPath: attackIndicator
+      value: 
+      objectReference: {fileID: 1555791761}
     - target: {fileID: 2981229927428327706, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -56002,6 +56006,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8011076794458981704, guid: b78909d98814b3d42aa488a008c30001, type: 3}
   m_PrefabInstance: {fileID: 1553190819}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1555791761 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2518692381757254345, guid: e36f78db816620d428e793016e941dd2, type: 3}
+  m_PrefabInstance: {fileID: 1236405804}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1556355149 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8528820825029984946, guid: a05d4d94c1106004abcd87df4b8f1777, type: 3}
@@ -78457,7 +78472,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3056851477996016524, guid: 7bcb649e0c329d04db0d68f36d3818bb, type: 3}
       propertyPath: pools.Array.size
-      value: 10
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 3056851477996016524, guid: 7bcb649e0c329d04db0d68f36d3818bb, type: 3}
       propertyPath: pools.Array.data[7].tag
@@ -78472,6 +78487,10 @@ PrefabInstance:
       value: BossProjectile
       objectReference: {fileID: 0}
     - target: {fileID: 3056851477996016524, guid: 7bcb649e0c329d04db0d68f36d3818bb, type: 3}
+      propertyPath: pools.Array.data[10].tag
+      value: RockExplosion
+      objectReference: {fileID: 0}
+    - target: {fileID: 3056851477996016524, guid: 7bcb649e0c329d04db0d68f36d3818bb, type: 3}
       propertyPath: pools.Array.data[7].size
       value: 5
       objectReference: {fileID: 0}
@@ -78481,7 +78500,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3056851477996016524, guid: 7bcb649e0c329d04db0d68f36d3818bb, type: 3}
       propertyPath: pools.Array.data[9].size
-      value: 3
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3056851477996016524, guid: 7bcb649e0c329d04db0d68f36d3818bb, type: 3}
+      propertyPath: pools.Array.data[10].size
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3056851477996016524, guid: 7bcb649e0c329d04db0d68f36d3818bb, type: 3}
       propertyPath: pools.Array.data[7].prefab
@@ -78495,6 +78518,10 @@ PrefabInstance:
       propertyPath: pools.Array.data[9].prefab
       value: 
       objectReference: {fileID: 1576488453971893466, guid: 253d6e73bc026fc4788d60e248795fd7, type: 3}
+    - target: {fileID: 3056851477996016524, guid: 7bcb649e0c329d04db0d68f36d3818bb, type: 3}
+      propertyPath: pools.Array.data[10].prefab
+      value: 
+      objectReference: {fileID: 2825708195889961966, guid: 8f354e2f87ae52d4ba4ac01b1b397823, type: 3}
     - target: {fileID: 8662873588976893853, guid: 7bcb649e0c329d04db0d68f36d3818bb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

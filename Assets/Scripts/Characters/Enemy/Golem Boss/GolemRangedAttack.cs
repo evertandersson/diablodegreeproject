@@ -4,7 +4,7 @@ namespace Game
 {
     public class GolemRangedAttack : EnemyEvent
     {
-        private int projectileCount = 10;
+        private int projectileCount = 7;
         private float projectileSpawnHeight = 15;
         private float range = 7;
 
