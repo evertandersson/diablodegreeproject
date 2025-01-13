@@ -275,7 +275,7 @@ namespace Game
             // Handle attacking
             if (IsAttacking)
             {
-                Agent.isStopped = true;
+                if (Agent.enabled) Agent.isStopped = true;
                 HandleRotation(mouseInput.mouseInputPosition);
             }
 

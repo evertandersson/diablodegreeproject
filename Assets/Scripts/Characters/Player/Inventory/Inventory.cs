@@ -32,7 +32,7 @@ public class Inventory : Popup
         PlayerManager.Instance.slotManager.GetActionSlots();
         PlayerManager.Instance.slotManager.SetUpSlots();
 
-        InventorySaver.Instance.Load();
+        SaveManager.Instance.Load();
     }
 
     public bool AddItemToInventory(ItemSO item)

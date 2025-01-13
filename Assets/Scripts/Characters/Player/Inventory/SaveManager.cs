@@ -1,14 +1,16 @@
 using Leguar.TotalJSON;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Game
 {
-    public class InventorySaver : MonoBehaviour
+    public class SaveManager : MonoBehaviour
     {
-        private static InventorySaver _instance;
+        private static SaveManager _instance;
 
         [SerializeField] private ItemDataBaseSO itemDB;
 
@@ -19,7 +21,10 @@ namespace Game
         private int playerLevel;
         private int playerExperience;
 
-        public static InventorySaver Instance
+        public SerializableListString pickedUpItemsList = new SerializableListString();
+        public static event Action LoadPickedUpItems; 
+
+        public static SaveManager Instance
         {
             get
             {
@@ -44,11 +49,6 @@ namespace Game
             DontDestroyOnLoad(gameObject);
         }
 
-        private void Start()
-        {
-            
-        }
-
         public void Load()
         {
             inventoryList.serializableList.Clear();
@@ -59,7 +59,7 @@ namespace Game
             ImportSaveData();
         }
 
-        private void Save()
+        public void Save()
         {
             inventoryList.serializableList.Clear();
             actionSlotList.serializableList.Clear();
@@ -125,7 +125,9 @@ namespace Game
                 equipmentSlots = equipmentList,
 
                 level = PlayerManager.Instance.levelSystem.GetCurrentLevel(),
-                experience = PlayerManager.Instance.levelSystem.GetExperience()
+                experience = PlayerManager.Instance.levelSystem.GetExperience(),
+
+                itemsPickedUp = pickedUpItemsList
             };
 
             string saveJson = JSON.Serialize(saveData).CreatePrettyString();
@@ -133,6 +135,23 @@ namespace Game
 
             Debug.Log("Save completed.");
         }
+
+        public void AddPickedUpItem(string itemId)
+        {
+            if (!pickedUpItemsList.serializableList.Exists(item => item.name == itemId))
+            {
+                SerializableListString.SerialItem pickedUpItem = new SerializableListString.SerialItem
+                {
+                    name = itemId,
+                    count = 1
+                };
+
+                pickedUpItemsList.serializableList.Add(pickedUpItem);
+                Save(); // Save the updated list
+                Debug.Log($"Item with ID {itemId} added to picked-up list.");
+            }
+        }
+
 
         private void ImportSaveData()
         {
@@ -166,6 +185,8 @@ namespace Game
             levelSystem.OnLevelChanged += PlayerManager.Instance.UpgradeLevel;
 
             SkillTreeManager.Instance.Initialize();
+
+            LoadPickedUpItems?.Invoke();
         }
 
         private void ClearSlots(IEnumerable<InventorySlot> slots)
@@ -251,6 +272,8 @@ namespace Game
                 playerLevel = saveData.level;
                 playerExperience = saveData.experience;
 
+                pickedUpItemsList = saveData.itemsPickedUp ?? new SerializableListString();
+
                 Debug.Log($"Loaded Inventory: {inventoryList.serializableList.Count} items");
                 Debug.Log($"Loaded Action Slots: {actionSlotList.serializableList.Count} items");
                 Debug.Log($"Loaded Equipment Slots: {equipmentList.serializableList.Count} items");
@@ -292,6 +315,7 @@ namespace Game
             inventoryList.serializableList.Clear();
             actionSlotList.serializableList.Clear();
             equipmentList.serializableList.Clear();
+            pickedUpItemsList.serializableList.Clear();
 
             // Reset Level and Experience
             if (PlayerManager.Instance.levelSystem == null)
@@ -329,5 +353,6 @@ namespace Game
         public SerializableListString equipmentSlots;
         public int level;
         public int experience;
+        public SerializableListString itemsPickedUp;
     }
 }
