@@ -47,7 +47,16 @@ namespace Game
         private ActionItemSO currentAction;
 
         [SerializeField]
-        private PlayerHealthBar healthBar;
+        private PlayerHealthOrb healthBar;
+
+        [SerializeField]
+        private PlayerManaOrb manaBar;
+
+        // Mana:
+        private float currentMana;
+        [Header("Mana")]
+        [SerializeField] private float maxMana = 50;
+        [SerializeField] private float manaRegeneration = 2;
 
         public bool isInteracting;
 
@@ -157,6 +166,9 @@ namespace Game
             }
         }
 
+        public float Mana => currentMana;
+        public float MaxMana => maxMana;
+
         #endregion
 
 
@@ -192,7 +204,11 @@ namespace Game
 
             //Health setup
             base.Start();
-            healthBar.SetMaxHealth(maxHealth);
+            healthBar.SetMaxValue(maxHealth);
+
+            //Mana setup
+            currentMana = maxMana;
+            manaBar.SetMaxValue((int)maxMana);
 
             EnableRagdoll(false);
         }
@@ -215,7 +231,7 @@ namespace Game
             health = maxHealth;
             damage += skill.damageIncrease;
             defense += skill.defenceIncrease;
-            healthBar.SetMaxHealth(maxHealth);
+            healthBar.SetMaxValue(maxHealth);
 
             statsDisplay.UpdateStatsText();
         }
@@ -225,7 +241,7 @@ namespace Game
             maxHealth += equipment.healthIncrease * apply;
             damage += equipment.damageIncrease * apply;
             defense += equipment.defenseIncrease * apply;
-            healthBar.SetMaxHealth(maxHealth);
+            healthBar.SetMaxValue(maxHealth);
 
             statsDisplay.UpdateStatsText();
         }
@@ -233,7 +249,12 @@ namespace Game
         public void Heal(int amount)
         {
             health += amount;
-            healthBar.SetHealth(health);
+            healthBar.SetValue(health);
+        }
+        public void RefillMana()
+        {
+            currentMana += manaRegeneration * Time.deltaTime;
+            currentMana = Mathf.Clamp(currentMana, 0, maxMana);
         }
 
         public void Update()
@@ -294,7 +315,7 @@ namespace Game
             if (bloodSplashEffect)
                 bloodSplashEffect.Play();
             SoundManager.PlaySound(SoundType.HURT);
-            healthBar.SetHealth(health);
+            healthBar.SetValue(health);
         }
 
 
@@ -314,9 +335,21 @@ namespace Game
 
                         if (actionItem is AttackTypeSO attackTypeAction)
                         {
-                            attackTypeAction.PerformAction(CharacterAnimator);
-                            IsAttacking = true;
-                            projectileSpawner.projectile = attackTypeAction.projectile;
+                            if (currentMana > attackTypeAction.manaCost)
+                            {
+                                attackTypeAction.PerformAction(CharacterAnimator);
+
+                                // Handle mana
+                                currentMana -= attackTypeAction.manaCost;
+                                manaBar.SetValue((int)currentMana);
+
+                                IsAttacking = true;
+                                projectileSpawner.projectile = attackTypeAction.projectile;
+                            }
+                            else
+                            {
+                                CurrentAction = null;
+                            }
                         }
                         if (actionItem is PotionSO potionSO)
                         {

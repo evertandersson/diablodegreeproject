@@ -23,4 +23,5 @@ MonoBehaviour:
   bufferedInputDelay: 0.7
   projectile: {fileID: 5048752434976709204, guid: c0e6fdf5328564d4f8ff41348ac69144, type: 3}
   attackTrigger: LightningAttack
+  manaCost: 12
   attackTriggerHash: 742591718

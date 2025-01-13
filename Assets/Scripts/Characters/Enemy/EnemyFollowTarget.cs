@@ -23,6 +23,9 @@ namespace Game
         {
             base.OnUpdate();
 
+            if (!enemy.Agent.enabled)
+                return;
+
             // Update animation timer
             CheckAnimationInterval();
 

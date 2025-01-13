@@ -1908,7 +1908,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 586a4c7492e3056478072e7cff92a324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthBarFill: {fileID: 4903315050566666536}
+  barFill: {fileID: 4903315050566666536}
   animationDuration: 0.2
 --- !u!1 &2712301566878499775
 GameObject:
@@ -2519,7 +2519,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6532383504759967543
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4570,6 +4570,7 @@ MonoBehaviour:
   inventory: {fileID: 1371595720092762355}
   skillTree: {fileID: 4526031383759848027}
   healthBar: {fileID: 5539486029914443312}
+  manaBar: {fileID: 4473243979194775367}
   isInteracting: 0
   attackTimer: 0
   attackIndicator: {fileID: 2518692381757254345}
@@ -5229,6 +5230,7 @@ GameObject:
   - component: {fileID: 4595416564077821742}
   - component: {fileID: 2274854468766764359}
   - component: {fileID: 2368266137847626299}
+  - component: {fileID: 4473243979194775367}
   m_Layer: 7
   m_Name: ManaOrb
   m_TagString: Untagged
@@ -5292,6 +5294,20 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &4473243979194775367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9125193356374313960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9007ad8c3112b6340a76d55849ec93d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  barFill: {fileID: 6575329204379194112}
+  animationDuration: 0.2
 --- !u!1001 &4780285691359079939
 PrefabInstance:
   m_ObjectHideFlags: 0

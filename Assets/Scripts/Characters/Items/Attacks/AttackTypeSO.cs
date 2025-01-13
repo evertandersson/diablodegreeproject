@@ -6,4 +6,5 @@ public abstract class AttackTypeSO : ActionItemSO
     public float bufferedInputDelay;
     public GameObject projectile;
     public string attackTrigger;
+    public int manaCost;
 }
