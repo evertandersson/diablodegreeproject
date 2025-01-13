@@ -4,10 +4,14 @@ using UnityEngine;
 public class Explosion : MonoBehaviour, IPooledObject
 {
     private ParticleSystem explosionParticle;
+    private SphereCollider sphereCollider;
+    protected float damageRange;
 
     void Awake()
     {
         explosionParticle = GetComponentInChildren<ParticleSystem>();
+        sphereCollider = GetComponent<SphereCollider>();
+        damageRange = sphereCollider.radius + 0.5f;
     } 
 
     public virtual void OnObjectSpawn()
@@ -17,7 +21,7 @@ public class Explosion : MonoBehaviour, IPooledObject
 
         foreach (Enemy enemy in enemies)
         {
-            if (Vector3.Distance(transform.position, enemy.transform.position) < 4)
+            if (Vector3.Distance(transform.position, enemy.transform.position) < damageRange)
             {
                 enemy.TakeDamage(PlayerManager.Instance.Damage);
             }

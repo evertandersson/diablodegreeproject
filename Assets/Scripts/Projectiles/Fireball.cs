@@ -7,7 +7,7 @@ namespace Game
         [SerializeField]
         protected float moveSpeed = 10;
 
-        public GameObject explosion;
+        public string explosionToSpawn;
 
         protected bool hasHit;
 
@@ -15,7 +15,7 @@ namespace Game
         protected float lifeTime = 5.0f;
         protected float timer;
 
-        public void OnObjectSpawn()
+        public virtual void OnObjectSpawn()
         {
             hasHit = false;
             timer = 0;
@@ -39,7 +39,7 @@ namespace Game
                 if (!other.gameObject.GetComponent<PlayerManager>()
                     && !other.gameObject.CompareTag("Projectile"))
                 {
-                    ObjectPooling.Instance.SpawnFromPool("Explosion", transform.position, Quaternion.identity);
+                    ObjectPooling.Instance.SpawnFromPool(explosionToSpawn, transform.position, Quaternion.identity);
                     ObjectPooling.Instance.DespawnObject(this.gameObject);
                     hasHit = true;
                 }

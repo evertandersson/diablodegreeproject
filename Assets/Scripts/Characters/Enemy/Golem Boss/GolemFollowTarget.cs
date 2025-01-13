@@ -4,6 +4,9 @@ namespace Game
 {
     public class GolemFollowTarget : EnemyFollowTarget
     {
+        private float attackCooldownTimer = 0f;
+        private float attackCooldownDuration = 0.5f;
+
         public override void OnBegin(bool firstTime)
         {
             base.OnBegin(firstTime);
@@ -20,6 +23,11 @@ namespace Game
             if (isAttackAnimationPlaying)
                 return;
 
+            // Cooldown timer for attacks
+            attackCooldownTimer -= Time.deltaTime;
+
+            if (attackCooldownTimer > 0)
+                return;
 
             // Update target timer
             targetTimer += Time.deltaTime;
@@ -37,14 +45,13 @@ namespace Game
                 if (attackToPerform == 0 || attackToPerform == 2)
                 {
                     enemy.golem.RangedAttack();
-                    return;
                 }
                 else
                 {
                     enemy.golem.JumpAttack();
-                    return;
                 }
-
+                attackCooldownTimer = attackCooldownDuration;
+                return;
             }
 
             if (targetTimer > updateTargetDelay)

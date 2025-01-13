@@ -22,12 +22,12 @@ namespace Game
                 }
 
                 Debug.Log(other);
-                GameObject explosion = ObjectPooling.Instance.SpawnFromPool("LightningExplosion", transform.position, Quaternion.identity);
+                GameObject explosion = ObjectPooling.Instance.SpawnFromPool(explosionToSpawn, transform.position, Quaternion.identity);
                 EnemyExplosion enemyExplosion = explosion.GetComponent<EnemyExplosion>();
                 enemyExplosion.SetEnemy(parentEnemy);
 
                 ObjectPooling.Instance.DespawnObject(this.gameObject);
-                hasHit = true;
+                hasHit = true;  
                 
             }
         }

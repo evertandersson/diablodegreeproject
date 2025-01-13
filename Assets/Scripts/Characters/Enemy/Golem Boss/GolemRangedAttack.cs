@@ -4,7 +4,7 @@ namespace Game
 {
     public class GolemRangedAttack : EnemyEvent
     {
-        private int projectileCount = 3;
+        private int projectileCount = 10;
         private float projectileSpawnHeight = 15;
         private float range = 7;
 
@@ -18,9 +18,19 @@ namespace Game
 
             for (int i = 0; i < projectileCount; i++)
             {
-                Vector3 spawnPos = new Vector3(Random.Range(transform.position.x - range, transform.position.x + range),
-                    transform.position.y + projectileSpawnHeight,
-                    Random.Range(transform.position.z - range, transform.position.z + range));
+                Vector3 spawnPos;
+                if (i == 0)
+                {
+                    spawnPos = new Vector3(PlayerManager.Instance.transform.position.x,
+                                transform.position.y + projectileSpawnHeight,
+                                PlayerManager.Instance.transform.position.z);
+                }
+                else
+                {
+                    spawnPos = new Vector3(Random.Range(transform.position.x - range, transform.position.x + range),
+                                transform.position.y + projectileSpawnHeight,
+                                Random.Range(transform.position.z - range, transform.position.z + range));
+                }
 
                 GameObject projectile = ObjectPooling.Instance.SpawnFromPool("BossProjectile", spawnPos, Quaternion.identity);
                 GolemProjectile enemyProjectile = projectile.GetComponent<GolemProjectile>();

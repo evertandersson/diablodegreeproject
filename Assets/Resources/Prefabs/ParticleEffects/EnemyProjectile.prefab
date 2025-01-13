@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
-  explosion: {fileID: 2825708195889961966, guid: 5dfad4e0c352f4a4383fc5ecc810de1c, type: 3}
+  explosionToSpawn: LightningExplosion
   lifeTime: 5
 --- !u!54 &19765527345339260
 Rigidbody:

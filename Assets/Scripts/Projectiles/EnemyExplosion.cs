@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyExplosion : Explosion
 {
     private Enemy parentEnemy;
+    private Vector3 offset = new Vector3(0, 1.2f, 0);
 
     public void SetEnemy(Enemy enemy)
     {
@@ -22,7 +23,7 @@ public class EnemyExplosion : Explosion
     {
         yield return new WaitForEndOfFrame();
 
-        if (Vector3.Distance(transform.position, PlayerManager.Instance.transform.position) < 2)
+        if (Vector3.Distance(transform.position, PlayerManager.Instance.transform.position + offset) < damageRange)
         {
             PlayerManager.Instance.TakeDamage(parentEnemy.Damage);
             parentEnemy = null;
