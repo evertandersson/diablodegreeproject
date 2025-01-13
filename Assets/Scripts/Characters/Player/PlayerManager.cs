@@ -47,7 +47,7 @@ namespace Game
         private ActionItemSO currentAction;
 
         [SerializeField]
-        private HealthBar healthBar;
+        private PlayerHealthBar healthBar;
 
         public bool isInteracting;
 

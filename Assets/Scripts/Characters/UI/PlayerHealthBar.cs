@@ -1,54 +1,60 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class PlayerHealthBar : HealthBar
+public class PlayerHealthBar : MonoBehaviour
 {
-    private Vector3 originalScale;
-    private Coroutine scaleCoroutine;
+    [SerializeField] private Image healthBarFill; // Reference to the UI image representing the health bar
+    [SerializeField] private float animationDuration = 0.2f; // Duration of the scaling animation
+
+    private float originalScale; // Store the original scale of the health bar
+    private Coroutine scaleCoroutine; // Reference to the currently running coroutine (if any)
+    private int maxHealth; // Store the maximum health
 
     private void Awake()
     {
-        originalScale = transform.localScale;
+        originalScale = healthBarFill.fillAmount; // Initialize the original scale
     }
 
-    public override void SetHealth(int health)
+    public void SetMaxHealth(int health)
     {
-        if (health < slider.value) // Only trigger scaling when taking damage
-        {
-            if (scaleCoroutine != null)
-                StopCoroutine(scaleCoroutine);
+        maxHealth = health; // Set the maximum health
+        SetHealth(health); // Initialize the health bar to full
+    }
 
-            scaleCoroutine = StartCoroutine(ScaleEffect());
+    public void SetHealth(int health)
+    {
+        // Clamp health to ensure it's between 0 and maxHealth
+        health = Mathf.Clamp(health, 0, maxHealth);
+
+        // Calculate the target scale as a percentage of max health
+        float targetFill = (float)health / maxHealth;
+
+        // Stop any currently running scaling animation
+        if (scaleCoroutine != null)
+        {
+            StopCoroutine(scaleCoroutine);
         }
-        base.SetHealth(health);
+
+        // Start a new scaling animation
+        scaleCoroutine = StartCoroutine(ScaleHealthBar(targetFill));
     }
 
-    private IEnumerator ScaleEffect()
+    private IEnumerator ScaleHealthBar(float targetFill)
     {
-        // Increase scale
-        Vector3 targetScale = originalScale + new Vector3(0.3f, 0.3f, 0.3f);
-        float durationToBig = 0.025f;
-        float durationToSmall = 0.15f;
-        float elapsed = 0f;
+        float currentFill = healthBarFill.fillAmount; // Get the current scale
 
-        while (elapsed < durationToBig)
+        float elapsedTime = 0f;
+
+        // Smoothly interpolate the scale over time
+        while (elapsedTime < animationDuration)
         {
-            transform.localScale = Vector3.Lerp(originalScale, targetScale, elapsed / durationToBig);
-            elapsed += Time.deltaTime;
+            elapsedTime += Time.deltaTime;
+            healthBarFill.fillAmount = Mathf.Lerp(currentFill, targetFill, elapsedTime / animationDuration);
             yield return null;
         }
 
-        transform.localScale = targetScale;
-
-        // Return to original scale
-        elapsed = 0f;
-        while (elapsed < durationToSmall)
-        {
-            transform.localScale = Vector3.Lerp(targetScale, originalScale, elapsed / durationToSmall);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        transform.localScale = originalScale;
+        // Ensure the scale is set to the exact target value at the end
+        healthBarFill.fillAmount = targetFill;
     }
 }
