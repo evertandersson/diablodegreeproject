@@ -7,8 +7,8 @@ public class PlayerManaOrb : Orb
     {
         if (PlayerManager.Instance.Mana < PlayerManager.Instance.MaxMana)
         {
-            PlayerManager.Instance.RefillMana();
-            SetValue((int)PlayerManager.Instance.Mana);
+            PlayerManager.Instance.RefillMana(false);
         }
+        SetValue((int)PlayerManager.Instance.Mana);
     }
 }

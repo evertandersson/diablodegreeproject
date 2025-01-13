@@ -4,12 +4,29 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Potion", menuName = "Scriptable Objects/Potion")]
 public class PotionSO : ActionItemSO
 {
-    public int healAmount;
+    public PotionType potionType;
+    
+    public int recoverAmount;
 
     public override void PerformAction(Animator animator)
     {
         Debug.Log("Drank potion");
         timerCooldown = 0;
-        PlayerManager.Instance.Heal(healAmount);
+        switch (potionType)
+        {
+            case PotionType.Health:
+                PlayerManager.Instance.Heal(recoverAmount);
+                break;
+            case PotionType.Mana:
+                PlayerManager.Instance.RefillMana(true, recoverAmount);
+                break;
+
+        }
     }
+}
+
+public enum PotionType
+{
+    Health,
+    Mana
 }

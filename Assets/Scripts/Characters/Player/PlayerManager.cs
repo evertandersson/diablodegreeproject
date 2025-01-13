@@ -251,9 +251,13 @@ namespace Game
             health += amount;
             healthBar.SetValue(health);
         }
-        public void RefillMana()
+        public void RefillMana(bool isFlask = false, float amount = 0)
         {
-            currentMana += manaRegeneration * Time.deltaTime;
+            if (isFlask)
+                currentMana += amount;
+            else
+                currentMana += manaRegeneration * Time.deltaTime;
+
             currentMana = Mathf.Clamp(currentMana, 0, maxMana);
         }
 
