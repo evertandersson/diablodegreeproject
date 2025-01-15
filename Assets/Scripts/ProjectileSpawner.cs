@@ -31,7 +31,7 @@ namespace Game
             {
                 projectile = ObjectPooling.Instance.SpawnFromPool(
                 tag,
-                transform.position,
+                transform.position + transform.forward * 1f,
                 PlayerManager.Instance.transform.rotation);
             }
         }

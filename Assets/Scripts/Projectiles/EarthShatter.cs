@@ -36,36 +36,37 @@ namespace Game
 
         private void Update()
         {
-            if (particle != null)
+            if (enemiesHit.Count < 1 || particle == null)
             {
-                currentTimer += Time.deltaTime;
+                return;
+            }
 
-                // Deal damage to enemies at intervals
-                if (currentTimer > damageTimer)
+            currentTimer += Time.deltaTime;
+
+            // Deal damage to enemies at intervals
+            if (currentTimer > damageTimer)
+            {
+                // Create a temporary list of keys to iterate over
+                var enemiesToProcess = new List<Enemy>(enemiesHit.Keys);
+
+                foreach (var enemy in enemiesToProcess)
                 {
-                    // Create a temporary list of keys to iterate over
-                    var enemiesToProcess = new List<Enemy>(enemiesHit.Keys);
-
-                    foreach (var enemy in enemiesToProcess)
+                    if (enemy != null && enemiesHit[enemy] < 2)
                     {
-                        if (enemy != null && enemiesHit[enemy] < 2)
-                        {
-                            enemy.TakeDamage(PlayerManager.Instance.Damage);
-                            enemiesHit[enemy] += 1;
-                        }
+                        enemy.TakeDamage(PlayerManager.Instance.Damage);
+                        enemiesHit[enemy] += 1;
                     }
-                    currentTimer = 0; // Reset timer after processing all enemies
                 }
+                currentTimer = 0; // Reset timer after processing all enemies
+            }
 
-                // Despawn object when particle system is no longer alive
-                if (!particle.IsAlive(true))
-                {
-                    enemiesHit.Clear();
-                    ObjectPooling.Instance.DespawnObject(gameObject);
-                }
+            // Despawn object when particle system is no longer alive
+            if (!particle.IsAlive(true))
+            {
+                enemiesHit.Clear();
+                ObjectPooling.Instance.DespawnObject(gameObject);
             }
         }
-
     }
 }
 
