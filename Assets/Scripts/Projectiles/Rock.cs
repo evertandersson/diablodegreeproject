@@ -15,15 +15,13 @@ namespace Game
 
         private void OnParticleCollision(GameObject other)
         {
-            Enemy enemy = other.GetComponent<Enemy>();
-
-            if (enemy != null) // Ensure the enemy is not null
+            if (!earthShatter.enemiesHit.Contains(other.GetComponent<Enemy>()))
             {
-                // Check if the enemy is already in the dictionary
-                if (!earthShatter.enemiesHit.ContainsKey(enemy))
+                Enemy enemy = other.GetComponent<Enemy>();
+                if (enemy != null)
                 {
+                    earthShatter.enemiesHit.Add(enemy);
                     enemy.TakeDamage(PlayerManager.Instance.Damage);
-                    earthShatter.enemiesHit.Add(enemy, 0); // Add the enemy to the dictionary with an initial hit count
                 }
             }
         }

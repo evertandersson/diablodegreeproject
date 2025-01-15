@@ -9568,6 +9568,7 @@ MonoBehaviour:
   moveSpeed: 10
   explosionToSpawn: EarthShatter
   lifeTime: 5
+  enemiesHit: []
   particle: {fileID: 198345217066185332}
 --- !u!1 &1584802242839310
 GameObject:
@@ -18120,14 +18121,14 @@ ParticleSystem:
         m_RotationOrder: 4
     minKillSpeed: 0
     maxKillSpeed: 10000
-    radiusScale: 1.28
+    radiusScale: 1.32
     collidesWith:
       serializedVersion: 2
       m_Bits: 256
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
-    collisionMessages: 0
+    collisionMessages: 1
     collidesWithDynamic: 1
     interiorCollisions: 0
   TriggerModule:
