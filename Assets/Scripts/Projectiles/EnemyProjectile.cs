@@ -16,7 +16,9 @@ namespace Game
             if (!hasHit)
             {
                 // Ignore the owner and other projectiles
-                if (other.gameObject.CompareTag("Projectile") || other.gameObject.GetComponent<RangedEnemy>())
+                if (other.gameObject.CompareTag("Projectile") || 
+                    other.gameObject.GetComponent<RangedEnemy>() ||
+                    other.gameObject.layer == LayerMask.NameToLayer("Ignore Raycast"))
                 {
                     return; // Ignore collision with owner and unwanted objects
                 }

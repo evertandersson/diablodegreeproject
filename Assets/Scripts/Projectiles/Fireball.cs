@@ -37,7 +37,8 @@ namespace Game
             if (hasHit == false)
             {
                 if (!other.gameObject.GetComponent<PlayerManager>()
-                    && !other.gameObject.CompareTag("Projectile"))
+                    && !other.gameObject.CompareTag("Projectile") &&
+                    other.gameObject.layer != LayerMask.NameToLayer("Ignore Raycast"))
                 {
                     ObjectPooling.Instance.SpawnFromPool(explosionToSpawn, transform.position, Quaternion.identity);
                     ObjectPooling.Instance.DespawnObject(this.gameObject);
