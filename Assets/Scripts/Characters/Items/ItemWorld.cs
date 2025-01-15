@@ -20,12 +20,12 @@ namespace Game
 
         private void Awake()
         {
-            SaveManager.LoadPickedUpItems += Load;
+            SaveManager.LoadWorldObjects += Load;
         }
 
         private void OnDisable()
         {
-            SaveManager.LoadPickedUpItems -= Load;
+            SaveManager.LoadWorldObjects -= Load;
         }
 
         private void Load()
@@ -48,7 +48,7 @@ namespace Game
 
                 if (itemAdded)
                 {
-                    SaveManager.Instance.AddPickedUpItem(id);
+                    SaveManager.Instance.AddObjectToList(id, SaveManager.Instance.pickedUpItemsList);
 
                     Vector3 offset = new Vector3(0, 1, 0);
                     PopupText text = ObjectPooling.Instance.SpawnFromPool("PopupText", transform.position + offset, Quaternion.identity).GetComponent<PopupText>();

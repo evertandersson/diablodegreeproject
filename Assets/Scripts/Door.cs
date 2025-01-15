@@ -19,9 +19,32 @@ namespace Game
 
         public State state;
 
+
+        [SerializeField] private string id;
+
+        [ContextMenu("Generate guid for id")]
+        private void GenerateGuid()
+        {
+            id = System.Guid.NewGuid().ToString();
+        }
+
         private void Awake()
         {
             doorRenderer = GetComponent<Renderer>();
+            SaveManager.LoadWorldObjects += Load;
+        }
+        private void OnDisable()
+        {
+            SaveManager.LoadWorldObjects -= Load;
+        }
+
+        private void Load()
+        {
+            if (SaveManager.Instance.openedDoorsList.serializableList.Exists(door => door.name == id))
+            {
+                state = State.Closed;
+                Trigger();
+            }
         }
 
         public void Trigger()
@@ -62,6 +85,9 @@ namespace Game
                         text.message = "Unlocked door";
                         text.StartCoroutine("Trigger");
                         SoundManager.PlaySound(SoundType.DOOR);
+
+                        SaveManager.Instance.AddObjectToList(id, SaveManager.Instance.openedDoorsList);
+
                         break;
                     }
                 }

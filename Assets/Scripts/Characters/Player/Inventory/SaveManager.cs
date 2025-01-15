@@ -22,7 +22,9 @@ namespace Game
         private int playerExperience;
 
         public SerializableListString pickedUpItemsList = new SerializableListString();
-        public static event Action LoadPickedUpItems; 
+        public SerializableListString openedDoorsList = new SerializableListString();
+        
+        public static event Action LoadWorldObjects; 
 
         public static SaveManager Instance
         {
@@ -127,7 +129,8 @@ namespace Game
                 level = PlayerManager.Instance.levelSystem.GetCurrentLevel(),
                 experience = PlayerManager.Instance.levelSystem.GetExperience(),
 
-                itemsPickedUp = pickedUpItemsList
+                itemsPickedUp = pickedUpItemsList,
+                doorsOpened = openedDoorsList
             };
 
             string saveJson = JSON.Serialize(saveData).CreatePrettyString();
@@ -136,22 +139,21 @@ namespace Game
             Debug.Log("Save completed.");
         }
 
-        public void AddPickedUpItem(string itemId)
+        public void AddObjectToList(string objectId, SerializableListString targetList)
         {
-            if (!pickedUpItemsList.serializableList.Exists(item => item.name == itemId))
+            if (!targetList.serializableList.Exists(obj => obj.name == objectId))
             {
-                SerializableListString.SerialItem pickedUpItem = new SerializableListString.SerialItem
+                SerializableListString.SerialItem addedObj = new SerializableListString.SerialItem
                 {
-                    name = itemId,
+                    name = objectId,
                     count = 1
                 };
 
-                pickedUpItemsList.serializableList.Add(pickedUpItem);
+                targetList.serializableList.Add(addedObj);
                 Save(); // Save the updated list
-                Debug.Log($"Item with ID {itemId} added to picked-up list.");
+                Debug.Log($"Item with ID {objectId} added to picked-up list.");
             }
         }
-
 
         private void ImportSaveData()
         {
@@ -186,7 +188,7 @@ namespace Game
 
             SkillTreeManager.Instance.Initialize();
 
-            LoadPickedUpItems?.Invoke();
+            LoadWorldObjects?.Invoke();
         }
 
         private void ClearSlots(IEnumerable<InventorySlot> slots)
@@ -273,6 +275,7 @@ namespace Game
                 playerExperience = saveData.experience;
 
                 pickedUpItemsList = saveData.itemsPickedUp ?? new SerializableListString();
+                openedDoorsList = saveData.doorsOpened ?? new SerializableListString();
 
                 Debug.Log($"Loaded Inventory: {inventoryList.serializableList.Count} items");
                 Debug.Log($"Loaded Action Slots: {actionSlotList.serializableList.Count} items");
@@ -316,6 +319,7 @@ namespace Game
             actionSlotList.serializableList.Clear();
             equipmentList.serializableList.Clear();
             pickedUpItemsList.serializableList.Clear();
+            openedDoorsList.serializableList.Clear();
 
             // Reset Level and Experience
             if (PlayerManager.Instance.levelSystem == null)
@@ -354,5 +358,6 @@ namespace Game
         public int level;
         public int experience;
         public SerializableListString itemsPickedUp;
+        public SerializableListString doorsOpened;
     }
 }
