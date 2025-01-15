@@ -24,9 +24,12 @@ public class SkillTreeManager : Popup
         allSkills = new List<SkillButton>(GetComponentsInChildren<SkillButton>(true));
         PlayerManager.Instance.levelSystem.OnLevelChanged += AddSkillPoint;
 
-        foreach (SkillButton skill in allSkills)
+        foreach (var unlockedSkill in SaveManager.Instance.skillsUnlockedList.serializableList)
         {
-            if (SaveManager.Instance.skillsUnlockedList.serializableList.Exists(item => item.name == skill.id))
+            // Find the matching skill in the allSkills list by id
+            SkillButton skill = allSkills.Find(s => s.id == unlockedSkill.name);
+
+            if (skill != null)
             {
                 LoadSkillAtStart(skill);
             }
