@@ -142,20 +142,24 @@ public abstract class Character : MonoBehaviour
     {
         if (!target) return false;
 
+        // Calculate direction and distance to the target
         Vector3 directionToTarget = (target.position + offset - (transform.position + offset)).normalized;
-        float distanceToTarget = Vector3.Distance(transform.position, target.position);
+        float distanceToTarget = Vector3.Distance(transform.position + offset, target.position + offset);
+        
+        Debug.DrawRay(transform.position + offset, directionToTarget * visionRange, Color.red);
 
         // Check if the target is within the vision range
         if (distanceToTarget > visionRange) return false;
 
         // Check if the target is within the vision angle
-        float angleToPlayer = Vector3.Angle(transform.forward, directionToTarget);
-        if (angleToPlayer > visionAngle) return false;
+        float angleToTarget = Vector3.Angle(transform.forward, directionToTarget);
+        if (angleToTarget > visionAngle / 2f) return false;
 
         // Perform a raycast to ensure there are no obstacles
         if (Physics.Raycast(transform.position + offset, directionToTarget, out RaycastHit hit, visionRange, detectionMask))
         {
-            return hit.transform == target; // Check if the hit object is the player
+            // Check if the raycast hit the actual target
+            return hit.transform == target;
         }
 
         return false;
