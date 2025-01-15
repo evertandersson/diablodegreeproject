@@ -98,6 +98,15 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HighlightItems"",
+                    ""type"": ""Button"",
+                    ""id"": ""0fb59f5c-9ed5-41c2-b194-783edd40158c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -230,6 +239,17 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Attack5"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2b569fa4-d787-41f4-a6a7-9e09ac14d2c1"",
+                    ""path"": ""<Keyboard>/leftAlt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HighlightItems"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -865,6 +885,7 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
         m_Player_Attack4 = m_Player.FindAction("Attack4", throwIfNotFound: true);
         m_Player_Attack5 = m_Player.FindAction("Attack5", throwIfNotFound: true);
         m_Player_Roll = m_Player.FindAction("Roll", throwIfNotFound: true);
+        m_Player_HighlightItems = m_Player.FindAction("HighlightItems", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -954,6 +975,7 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Attack4;
     private readonly InputAction m_Player_Attack5;
     private readonly InputAction m_Player_Roll;
+    private readonly InputAction m_Player_HighlightItems;
     public struct PlayerActions
     {
         private @PlayerInputSystem m_Wrapper;
@@ -966,6 +988,7 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
         public InputAction @Attack4 => m_Wrapper.m_Player_Attack4;
         public InputAction @Attack5 => m_Wrapper.m_Player_Attack5;
         public InputAction @Roll => m_Wrapper.m_Player_Roll;
+        public InputAction @HighlightItems => m_Wrapper.m_Player_HighlightItems;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -999,6 +1022,9 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
             @Roll.started += instance.OnRoll;
             @Roll.performed += instance.OnRoll;
             @Roll.canceled += instance.OnRoll;
+            @HighlightItems.started += instance.OnHighlightItems;
+            @HighlightItems.performed += instance.OnHighlightItems;
+            @HighlightItems.canceled += instance.OnHighlightItems;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1027,6 +1053,9 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
             @Roll.started -= instance.OnRoll;
             @Roll.performed -= instance.OnRoll;
             @Roll.canceled -= instance.OnRoll;
+            @HighlightItems.started -= instance.OnHighlightItems;
+            @HighlightItems.performed -= instance.OnHighlightItems;
+            @HighlightItems.canceled -= instance.OnHighlightItems;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1233,6 +1262,7 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
         void OnAttack4(InputAction.CallbackContext context);
         void OnAttack5(InputAction.CallbackContext context);
         void OnRoll(InputAction.CallbackContext context);
+        void OnHighlightItems(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

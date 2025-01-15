@@ -10,6 +10,23 @@ namespace Game
         [SerializeField]
         private string message;
 
+        private Outline outline;
+
+        private void Start()
+        {
+            outline = GetComponent<Outline>();
+
+            PlayerInput.HighlightItems += HighlightItem;
+            PlayerInput.HideItems += HideItem;
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            PlayerInput.HighlightItems -= HighlightItem;
+            PlayerInput.HideItems -= HideItem;
+        }
+
         protected override void Load()
         {
             if (SaveManager.Instance.pickedUpItemsList.serializableList.Exists(item => item.name == id))
@@ -50,6 +67,17 @@ namespace Game
         public Vector3 GetCenterPoint()
         {
             return transform.position;
+        }
+
+        private void HighlightItem()
+        {
+            if (outline.enabled == false)
+                outline.enabled = true;
+        }
+        private void HideItem()
+        {
+            if (outline.enabled == true)
+                outline.enabled = false;
         }
     }
 

@@ -1,5 +1,7 @@
+using System;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Game
 {
@@ -17,11 +19,35 @@ namespace Game
         [SerializeField] float followOffsetMaxY = 50f;
 
         Outline highlightedObject = null;
+        private bool highlightEnabled = true;
 
         private void Awake()
         {
             followComponent = GetComponent<CinemachineFollow>();
             followOffset = followComponent.FollowOffset;
+        }
+
+        private void Start()
+        {
+            PlayerInput.HighlightItems += DisableHighlight;
+            PlayerInput.HideItems += EnableHighlight;
+        }
+
+
+        private void OnDisable()
+        {
+            PlayerInput.HighlightItems -= DisableHighlight;
+            PlayerInput.HideItems -= EnableHighlight;
+        }
+
+
+        private void EnableHighlight()
+        {
+            highlightEnabled = true;
+        }
+        private void DisableHighlight()
+        {
+            highlightEnabled = false;
         }
 
         void Update()
@@ -33,9 +59,9 @@ namespace Game
                 mouseInputPosition = hit.point;
 
                 // Check if the raycast hit a Door
-                if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Interactable"))
+                if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Interactable") && highlightEnabled)
                 {
-                    var outline = hit.transform.GetComponent<Outline>();
+                    Outline outline = hit.transform.GetComponent<Outline>();
 
                     // If it's a new object, enable the outline
                     if (outline != highlightedObject)
@@ -53,8 +79,8 @@ namespace Game
                 }
                 else
                 {
-                    // If no Door is hit, reset the outline
-                    if (highlightedObject != null)
+                    // If no object is hit, reset the outline
+                    if (highlightedObject != null && highlightEnabled)
                     {
                         highlightedObject.enabled = false;
                         highlightedObject = null;

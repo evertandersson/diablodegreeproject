@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,9 +18,13 @@ namespace Game
         InputAction[] attacks;  // Array to store all attack actions
         InputAction openInventory;
         InputAction openSkillTree;
+        InputAction highlightItems;
 
         bool isMoving = false;
         bool isClickInteraction = false;
+
+        public static event Action HighlightItems;
+        public static event Action HideItems;
 
         private void Awake()
         {
@@ -57,6 +62,12 @@ namespace Game
             openSkillTree.Enable();
             openSkillTree.performed += OpenSkillTree;
 
+            // Initialize the highlight items action
+            highlightItems = playerInputSystem.Player.HighlightItems;
+            highlightItems.Enable();
+            highlightItems.performed += ShowHighlightItems;
+            highlightItems.canceled += HideHighlightItems;
+
             // Subscribe to each attack action
             for (int i = 0; i < attacks.Length; i++)
             {
@@ -72,6 +83,8 @@ namespace Game
             move.Disable();
             roll.Disable();
             openInventory.Disable();
+            openSkillTree.Disable();
+            highlightItems.Disable();
             for (int i = 0; i < attacks.Length; i++)
             {
                 attacks[i].Disable();
@@ -232,6 +245,15 @@ namespace Game
                     popupInstance.OnCancel();
                 }
             }
+        }
+
+        private void ShowHighlightItems(InputAction.CallbackContext context)
+        {
+            HighlightItems?.Invoke();
+        }
+        private void HideHighlightItems(InputAction.CallbackContext context)
+        {
+            HideItems?.Invoke();
         }
     }
 }
