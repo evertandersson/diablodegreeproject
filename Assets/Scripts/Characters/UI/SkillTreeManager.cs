@@ -24,12 +24,17 @@ public class SkillTreeManager : Popup
         allSkills = new List<SkillButton>(GetComponentsInChildren<SkillButton>(true));
         PlayerManager.Instance.levelSystem.OnLevelChanged += AddSkillPoint;
 
+        foreach (SkillButton skill in allSkills)
+        {
+            if (SaveManager.Instance.skillsUnlockedList.serializableList.Exists(item => item.name == skill.id))
+            {
+                LoadSkillAtStart(skill);
+            }
+        }
+
         foreach (SkillButton skillButton in allSkills)
         {
-            if (skillButton.isUnlocked)
-            {
-                UnlockSkill(skillButton);
-            }
+            skillButton.UpdateButtonState(skillButton);
         }
 
         UpdateSkillPointsText();
@@ -83,5 +88,12 @@ public class SkillTreeManager : Popup
             }
             PlayerManager.Instance.ApplySkillPoint(skill.skill);
         }
+    }
+
+    private void LoadSkillAtStart(SkillButton skill)
+    {
+        skill.isUnlocked = true;
+        unlockedSkills.Add(skill); // Add to unlockedSkills, not allSkills
+        PlayerManager.Instance.ApplySkillPoint(skill.skill);
     }
 }

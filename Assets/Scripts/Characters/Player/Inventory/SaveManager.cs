@@ -22,7 +22,9 @@ namespace Game
         private int playerExperience;
 
         public SerializableListString pickedUpItemsList = new SerializableListString();
-        public SerializableListString openedDoorsList = new SerializableListString();
+        public SerializableListString doorsOpenedList = new SerializableListString();
+
+        public SerializableListString skillsUnlockedList = new SerializableListString();
         
         public static event Action LoadWorldObjects; 
 
@@ -130,7 +132,9 @@ namespace Game
                 experience = PlayerManager.Instance.levelSystem.GetExperience(),
 
                 itemsPickedUp = pickedUpItemsList,
-                doorsOpened = openedDoorsList
+                doorsOpened = doorsOpenedList,
+
+                skillsUnlocked = skillsUnlockedList
             };
 
             string saveJson = JSON.Serialize(saveData).CreatePrettyString();
@@ -275,7 +279,9 @@ namespace Game
                 playerExperience = saveData.experience;
 
                 pickedUpItemsList = saveData.itemsPickedUp ?? new SerializableListString();
-                openedDoorsList = saveData.doorsOpened ?? new SerializableListString();
+                doorsOpenedList = saveData.doorsOpened ?? new SerializableListString();
+
+                skillsUnlockedList = saveData.skillsUnlocked ?? new SerializableListString();
 
                 Debug.Log($"Loaded Inventory: {inventoryList.serializableList.Count} items");
                 Debug.Log($"Loaded Action Slots: {actionSlotList.serializableList.Count} items");
@@ -319,7 +325,8 @@ namespace Game
             actionSlotList.serializableList.Clear();
             equipmentList.serializableList.Clear();
             pickedUpItemsList.serializableList.Clear();
-            openedDoorsList.serializableList.Clear();
+            doorsOpenedList.serializableList.Clear();
+            skillsUnlockedList.serializableList.Clear();
 
             // Reset Level and Experience
             if (PlayerManager.Instance.levelSystem == null)
@@ -359,5 +366,6 @@ namespace Game
         public int experience;
         public SerializableListString itemsPickedUp;
         public SerializableListString doorsOpened;
+        public SerializableListString skillsUnlocked;
     }
 }

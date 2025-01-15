@@ -1456,6 +1456,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a5c465070e9acc488897011a33029b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 60f8fec9-d03b-4ff3-93e5-73cb1403fc6f
   skill: {fileID: 11400000, guid: 2a3eee900023df949a5ee7f10f02527e, type: 2}
   previousSkillsNeeded:
   - {fileID: 7610399717946466461}
@@ -1670,6 +1671,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a5c465070e9acc488897011a33029b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: cbc29af3-c300-4e01-bd46-840486d086e0
   skill: {fileID: 11400000, guid: 2a3eee900023df949a5ee7f10f02527e, type: 2}
   previousSkillsNeeded:
   - {fileID: 7610399717946466461}
@@ -3041,6 +3043,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a5c465070e9acc488897011a33029b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 1986e142-df21-4d00-8ac2-2e5a6c3b124d
   skill: {fileID: 11400000, guid: c87645596e8e5de4787437b0bfb6fbd2, type: 2}
   previousSkillsNeeded:
   - {fileID: 4132508665346479421}
@@ -3812,6 +3815,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a5c465070e9acc488897011a33029b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 55a33bca-fc65-4ea3-a846-60825ecfe081
   skill: {fileID: 11400000, guid: 4af85dad9b9f3c548a639a73df6d3ade, type: 2}
   previousSkillsNeeded:
   - {fileID: 1701405320635804224}
@@ -4758,6 +4762,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a5c465070e9acc488897011a33029b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 873ded49-1131-40ec-bea7-e6292c2ee6e0
   skill: {fileID: 11400000, guid: 4af85dad9b9f3c548a639a73df6d3ade, type: 2}
   previousSkillsNeeded:
   - {fileID: 1701405320635804224}
@@ -5662,7 +5667,7 @@ PrefabInstance:
       objectReference: {fileID: 7068955261144503418}
     - target: {fileID: 8496131112847303292, guid: 49200478650886d4dba9fb5aa0acfa37, type: 3}
       propertyPath: m_Alpha
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8728662155120187798, guid: 49200478650886d4dba9fb5aa0acfa37, type: 3}
       propertyPath: m_Name
@@ -5738,6 +5743,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a5c465070e9acc488897011a33029b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: e971a39a-ff64-44a7-bc01-8225483e1fab
   skill: {fileID: 11400000, guid: 2a3eee900023df949a5ee7f10f02527e, type: 2}
   previousSkillsNeeded: []
   isUnlocked: 0
@@ -5766,6 +5772,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a5c465070e9acc488897011a33029b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 34591956-5e44-467c-bead-b9cf93124687
   skill: {fileID: 11400000, guid: 4af85dad9b9f3c548a639a73df6d3ade, type: 2}
   previousSkillsNeeded: []
   isUnlocked: 0
@@ -5805,6 +5812,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a5c465070e9acc488897011a33029b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: b063933a-7ad4-4f42-a320-04c4abce05a6
   skill: {fileID: 11400000, guid: c87645596e8e5de4787437b0bfb6fbd2, type: 2}
   previousSkillsNeeded: []
   isUnlocked: 0
@@ -7006,6 +7014,10 @@ PrefabInstance:
     - target: {fileID: 8012021228845520189, guid: f15896cef99df0e43b9c64e54c96a3eb, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8012021228845520189, guid: f15896cef99df0e43b9c64e54c96a3eb, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8015738386680863130, guid: f15896cef99df0e43b9c64e54c96a3eb, type: 3}
       propertyPath: m_Layer

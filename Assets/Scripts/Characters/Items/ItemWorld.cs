@@ -2,33 +2,15 @@ using UnityEngine;
 
 namespace Game
 {
-    public class ItemWorld : MonoBehaviour, Interactable
+    public class ItemWorld : Loadable, Interactable
     {
         [SerializeField]
         private ItemSO item;
 
-        [SerializeField] private string id;
-
-        [ContextMenu("Generate guid for id")]
-        private void GenerateGuid()
-        {
-            id = System.Guid.NewGuid().ToString();
-        }
-
         [SerializeField]
         private string message;
 
-        private void Awake()
-        {
-            SaveManager.LoadWorldObjects += Load;
-        }
-
-        private void OnDisable()
-        {
-            SaveManager.LoadWorldObjects -= Load;
-        }
-
-        private void Load()
+        protected override void Load()
         {
             if (SaveManager.Instance.pickedUpItemsList.serializableList.Exists(item => item.name == id))
             {

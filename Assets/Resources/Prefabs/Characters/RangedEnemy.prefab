@@ -636,7 +636,7 @@ MonoBehaviour:
   detectionMask:
     serializedVersion: 2
     m_Bits: 3201
-  experienceOnDeath: 30
+  experienceOnDeath: 500
   standStill: 0
   isAggro: 0
   distanceToAttack: 10

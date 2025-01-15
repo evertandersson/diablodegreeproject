@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game
 {
-    public class Door : MonoBehaviour, Interactable
+    public class Door : Loadable, Interactable
     {
         [SerializeField] private ItemSO key;
         Renderer doorRenderer;
@@ -19,28 +19,15 @@ namespace Game
 
         public State state;
 
-
-        [SerializeField] private string id;
-
-        [ContextMenu("Generate guid for id")]
-        private void GenerateGuid()
+        protected override void Awake()
         {
-            id = System.Guid.NewGuid().ToString();
-        }
-
-        private void Awake()
-        {
+            base.Awake();
             doorRenderer = GetComponent<Renderer>();
-            SaveManager.LoadWorldObjects += Load;
-        }
-        private void OnDisable()
-        {
-            SaveManager.LoadWorldObjects -= Load;
         }
 
-        private void Load()
+        protected override void Load()
         {
-            if (SaveManager.Instance.openedDoorsList.serializableList.Exists(door => door.name == id))
+            if (SaveManager.Instance.doorsOpenedList.serializableList.Exists(door => door.name == id))
             {
                 state = State.Closed;
                 Trigger();
@@ -86,7 +73,7 @@ namespace Game
                         text.StartCoroutine("Trigger");
                         SoundManager.PlaySound(SoundType.DOOR);
 
-                        SaveManager.Instance.AddObjectToList(id, SaveManager.Instance.openedDoorsList);
+                        SaveManager.Instance.AddObjectToList(id, SaveManager.Instance.doorsOpenedList);
 
                         break;
                     }

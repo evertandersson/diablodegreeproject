@@ -1,8 +1,9 @@
+using Game;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class SkillButton : Loadable, IPointerEnterHandler, IPointerExitHandler
 {
     public SkillSO skill;
     public SkillButton[] previousSkillsNeeded;
@@ -15,6 +16,11 @@ public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private SkillTreeManager skillTreeManager;
 
+    protected override void Awake()
+    {
+        // Do nothing
+    }
+
     private void Start()
     {
         skillTreeManager = FindFirstObjectByType<SkillTreeManager>();
@@ -24,19 +30,24 @@ public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         icon.texture = skill.skillIcon;
         //costText.text = skill.skillCost.ToString();
 
-        button.onClick.AddListener(() => UnlockSkill());
-        UpdateButtonState(this);
+        button.onClick.AddListener(() => UnlockSkill(true));
+    }
+
+    protected override void Load()
+    {
+        //Do nothing
     }
 
     public void UpdateButtonState(SkillButton skillButton)
     {
-        if (EventHandler.Main.CurrentEvent is SkillTreeManager)
-            button.interactable = skillTreeManager.CanUnlock(skillButton);
+        //if (EventHandler.Main.CurrentEvent is SkillTreeManager)
+        button.interactable = skillTreeManager.CanUnlock(skillButton);
     }
 
-    public void UnlockSkill()
+    public void UnlockSkill(bool saveToList)
     {
         skillTreeManager.UnlockSkill(this);
+        if (saveToList) SaveManager.Instance.AddObjectToList(id, SaveManager.Instance.skillsUnlockedList);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -55,4 +66,5 @@ public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         InfoWindow.Instance.HideInfoWindow();
     }
+
 }
