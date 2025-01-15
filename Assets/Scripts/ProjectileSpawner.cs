@@ -7,12 +7,33 @@ namespace Game
         public GameObject projectile;
         private Vector3 offset = new Vector3(0, 1.2f, 0);
 
-        public void SpawnProjectile(string tag)
+        public void SpawnProjectileWithOffset(string tag)
         {
-            projectile = ObjectPooling.Instance.SpawnFromPool(
+            SpawnProjectile(tag, true);
+        }
+
+        public void SpawnProjectileWithoutOffset(string tag)
+        {
+            SpawnProjectile(tag, false);
+        }
+
+
+        public void SpawnProjectile(string tag, bool offsetEnable)
+        {
+            if (offsetEnable)
+            {
+                projectile = ObjectPooling.Instance.SpawnFromPool(
                 tag,
                 transform.position + offset,
                 PlayerManager.Instance.transform.rotation);
+            }
+            else
+            {
+                projectile = ObjectPooling.Instance.SpawnFromPool(
+                tag,
+                transform.position,
+                PlayerManager.Instance.transform.rotation);
+            }
         }
     }
 
