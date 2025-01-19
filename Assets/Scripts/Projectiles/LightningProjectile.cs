@@ -70,7 +70,7 @@ public class LightningEffect : MonoBehaviour, IPooledObject
             // Update the lightning position to the new enemy
             startPosition = closestEnemy.transform.position;
 
-            // Move the lightning to the enemy (optional visual adjustment)
+            // Move the lightning to the enemy
             transform.position = closestEnemy.transform.position;
 
             // Add a point to the line renderer for the lightning visual

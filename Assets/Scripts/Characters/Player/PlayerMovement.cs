@@ -178,7 +178,7 @@ namespace Game
 
             // Calculate the direction from the player to the mouse position
             Vector3 direction = (mouseWorldPosition - transform.position).normalized;
-            direction.y = 0; // Ensure movement is constrained to the XZ plane
+            direction.y = 0;
 
             return direction;
         }
@@ -195,7 +195,6 @@ namespace Game
                     return;
                 }
 
-                // Same for buffered attack, but perform when timer is 0.5 instead
                 if (hasBufferedAttack && rollTimer > 0.5f)
                 {
                     ProcessBufferedInput();

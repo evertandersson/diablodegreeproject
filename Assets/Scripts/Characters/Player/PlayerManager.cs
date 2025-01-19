@@ -337,6 +337,7 @@ namespace Game
                     {
                         CurrentAction = actionItem;
 
+                        // Handle attack item
                         if (actionItem is AttackTypeSO attackTypeAction)
                         {
                             if (currentMana > attackTypeAction.manaCost)
@@ -355,6 +356,7 @@ namespace Game
                                 CurrentAction = null;
                             }
                         }
+                        // Handle potion item
                         if (actionItem is PotionSO potionSO)
                         {
                             potionSO.PerformAction(CharacterAnimator);
