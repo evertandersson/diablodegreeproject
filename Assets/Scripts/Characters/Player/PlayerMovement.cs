@@ -221,7 +221,6 @@ namespace Game
         {
             if (playerManager.CurrentPlayerState != PlayerManager.State.Rolling) return;
 
-            // Apply root motion position normally
             Vector3 newPosition = transform.position + playerManager.CharacterAnimator.deltaPosition;
 
             // Get ground height difference
@@ -243,16 +242,15 @@ namespace Game
         public float DistanceToGround()
         {
             RaycastHit hit;
-            float raycastLength = 2f; // Adjust based on player height
-            Vector3 rayOrigin = transform.position + Vector3.up * 0.5f; // Slightly above the player to avoid clipping
+            float raycastLength = 2f;
+            Vector3 rayOrigin = transform.position + Vector3.up * 0.5f;
 
-            // Raycast downwards with proper LayerMask
             if (Physics.Raycast(rayOrigin, Vector3.down, out hit, raycastLength, groundLayer))
             {
-                return transform.position.y - hit.point.y; // Corrected to return actual distance
+                return transform.position.y - hit.point.y;
             }
 
-            return 0f; // If no ground detected, assume the character is on the ground
+            return 0f;
         }
     }
 }
