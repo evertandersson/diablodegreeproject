@@ -19,6 +19,7 @@ namespace Game
         private int bufferedAttackIndex;
         private bool hasBufferedAttack;
         private bool hasBufferedRoll;
+        [SerializeField] private LayerMask groundLayer;
 
         // Animation names:
         private int rollTrigger = Animator.StringToHash("Roll");
@@ -91,13 +92,10 @@ namespace Game
 
         private void FixedUpdate()
         {
-            if (playerManager.CurrentPlayerState == PlayerManager.State.Rolling)
+            if (playerManager.CurrentPlayerState == PlayerManager.State.Rolling && IsCollidingWithWall())
             {
-                if (IsCollidingWithWall())
-                {
-                    RollEnd();
-                    playerManager.CurrentPlayerState = PlayerManager.State.Idle;
-                }
+                RollEnd();
+                playerManager.CurrentPlayerState = PlayerManager.State.Idle;
             }
         }
 
@@ -214,7 +212,6 @@ namespace Game
 
             // Update the NavMeshAgent's position to prevent snapping
             Vector3 currentPosition = transform.position;
-            currentPosition.y = initialYPosition; // Maintain the original Y position
             playerManager.Agent.Warp(currentPosition);
 
             rollTimer = 0;
@@ -224,13 +221,38 @@ namespace Game
         {
             if (playerManager.CurrentPlayerState != PlayerManager.State.Rolling) return;
 
-            // Apply root motion position, but lock the Y position
+            // Apply root motion position normally
             Vector3 newPosition = transform.position + playerManager.CharacterAnimator.deltaPosition;
-            newPosition.y = initialYPosition; // Maintain the original Y position
+
+            // Get ground height difference
+            float groundAdjustment = DistanceToGround();
+
+            // Adjust Y position based on ground height
+            float targetY = newPosition.y - groundAdjustment;
+
+            newPosition.y = Mathf.Lerp(transform.position.y, targetY, 0.5f);
+
             transform.position = newPosition;
 
-            // Force rotation to stay aligned with rollDirection
+            // Maintain roll direction
             playerManager.transform.rotation = Quaternion.LookRotation(rollDirection);
+        }
+
+
+
+        public float DistanceToGround()
+        {
+            RaycastHit hit;
+            float raycastLength = 2f; // Adjust based on player height
+            Vector3 rayOrigin = transform.position + Vector3.up * 0.5f; // Slightly above the player to avoid clipping
+
+            // Raycast downwards with proper LayerMask
+            if (Physics.Raycast(rayOrigin, Vector3.down, out hit, raycastLength, groundLayer))
+            {
+                return transform.position.y - hit.point.y; // Corrected to return actual distance
+            }
+
+            return 0f; // If no ground detected, assume the character is on the ground
         }
     }
 }
