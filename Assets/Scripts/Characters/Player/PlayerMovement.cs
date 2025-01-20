@@ -158,10 +158,6 @@ namespace Game
                 playerManager.Agent.enabled = false;
             }
 
-            // Enable Rigidbody physics for collisions
-            rb.isKinematic = false;
-            rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
-
             // Lock rotation to prevent unwanted turning and face the roll direction
             playerManager.transform.rotation = Quaternion.LookRotation(rollDirection);
 
@@ -220,9 +216,6 @@ namespace Game
             Vector3 currentPosition = transform.position;
             currentPosition.y = initialYPosition; // Maintain the original Y position
             playerManager.Agent.Warp(currentPosition);
-
-            // Disable Rigidbody physics after the roll
-            rb.isKinematic = true;
 
             rollTimer = 0;
         }
