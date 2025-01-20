@@ -18,18 +18,15 @@ public class SkillButton : Loadable, IPointerEnterHandler, IPointerExitHandler
 
     protected override void Awake()
     {
-        // Do nothing
-    }
-
-    private void Start()
-    {
+        if (button == null)
+        {
+            button = GetComponent<Button>(); // Try to assign it dynamically if not assigned
+        }
         skillTreeManager = FindFirstObjectByType<SkillTreeManager>();
-        button = GetComponent<Button>();
         rectTransform = GetComponent<RectTransform>();
         icon = GetComponentInChildren<RawImage>();
         icon.texture = skill.skillIcon;
         //costText.text = skill.skillCost.ToString();
-
         button.onClick.AddListener(() => UnlockSkill(true));
     }
 
