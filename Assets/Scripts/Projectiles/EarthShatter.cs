@@ -36,6 +36,13 @@ namespace Game
 
         private void Update()
         {
+            // Despawn object when particle system is no longer alive
+            if (!particle.IsAlive(true))
+            {
+                enemiesHit.Clear();
+                ObjectPooling.Instance.DespawnObject(gameObject);
+            }
+
             if (enemiesHit.Count < 1 || particle == null)
             {
                 return;
@@ -58,13 +65,6 @@ namespace Game
                     }
                 }
                 currentTimer = 0; // Reset timer after processing all enemies
-            }
-
-            // Despawn object when particle system is no longer alive
-            if (!particle.IsAlive(true))
-            {
-                enemiesHit.Clear();
-                ObjectPooling.Instance.DespawnObject(gameObject);
             }
         }
     }

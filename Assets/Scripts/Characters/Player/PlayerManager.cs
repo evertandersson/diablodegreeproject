@@ -69,10 +69,12 @@ namespace Game
 
         [SerializeField] private RawImage attackIndicator;
 
-        // Particles effects
+        [Header("Particle Effects")]
         [SerializeField] private ParticleSystem healParticle;
         [SerializeField] private ParticleSystem manaParticle;
         [SerializeField] private ParticleSystem levelUpParticle;
+
+        private Vector3 textOffset = new Vector3(0, 2.5f, 0);
 
         #region Properties
 
@@ -202,6 +204,10 @@ namespace Game
             playerMovement = GetComponent<PlayerMovement>();
             projectileSpawner = GetComponentInChildren<ProjectileSpawner>();
 
+            healParticle.playbackSpeed = 2f;
+            manaParticle.playbackSpeed = 2f;
+            levelUpParticle.playbackSpeed = 2f;
+
             UpdateActionSlots();
 
             CharacterAnimator = GetComponentInChildren<Animator>();
@@ -227,6 +233,7 @@ namespace Game
         {
             level = levelSystem.GetCurrentLevel();
             statsDisplay.UpdateStatsText();
+            levelUpParticle.Play();
         }
 
         public void ApplySkillPoint(SkillSO skill)
@@ -255,7 +262,6 @@ namespace Game
             health += amount;
             healthBar.SetValue(health);
             healParticle.Play();
-            healParticle.playbackSpeed = 2f;
         }
         public void RefillMana(bool isFlask = false, float amount = 0)
         {
@@ -263,7 +269,6 @@ namespace Game
             {
                 currentMana += amount;
                 manaParticle.Play();
-                manaParticle.playbackSpeed = 2f;
             }
             else
             {
@@ -366,6 +371,10 @@ namespace Game
                             else
                             {
                                 CurrentAction = null;
+
+                                PopupText text = ObjectPooling.Instance.SpawnFromPool("PopupText", transform.position + textOffset, Quaternion.identity).GetComponent<PopupText>();
+                                text.message = "Not enough mana";
+                                text.StartCoroutine("Trigger");
                             }
                         }
                         // Handle potion item

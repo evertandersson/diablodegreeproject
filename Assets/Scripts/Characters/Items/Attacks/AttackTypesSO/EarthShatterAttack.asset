@@ -18,10 +18,10 @@ MonoBehaviour:
   prefab: {fileID: 0}
   isStackable: 0
   cooldown: 4
-  timerCooldown: 4
+  timerCooldown: 4.003379
   nextAttackDelay: 1
   bufferedInputDelay: 0.5
   projectile: {fileID: 0}
   attackTrigger: 
-  manaCost: 0
+  manaCost: 15
   attackTriggerHash: -306797612
