@@ -25,7 +25,7 @@ public class EnemyExplosion : Explosion
 
         if (Vector3.Distance(transform.position, PlayerManager.Instance.transform.position + offset) < damageRange)
         {
-            PlayerManager.Instance.TakeDamage(parentEnemy.Damage);
+            StatsCalculator.CalculateDamage(parentEnemy.Damage, PlayerManager.Instance);
             parentEnemy = null;
         }
     }

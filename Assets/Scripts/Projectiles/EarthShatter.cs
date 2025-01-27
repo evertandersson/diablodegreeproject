@@ -60,7 +60,7 @@ namespace Game
                 {
                     if (enemy != null && enemiesHit[enemy] < 2)
                     {
-                        enemy.TakeDamage(PlayerManager.Instance.Damage);
+                        StatsCalculator.CalculateDamage(PlayerManager.Instance.Damage, enemy);
                         enemiesHit[enemy] += 1;
                     }
                 }

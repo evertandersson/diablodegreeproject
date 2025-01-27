@@ -79,7 +79,7 @@ public class LightningEffect : MonoBehaviour, IPooledObject
                 lineRenderer.positionCount = chainedEnemies.Count + 1;
                 lineRenderer.SetPosition(chainedEnemies.Count, closestEnemy.transform.position + offset);
                 lightningEffects[i] = ObjectPooling.Instance.SpawnFromPool("Lightning", transform.position, Quaternion.identity);
-                closestEnemy.TakeDamage(PlayerManager.Instance.Damage);
+                StatsCalculator.CalculateDamage(PlayerManager.Instance.Damage, closestEnemy);
             }
         }
     }

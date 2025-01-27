@@ -19,6 +19,6 @@ MonoBehaviour:
   isStackable: 0
   equipmentType: 0
   damageIncrease: 0
-  defenseIncrease: 3
+  defenseIncrease: 1
   healthIncrease: 0
   movementSpeedIncrease: 0

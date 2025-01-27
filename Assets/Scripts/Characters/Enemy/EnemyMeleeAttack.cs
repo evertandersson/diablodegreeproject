@@ -8,7 +8,7 @@ namespace Game
         {
             if (IsCloseToPlayer(enemy.distanceToAttack + 0.5f) && IsTargetedAtPlayer())
             {
-                PlayerManager.Instance.TakeDamage(enemy.Damage);
+                StatsCalculator.CalculateDamage(enemy.Damage, PlayerManager.Instance);
             }
         }
     }

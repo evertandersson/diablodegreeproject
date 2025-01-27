@@ -23,7 +23,7 @@ public class Explosion : MonoBehaviour, IPooledObject
         {
             if (Vector3.Distance(transform.position, enemy.transform.position) < damageRange)
             {
-                enemy.TakeDamage(PlayerManager.Instance.Damage);
+                StatsCalculator.CalculateDamage(PlayerManager.Instance.Damage, enemy);
             }
         }
     }
