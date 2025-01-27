@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Explosion : MonoBehaviour, IPooledObject
 {
+    [SerializeField] private AttackTypeSO attackType;
+
     private ParticleSystem explosionParticle;
     private SphereCollider sphereCollider;
     protected float damageRange;
@@ -23,7 +25,7 @@ public class Explosion : MonoBehaviour, IPooledObject
         {
             if (Vector3.Distance(transform.position, enemy.transform.position) < damageRange)
             {
-                StatsCalculator.CalculateDamage(PlayerManager.Instance.Damage, enemy);
+                StatsCalculator.CalculateDamage(StatsCalculator.CalculateAbilityDamage(attackType), enemy);
             }
         }
     }

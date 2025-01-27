@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class LightningEffect : MonoBehaviour, IPooledObject
 {
+    [SerializeField] private AttackTypeSO attackType;
+
     [SerializeField] private int maxChains = 5; // Maximum number of enemies to chain to
     [SerializeField] private Material lightningMaterial; // Material for the lightning effect
     [SerializeField] private float flickerDuration = 0.5f; // Duration of the lightning flicker
@@ -79,7 +81,7 @@ public class LightningEffect : MonoBehaviour, IPooledObject
                 lineRenderer.positionCount = chainedEnemies.Count + 1;
                 lineRenderer.SetPosition(chainedEnemies.Count, closestEnemy.transform.position + offset);
                 lightningEffects[i] = ObjectPooling.Instance.SpawnFromPool("Lightning", transform.position, Quaternion.identity);
-                StatsCalculator.CalculateDamage(PlayerManager.Instance.Damage, closestEnemy);
+                StatsCalculator.CalculateDamage(StatsCalculator.CalculateAbilityDamage(attackType), closestEnemy);
             }
         }
     }

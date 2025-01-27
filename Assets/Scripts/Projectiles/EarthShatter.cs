@@ -5,6 +5,8 @@ namespace Game
 {
     public class EarthShatter : Fireball
     {
+        [SerializeField] private AttackTypeSO attackType;
+
         public Dictionary<Enemy, int> enemiesHit = new Dictionary<Enemy, int>();
 
         [SerializeField] private ParticleSystem particle;
@@ -60,7 +62,7 @@ namespace Game
                 {
                     if (enemy != null && enemiesHit[enemy] < 2)
                     {
-                        StatsCalculator.CalculateDamage(PlayerManager.Instance.Damage, enemy);
+                        StatsCalculator.CalculateDamage(StatsCalculator.CalculateAbilityDamage(attackType), enemy);
                         enemiesHit[enemy] += 1;
                     }
                 }

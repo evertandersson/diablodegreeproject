@@ -9568,7 +9568,7 @@ MonoBehaviour:
   moveSpeed: 10
   explosionToSpawn: EarthShatter
   lifeTime: 5
-  enemiesHit: []
+  attackType: {fileID: 11400000, guid: 1bfa4eef194410748b2148499b220edd, type: 2}
   particle: {fileID: 198345217066185332}
 --- !u!1 &1584802242839310
 GameObject:
