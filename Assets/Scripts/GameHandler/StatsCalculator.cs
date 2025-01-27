@@ -15,4 +15,9 @@ public static class StatsCalculator
         damage = Mathf.Clamp(damage, 0, Mathf.Infinity);
         target.TakeDamage(Mathf.RoundToInt(damage));
     }
+
+    public static void CalculateAttackSpeed()
+    {
+
+    }
 }

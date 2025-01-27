@@ -65,6 +65,7 @@ namespace Game
 
         private Interactable currentObject = null;
 
+        private float attackSpeed = 1f;
         public float attackTimer;
 
         [SerializeField] private RawImage attackIndicator;
@@ -174,6 +175,8 @@ namespace Game
 
         public float Mana => currentMana;
         public float MaxMana => maxMana;
+
+        public float AttackSpeed => attackSpeed;
 
         #endregion
 
