@@ -106,7 +106,8 @@ namespace Game
             if (PlayerManager.Instance.IsAttacking)
             {
                 AttackTypeSO attack = PlayerManager.Instance.CurrentAction as AttackTypeSO;
-                return attack.bufferedInputDelay;
+                float bufferedInput = StatsCalculator.CalculateAttackSpeed(attack.bufferedInputDelay);
+                return bufferedInput;
             }
             else if (PlayerManager.Instance.IsRolling)
                 return 0.2f;

@@ -65,7 +65,7 @@ namespace Game
 
         private Interactable currentObject = null;
 
-        private float attackSpeed = 1f;
+        private float attackSpeed = 1.5f;
         public float attackTimer;
 
         [SerializeField] private RawImage attackIndicator;
@@ -409,7 +409,7 @@ namespace Game
             {
                 if (currentAction is AttackTypeSO attackTypeAction)
                 {
-                    if (attackTimer <= attackTypeAction.nextAttackDelay)
+                    if (attackTimer <= StatsCalculator.CalculateAttackSpeed(attackTypeAction.nextAttackDelay))
                     {
                         attackTimer += Time.deltaTime;
                     }

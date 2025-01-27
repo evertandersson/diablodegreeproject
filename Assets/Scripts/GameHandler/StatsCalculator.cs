@@ -16,8 +16,10 @@ public static class StatsCalculator
         target.TakeDamage(Mathf.RoundToInt(damage));
     }
 
-    public static void CalculateAttackSpeed()
+    public static float CalculateAttackSpeed(float attackTypeDelay)
     {
-
+        float attackDelayDecrease = 1 - (PlayerManager.Instance.AttackSpeed - 1);
+        float totalAttackDelay = attackTypeDelay * attackDelayDecrease;
+        return totalAttackDelay;
     }
 }
