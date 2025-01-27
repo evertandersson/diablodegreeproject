@@ -59,7 +59,6 @@ namespace Game
         [SerializeField] private float manaRegeneration = 2;
 
         public bool isInteracting;
-
         private bool isAttacking;
         private bool canAttack = true;
         private bool isRolling;
@@ -69,6 +68,11 @@ namespace Game
         public float attackTimer;
 
         [SerializeField] private RawImage attackIndicator;
+
+        // Particles effects
+        [SerializeField] private ParticleSystem healParticle;
+        [SerializeField] private ParticleSystem manaParticle;
+        [SerializeField] private ParticleSystem levelUpParticle;
 
         #region Properties
 
@@ -250,13 +254,21 @@ namespace Game
         {
             health += amount;
             healthBar.SetValue(health);
+            healParticle.Play();
+            healParticle.playbackSpeed = 2f;
         }
         public void RefillMana(bool isFlask = false, float amount = 0)
         {
             if (isFlask)
+            {
                 currentMana += amount;
+                manaParticle.Play();
+                manaParticle.playbackSpeed = 2f;
+            }
             else
+            {
                 currentMana += manaRegeneration * Time.deltaTime;
+            }
 
             currentMana = Mathf.Clamp(currentMana, 0, maxMana);
         }
