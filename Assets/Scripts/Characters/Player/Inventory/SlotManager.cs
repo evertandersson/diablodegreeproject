@@ -61,7 +61,7 @@ namespace Game
                         actionItem.timerCooldown += Time.deltaTime;
 
                         // Update the UI for the cooldown
-                        actionSlot.RefillCooldown(actionItem.cooldown, actionItem.timerCooldown);
+                        actionSlot.RefillCooldown(StatsCalculator.CalculateAttackSpeed(actionItem.cooldown), actionItem.timerCooldown);
                     }
                     else
                     {

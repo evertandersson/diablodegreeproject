@@ -10,10 +10,14 @@ public class Orb : MonoBehaviour
     private Coroutine scaleCoroutine; // Reference to the currently running coroutine (if any)
     private int maxValue; // Store the maximum health
 
-    public void SetMaxValue(int value)
+    public void SetMaxValue(int value, bool fillHPToMax = false)
     {
         maxValue = value; // Set the maximum health
-        SetValue(value); // Initialize the health bar to full
+
+        if (!fillHPToMax)
+            SetValue(value); // Initialize the health bar to full
+        else 
+            SetValue(Game.PlayerManager.Instance.Health);
     }
 
     public void SetValue(int value)

@@ -13,4 +13,6 @@ public class SkillSO : ScriptableObject
     public int damageIncrease;
     public int defenceIncrease;
     public float movementIncrease;
+    public int manaIncrease;
+    public float attackSpeedIncrease;
 }

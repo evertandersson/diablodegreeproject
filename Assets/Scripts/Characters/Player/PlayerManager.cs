@@ -65,7 +65,7 @@ namespace Game
 
         private Interactable currentObject = null;
 
-        private float attackSpeed = 1.5f;
+        private float attackSpeed = 1f;
         public float attackTimer;
 
         [SerializeField] private RawImage attackIndicator;
@@ -245,6 +245,8 @@ namespace Game
             health = maxHealth;
             damage += skill.damageIncrease;
             defense += skill.defenceIncrease;
+            maxMana += skill.manaIncrease;
+            attackSpeed += skill.attackSpeedIncrease;
             healthBar.SetMaxValue(maxHealth);
 
             statsDisplay.UpdateStatsText();
@@ -255,7 +257,7 @@ namespace Game
             maxHealth += equipment.healthIncrease * apply;
             damage += equipment.damageIncrease * apply;
             defense += equipment.defenseIncrease * apply;
-            healthBar.SetMaxValue(maxHealth);
+            healthBar.SetMaxValue(maxHealth, true);
 
             statsDisplay.UpdateStatsText();
         }
