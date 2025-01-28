@@ -6,6 +6,7 @@ public class ItemSO : ScriptableObject
 {
     public string itemName;
     public string itemDescription;
+    public ItemType itemType;
     public Texture2D itemIcon;
     public GameObject prefab;
 

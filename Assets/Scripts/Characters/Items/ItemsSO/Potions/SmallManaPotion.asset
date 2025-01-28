@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Small Mana Potion
   itemDescription: 
+  itemType: 1
   itemIcon: {fileID: 2800000, guid: 359f4c2ac00ac05468b721b82a1e5d34, type: 3}
   prefab: {fileID: 8385242052075035819, guid: 42e1db9f34c2a9340ba682d3ea95af3a, type: 3}
   isStackable: 1

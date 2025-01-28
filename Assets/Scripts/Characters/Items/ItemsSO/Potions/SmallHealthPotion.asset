@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Small Health Potion
   itemDescription: 
+  itemType: 1
   itemIcon: {fileID: 2800000, guid: e958392ccc1a5c04d9cdfbc32674aa05, type: 3}
   prefab: {fileID: 7200927917085466066, guid: a84a636a35a83fe408bd4b3d8c2b8058, type: 3}
   isStackable: 1

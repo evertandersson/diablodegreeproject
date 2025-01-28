@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Basic Armour
   itemDescription: This is a basic armour.
+  itemType: 3
   itemIcon: {fileID: 2800000, guid: 6d6287a9ac5070f45abd925aaaaf4090, type: 3}
   prefab: {fileID: 1224305259278186917, guid: b466e9aad01644f46839b2ce08b3fb88, type: 3}
   isStackable: 0

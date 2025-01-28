@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Earth Shatter
   itemDescription: Time to fuck some shit up!
+  itemType: 2
   itemIcon: {fileID: 2800000, guid: 03a188aeeaecbb9478d9ae70eae185f6, type: 3}
   prefab: {fileID: 0}
   isStackable: 0
   cooldown: 4
-  timerCooldown: 3.1155915
+  timerCooldown: 4.0263524
   damageMultiplier: 0.8
   nextAttackDelay: 1
   bufferedInputDelay: 0.5
