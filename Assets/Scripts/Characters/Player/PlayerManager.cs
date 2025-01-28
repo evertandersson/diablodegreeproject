@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -175,6 +176,7 @@ namespace Game
 
         public float Mana => currentMana;
         public float MaxMana => maxMana;
+        public float ManaRegen => manaRegeneration;
 
         public float AttackSpeed => attackSpeed;
 
