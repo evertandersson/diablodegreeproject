@@ -20,7 +20,7 @@ public class InfoWindow : MonoBehaviour
         string title = "title",
         string description = "description")
     {
-        Vector3 offset = new Vector3(-width * 0.5f, -height * 0.5f, 0);
+        Vector3 offset = new Vector3(0, -height * 0.5f, 0);
         transform.position = position + offset;
         titleText.text = title;
         descriptionText.text = description;

@@ -339,7 +339,7 @@ namespace Game
             if (IsInteractable())
             {
                 InfoWindow.Instance.ShowInfoWindow(transform.position, 
-                    rectTransform.rect.height, 
+                    rectTransform.rect.width, 
                     rectTransform.rect.height,
                     item.itemName,
                     item.itemDescription);
