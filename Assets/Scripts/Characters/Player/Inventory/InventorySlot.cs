@@ -338,7 +338,7 @@ namespace Game
         {
             if (IsInteractable())
             {
-                InfoWindow.Instance.ShowInfoWindow(transform.position, 
+                InfoWindow.Instance.ShowEquipmentInfoWindow(transform.position, 
                     rectTransform.rect.width, 
                     rectTransform.rect.height,
                     item);

@@ -245,13 +245,9 @@ namespace Game
 
         public void ApplySkillPoint(SkillSO skill)
         {
-            maxHealth += skill.healthIncrease;
-            health = maxHealth;
-            damage += skill.damageIncrease;
-            defense += skill.defenceIncrease;
-            maxMana += skill.manaIncrease;
-            attackSpeed += skill.attackSpeedIncrease;
             healthBar.SetMaxValue(maxHealth);
+
+            ApplyStats(skill);
 
             statsDisplay.UpdateStatsText();
         }
@@ -263,7 +259,14 @@ namespace Game
             defense += equipment.defenseIncrease * apply;
             healthBar.SetMaxValue(maxHealth, true);
 
-            foreach (BonusStat bonusStat in equipment.bonusStats)
+            ApplyStats(equipment, apply);
+
+            statsDisplay.UpdateStatsText();
+        }
+
+        private void ApplyStats(IHasInfo addOn, int apply = 1)
+        {
+            foreach (Stat bonusStat in addOn.Stats)
             {
                 switch (bonusStat.type)
                 {
@@ -293,8 +296,6 @@ namespace Game
                         break;
                 }
             }
-
-            statsDisplay.UpdateStatsText();
         }
 
         public void RefillHealth(bool isFlask = false, float amount = 0)

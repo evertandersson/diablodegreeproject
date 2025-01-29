@@ -15,7 +15,7 @@ namespace Game
     }
 
     [System.Serializable]
-    public class BonusStat
+    public class Stat
     {
         public BonusStatType type;
         [HideInInspector] public string statText;
@@ -54,7 +54,7 @@ namespace Game
     }
 
     [CreateAssetMenu(fileName = "Equipment", menuName = "Scriptable Objects/Equipment")]
-    public class EquipmentSO : ItemSO
+    public class EquipmentSO : ItemSO, IHasInfo
     {
         public EquipmentType equipmentType;
 
@@ -63,11 +63,13 @@ namespace Game
         public int healthIncrease;
         public float movementSpeedIncrease;
 
-        public BonusStat[] bonusStats;
+        public Stat[] bonusStats;
+
+        public Stat[] Stats { get => bonusStats; set => Stats = bonusStats; }
 
         public override string GetStatIncrease()
         {
-            foreach(BonusStat stat in bonusStats)
+            foreach(Stat stat in bonusStats)
             {
                 stat.UpdateStatText();
             }

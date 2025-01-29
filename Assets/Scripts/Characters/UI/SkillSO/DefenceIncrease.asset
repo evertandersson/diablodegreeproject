@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: DefenceIncrease
   m_EditorClassIdentifier: 
   skillName: Defence Increase
-  skillDescription: Increases your defence.
+  skillDescription: Increases your defence
   skillIcon: {fileID: 2800000, guid: d96f6aabc43915a45a05d6df44c42f8d, type: 3}
   skillCost: 1
-  healthIncrease: 0
-  damageIncrease: 0
-  defenceIncrease: 2
-  movementIncrease: 0
+  statsImprovements:
+  - type: 1
+    statText: 'Additional Defense:'
+    statImprovement: 5

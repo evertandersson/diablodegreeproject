@@ -22,7 +22,7 @@ public class InfoWindow : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void ShowInfoWindow(Vector3 position,
+    public void ShowEquipmentInfoWindow(Vector3 position,
         float width,
         float height,
         ItemSO item)
@@ -63,13 +63,55 @@ public class InfoWindow : MonoBehaviour
 
             for (int i = 0; i < bonusStat.Length; i++)
             {
-                if (equipment.bonusStats.Length < i)
+                if (i >= equipment.bonusStats.Length)
                     break;
+
+                if (bonusStat[i] == null)
+                    continue;
 
                 bonusStat[i].gameObject.SetActive(true);
                 bonusStat[i].text = equipment.bonusStats[i].statText + " " + equipment.bonusStats[i].statImprovement;
                 
             }
+        }
+    }
+
+    public void ShowSkillInfoWindow(Vector3 position,
+        float width,
+        float height,
+        SkillSO skill)
+    {
+        Vector3 offset = new Vector3(0, -height * 0.5f, 0);
+        transform.position = position + offset;
+        titleText.text = skill.skillName;
+        descriptionText.text = skill.skillDescription;
+        levelRequiredText.text = "Cost: " + skill.skillCost;
+
+        transform.SetAsLastSibling();
+        gameObject.SetActive(true);
+
+        statText.gameObject.SetActive(false);
+
+
+        foreach (TextMeshProUGUI stat in bonusStat)
+        {
+            statText.gameObject.SetActive(false);
+        }
+
+        if (skill.statsImprovements.Length <= 0)
+            return;
+
+        for (int i = 0; i < bonusStat.Length; i++)
+        {
+            if (i >= skill.statsImprovements.Length)
+                break;
+
+            if (bonusStat[i] == null)
+                continue;
+
+            bonusStat[i].gameObject.SetActive(true);
+            skill.GetStatIncrease();
+            bonusStat[i].text = skill.statsImprovements[i].statText + " " + skill.statsImprovements[i].statImprovement;
         }
     }
 

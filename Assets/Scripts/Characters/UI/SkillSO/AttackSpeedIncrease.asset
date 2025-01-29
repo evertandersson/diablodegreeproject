@@ -13,12 +13,10 @@ MonoBehaviour:
   m_Name: AttackSpeedIncrease
   m_EditorClassIdentifier: 
   skillName: Attack Speed Increase
-  skillDescription: Increases your attack speed by 3%.
+  skillDescription: Increases your attack speed
   skillIcon: {fileID: 2800000, guid: 8f8e130d3d0c9c247b78be9804308002, type: 3}
   skillCost: 1
-  healthIncrease: 0
-  damageIncrease: 0
-  defenceIncrease: 0
-  movementIncrease: 0
-  manaIncrease: 0
-  attackSpeedIncrease: 0.03
+  statsImprovements:
+  - type: 7
+    statText: 'Attack Speed:'
+    statImprovement: 0.03

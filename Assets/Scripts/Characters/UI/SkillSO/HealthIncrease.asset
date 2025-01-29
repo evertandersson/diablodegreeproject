@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: HealthIncrease
   m_EditorClassIdentifier: 
   skillName: Health Increase
-  skillDescription: Increases your health.
+  skillDescription: Increases your maximum health
   skillIcon: {fileID: 2800000, guid: 6d6287a9ac5070f45abd925aaaaf4090, type: 3}
   skillCost: 1
-  healthIncrease: 10
-  damageIncrease: 0
-  defenceIncrease: 0
-  movementIncrease: 0
+  statsImprovements:
+  - type: 2
+    statText: 
+    statImprovement: 20

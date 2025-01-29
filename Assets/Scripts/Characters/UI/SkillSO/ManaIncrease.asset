@@ -13,12 +13,10 @@ MonoBehaviour:
   m_Name: ManaIncrease
   m_EditorClassIdentifier: 
   skillName: Mana Increase
-  skillDescription: Increases your maximum mana by 10.
+  skillDescription: Increases your maximum mana
   skillIcon: {fileID: 2800000, guid: a34945a417c6f284d844fac05b0826ee, type: 3}
   skillCost: 1
-  healthIncrease: 0
-  damageIncrease: 0
-  defenceIncrease: 0
-  movementIncrease: 0
-  manaIncrease: 10
-  attackSpeedIncrease: 0
+  statsImprovements:
+  - type: 4
+    statText: 
+    statImprovement: 20
