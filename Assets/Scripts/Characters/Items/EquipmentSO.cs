@@ -19,7 +19,7 @@ namespace Game
     {
         public BonusStatType type;
         [HideInInspector] public string statText;
-        public int statImprovement;
+        public float statImprovement;
 
         public void UpdateStatText()
         {

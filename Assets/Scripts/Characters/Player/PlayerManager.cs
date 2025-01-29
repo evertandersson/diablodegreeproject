@@ -268,13 +268,13 @@ namespace Game
                 switch (bonusStat.type)
                 {
                     case BonusStatType.Damage:
-                        damage += bonusStat.statImprovement * apply;
+                        damage += (int)bonusStat.statImprovement * apply;
                         break;
                     case BonusStatType.Defense:
-                        defense += bonusStat.statImprovement * apply;
+                        defense += (int)bonusStat.statImprovement * apply;
                         break;
                     case BonusStatType.Health:
-                        maxHealth += bonusStat.statImprovement * apply;
+                        maxHealth += (int)bonusStat.statImprovement * apply;
                         break;
                     case BonusStatType.HealthRegen:
                         healthRegeneration += bonusStat.statImprovement * apply;

@@ -24,3 +24,7 @@ MonoBehaviour:
   defenseIncrease: 0
   healthIncrease: 0
   movementSpeedIncrease: 0
+  bonusStats:
+  - type: 7
+    statText: 'Attack Speed:'
+    statImprovement: 0.03
