@@ -11,5 +11,16 @@ namespace Game
         public int defenseIncrease;
         public int healthIncrease;
         public float movementSpeedIncrease;
+
+        public override string GetStatIncrease()
+        {
+            switch (equipmentType)
+            {
+                case EquipmentType.FirstHandWeapon:
+                    return damageIncrease.ToString();
+                default:
+                    return defenseIncrease.ToString();
+            }
+        }
     }
 }

@@ -1,3 +1,4 @@
+using Game;
 using UnityEngine;
 
 public abstract class AttackTypeSO : ActionItemSO
@@ -8,4 +9,9 @@ public abstract class AttackTypeSO : ActionItemSO
     public GameObject projectile;
     public string attackTrigger;
     public int manaCost;
+
+    public override string GetStatIncrease()
+    {
+        return Mathf.RoundToInt(PlayerManager.Instance.Damage * damageMultiplier).ToString();
+    }
 }

@@ -23,6 +23,11 @@ public class PotionSO : ActionItemSO
 
         }
     }
+
+    public override string GetStatIncrease()
+    {
+        return recoverAmount.ToString();
+    }
 }
 
 public enum PotionType

@@ -6,9 +6,14 @@ public class ItemSO : ScriptableObject
 {
     public string itemName;
     public string itemDescription;
-    public ItemType itemType;
+    public string statText;
     public Texture2D itemIcon;
     public GameObject prefab;
 
     public bool isStackable;
+
+    public virtual string GetStatIncrease()
+    {
+        return "";
+    }
 }

@@ -341,9 +341,7 @@ namespace Game
                 InfoWindow.Instance.ShowInfoWindow(transform.position, 
                     rectTransform.rect.width, 
                     rectTransform.rect.height,
-                    item.itemType,
-                    item.itemName,
-                    item.itemDescription);
+                    item);
             }
         }
 

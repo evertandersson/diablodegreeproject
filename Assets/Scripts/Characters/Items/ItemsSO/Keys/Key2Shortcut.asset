@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e14a47a7bb911ce44a3d62ffa0c19a6c, type: 3}
   m_Name: Key2Shortcut
   m_EditorClassIdentifier: 
-  itemName: Key2Shortcut
-  itemDescription: 
+  itemName: Golem key
+  itemDescription: Can be used to open a shortcut
+  statText: 
   itemType: 1
   itemIcon: {fileID: 2800000, guid: 1e04413f5a56d6d419d951306f4bbd3e, type: 3}
   prefab: {fileID: 8527437691338737799, guid: df5e73daebb2ce346afd472936e4bcc5, type: 3}

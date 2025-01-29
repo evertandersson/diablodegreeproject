@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: LightningAttack
   m_EditorClassIdentifier: 
   itemName: Lightning Attack
-  itemDescription: Destroy your enemies with this epic lightning attack.
-  itemType: 2
+  itemDescription: Causes a chained lightning attack
+  statText: 'Damage per hit:'
+  itemType: 3
   itemIcon: {fileID: 2800000, guid: bef348517eaa7034b85daa49c535b764, type: 3}
   prefab: {fileID: 8568345371341501179, guid: 96e21130f10aae845bf312d26cd72047, type: 3}
   isStackable: 1
   cooldown: 3
-  timerCooldown: 3.0056202
+  timerCooldown: 3.0011413
   damageMultiplier: 1.2
   nextAttackDelay: 1.3
   bufferedInputDelay: 0.7

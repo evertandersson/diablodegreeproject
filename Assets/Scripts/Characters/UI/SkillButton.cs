@@ -53,10 +53,8 @@ public class SkillButton : Loadable, IPointerEnterHandler, IPointerExitHandler
         {
             InfoWindow.Instance.ShowInfoWindow(transform.position, 
                 rectTransform.rect.width, 
-                rectTransform.rect.height,
-                ItemType.None,
-                skill.skillName, 
-                skill.skillDescription);
+                rectTransform.rect.height, 
+                null);
         }
     }
 
