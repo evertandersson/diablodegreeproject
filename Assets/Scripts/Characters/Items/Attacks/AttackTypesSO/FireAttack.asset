@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Fire Attack
   itemDescription: Shoots a fireball at enemies
   statText: 'Damage per hit:'
-  itemType: 3
+  levelRequired: 1
   itemIcon: {fileID: 2800000, guid: 17c9d81a34a12f14fa4ace849d01fb39, type: 3}
   prefab: {fileID: 6124788533310901661, guid: a99eb37a8818716499332d915fd2b531, type: 3}
   isStackable: 1

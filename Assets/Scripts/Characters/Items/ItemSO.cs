@@ -7,6 +7,7 @@ public class ItemSO : ScriptableObject
     public string itemName;
     public string itemDescription;
     public string statText;
+    public int levelRequired;
     public Texture2D itemIcon;
     public GameObject prefab;
 

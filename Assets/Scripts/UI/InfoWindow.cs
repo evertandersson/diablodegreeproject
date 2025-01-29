@@ -1,5 +1,6 @@
 using Game;
 using System.Collections;
+using System.Linq;
 using TMPro;
 using UnityEditor.UI;
 using UnityEngine;
@@ -30,6 +31,10 @@ public class InfoWindow : MonoBehaviour
         transform.position = position + offset;
         titleText.text = item.itemName;
         descriptionText.text = item.itemDescription;
+        levelRequiredText.text = "Requires Level " + item.levelRequired;
+
+        transform.SetAsLastSibling();
+        gameObject.SetActive(true);
 
         if (item is AttackTypeSO || item is ItemSO || item is PotionSO)
         {
@@ -53,14 +58,19 @@ public class InfoWindow : MonoBehaviour
 
             statText.text = item.statText + " " + equipment.GetStatIncrease();
 
-            foreach (var stat in bonusStat)
+            if (equipment.bonusStats.Length <= 0)
+                return;
+
+            for (int i = 0; i < bonusStat.Length; i++)
             {
-                stat.gameObject.SetActive(true);
+                if (equipment.bonusStats.Length < i)
+                    break;
+
+                bonusStat[i].gameObject.SetActive(true);
+                bonusStat[i].text = equipment.bonusStats[i].statText + " " + equipment.bonusStats[i].statImprovement;
+                
             }
         }
-
-        transform.SetAsLastSibling();
-        gameObject.SetActive(true);
     }
 
     public void HideInfoWindow()

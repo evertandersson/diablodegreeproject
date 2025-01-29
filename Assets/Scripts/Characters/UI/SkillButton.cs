@@ -49,18 +49,18 @@ public class SkillButton : Loadable, IPointerEnterHandler, IPointerExitHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (EventHandler.Main.CurrentEvent is SkillTreeManager)
-        {
-            InfoWindow.Instance.ShowInfoWindow(transform.position, 
-                rectTransform.rect.width, 
-                rectTransform.rect.height, 
-                null);
-        }
+        //if (EventHandler.Main.CurrentEvent is SkillTreeManager)
+        //{
+        //    InfoWindow.Instance.ShowInfoWindow(transform.position, 
+        //        rectTransform.rect.width, 
+        //        rectTransform.rect.height, 
+        //        null);
+        //}
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        InfoWindow.Instance.HideInfoWindow();
+        //InfoWindow.Instance.HideInfoWindow();
     }
 
 }

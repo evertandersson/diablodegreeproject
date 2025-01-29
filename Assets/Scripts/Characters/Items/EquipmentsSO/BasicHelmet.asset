@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Basic Helmet
   itemDescription: This is a basic helmet
   statText: 'Defense:'
-  itemType: 4
+  levelRequired: 1
   itemIcon: {fileID: 2800000, guid: d96f6aabc43915a45a05d6df44c42f8d, type: 3}
   prefab: {fileID: 8360131347987408477, guid: 10f5add84fa828842b856745fb824f77, type: 3}
   isStackable: 0

@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Basic Armour
   itemDescription: This is a basic armour
   statText: 'Defense:'
-  itemType: 4
+  levelRequired: 1
   itemIcon: {fileID: 2800000, guid: 6d6287a9ac5070f45abd925aaaaf4090, type: 3}
   prefab: {fileID: 1224305259278186917, guid: b466e9aad01644f46839b2ce08b3fb88, type: 3}
   isStackable: 0
@@ -24,3 +24,8 @@ MonoBehaviour:
   defenseIncrease: 2
   healthIncrease: 0
   movementSpeedIncrease: 0
+  bonusStats:
+  - type: 3
+    statImprovement: 1
+  - type: 2
+    statImprovement: 5

@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Lightning Attack
   itemDescription: Causes a chained lightning attack
   statText: 'Damage per hit:'
-  itemType: 3
+  levelRequired: 2
   itemIcon: {fileID: 2800000, guid: bef348517eaa7034b85daa49c535b764, type: 3}
   prefab: {fileID: 8568345371341501179, guid: 96e21130f10aae845bf312d26cd72047, type: 3}
   isStackable: 1
