@@ -6422,7 +6422,7 @@ MonoBehaviour:
   health: 0
   level: 1
   maxHealth: 20
-  damage: 5
+  damage: 20
   defense: 2
   bloodSplashEffect: {fileID: 6474922961284132634}
   renderers: []

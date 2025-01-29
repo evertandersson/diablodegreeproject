@@ -263,6 +263,37 @@ namespace Game
             defense += equipment.defenseIncrease * apply;
             healthBar.SetMaxValue(maxHealth, true);
 
+            foreach (BonusStat bonusStat in equipment.bonusStats)
+            {
+                switch (bonusStat.type)
+                {
+                    case BonusStatType.Damage:
+                        damage += bonusStat.statImprovement * apply;
+                        break;
+                    case BonusStatType.Defense:
+                        defense += bonusStat.statImprovement * apply;
+                        break;
+                    case BonusStatType.Health:
+                        maxHealth += bonusStat.statImprovement * apply;
+                        break;
+                    case BonusStatType.HealthRegen:
+                        healthRegeneration += bonusStat.statImprovement * apply;
+                        break;
+                    case BonusStatType.Mana:
+                        maxMana += bonusStat.statImprovement * apply;
+                        break;
+                    case BonusStatType.ManaRegen:
+                        manaRegeneration += bonusStat.statImprovement * apply;
+                        break;
+                    case BonusStatType.Movement:
+                        // TODO: Add movement speed
+                        break;
+                    case BonusStatType.AttackSpeed:
+                        attackSpeed += bonusStat.statImprovement * apply;
+                        break;
+                }
+            }
+
             statsDisplay.UpdateStatsText();
         }
 

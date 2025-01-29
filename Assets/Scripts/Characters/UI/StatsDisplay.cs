@@ -18,7 +18,7 @@ namespace Game
         {
             levelText.text = PlayerManager.Instance.Level.ToString();
             healthText.text = PlayerManager.Instance.MaxHealth.ToString();
-            healthRegenText.text = "0"; // TODO: Add health regen variable in playermanager
+            healthRegenText.text = PlayerManager.Instance.HealthRegen.ToString(); 
             manaText.text = PlayerManager.Instance.MaxMana.ToString();
             manaRegenText.text = PlayerManager.Instance.ManaRegen.ToString();
             damageText.text = PlayerManager.Instance.Damage.ToString();
