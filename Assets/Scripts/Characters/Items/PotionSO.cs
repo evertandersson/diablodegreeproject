@@ -15,7 +15,7 @@ public class PotionSO : ActionItemSO
         switch (potionType)
         {
             case PotionType.Health:
-                PlayerManager.Instance.Heal(recoverAmount);
+                PlayerManager.Instance.RefillHealth(true, recoverAmount);
                 break;
             case PotionType.Mana:
                 PlayerManager.Instance.RefillMana(true, recoverAmount);

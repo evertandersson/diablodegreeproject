@@ -20,7 +20,7 @@ public class Orb : MonoBehaviour
             SetValue(Game.PlayerManager.Instance.Health);
     }
 
-    public void SetValue(int value)
+    public void SetValue(float value)
     {
         // Clamp health to ensure it's between 0 and maxHealth
         value = Mathf.Clamp(value, 0, maxValue);

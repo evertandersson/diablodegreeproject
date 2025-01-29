@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public abstract class Character : MonoBehaviour
 {
     [SerializeField]
-    public int health;
+    public float health;
 
     #region Stats
 
@@ -49,7 +49,7 @@ public abstract class Character : MonoBehaviour
 
     #region Properties
 
-    public int Health
+    public float Health
     {
         get => health;
         private set

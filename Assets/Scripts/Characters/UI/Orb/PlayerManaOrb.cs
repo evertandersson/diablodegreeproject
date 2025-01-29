@@ -9,6 +9,6 @@ public class PlayerManaOrb : Orb
         {
             PlayerManager.Instance.RefillMana(false);
         }
-        SetValue((int)PlayerManager.Instance.Mana);
+        SetValue(PlayerManager.Instance.Mana);
     }
 }

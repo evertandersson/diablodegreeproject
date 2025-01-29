@@ -12,7 +12,7 @@ public class HealthBar : Bar
         backgroundSlider.value = health;
     }
 
-    public virtual void SetHealth(int health)
+    public virtual void SetHealth(float health)
     {
         if (gameObject.activeSelf)
         {

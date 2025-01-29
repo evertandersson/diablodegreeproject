@@ -58,6 +58,7 @@ namespace Game
         [Header("Mana")]
         [SerializeField] private float maxMana = 50;
         [SerializeField] private float manaRegeneration = 2;
+        [SerializeField] private float healthRegeneration = 0;
 
         public bool isInteracting;
         private bool isAttacking;
@@ -177,6 +178,7 @@ namespace Game
         public float Mana => currentMana;
         public float MaxMana => maxMana;
         public float ManaRegen => manaRegeneration;
+        public float HealthRegen => healthRegeneration;
 
         public float AttackSpeed => attackSpeed;
 
@@ -264,12 +266,21 @@ namespace Game
             statsDisplay.UpdateStatsText();
         }
 
-        public void Heal(int amount)
+        public void RefillHealth(bool isFlask = false, float amount = 0)
         {
-            health += amount;
-            healthBar.SetValue(health);
-            healParticle.Play();
+            if (isFlask)
+            {
+                health += amount;
+                healParticle.Play();
+            }
+            else
+            {
+                health += healthRegeneration * Time.deltaTime;
+            }
+
+            health = Mathf.Clamp(health, 0, maxHealth);
         }
+
         public void RefillMana(bool isFlask = false, float amount = 0)
         {
             if (isFlask)

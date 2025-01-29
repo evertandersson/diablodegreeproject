@@ -22,7 +22,7 @@ public class EnemyHealthBar : HealthBar
         }
     }
 
-    public override void SetHealth(int health)
+    public override void SetHealth(float health)
     {
         if (health <= 0)
         {
