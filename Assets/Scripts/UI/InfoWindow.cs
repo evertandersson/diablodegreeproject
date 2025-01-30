@@ -13,6 +13,7 @@ public class InfoWindow : MonoBehaviour
     [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private TextMeshProUGUI descriptionText;
     [SerializeField] private TextMeshProUGUI statText;
+    [SerializeField] private Image[] lines;
     [SerializeField] private TextMeshProUGUI levelRequiredText;
     [SerializeField] private TextMeshProUGUI[] bonusStat;
 
@@ -31,7 +32,13 @@ public class InfoWindow : MonoBehaviour
         transform.position = position + offset;
         titleText.text = item.itemName;
         descriptionText.text = item.itemDescription;
+        levelRequiredText.gameObject.SetActive(true);
         levelRequiredText.text = "Requires Level " + item.levelRequired;
+
+        foreach(Image line in lines)
+        {
+            line.gameObject.SetActive(true);
+        }
 
         transform.SetAsLastSibling();
         gameObject.SetActive(true);
@@ -85,7 +92,12 @@ public class InfoWindow : MonoBehaviour
         transform.position = position + offset;
         titleText.text = skill.skillName;
         descriptionText.text = skill.skillDescription;
-        levelRequiredText.text = "Cost: " + skill.skillCost;
+        levelRequiredText.gameObject.SetActive(false);
+
+        foreach (Image line in lines)
+        {
+            line.gameObject.SetActive(false);
+        }
 
         transform.SetAsLastSibling();
         gameObject.SetActive(true);
