@@ -18,9 +18,9 @@ MonoBehaviour:
   levelRequired: 2
   itemIcon: {fileID: 2800000, guid: bef348517eaa7034b85daa49c535b764, type: 3}
   prefab: {fileID: 8568345371341501179, guid: 96e21130f10aae845bf312d26cd72047, type: 3}
-  isStackable: 1
+  isStackable: 0
   cooldown: 3
-  timerCooldown: 3.0011413
+  timerCooldown: 3.000815
   damageMultiplier: 1.2
   nextAttackDelay: 1.3
   bufferedInputDelay: 0.7

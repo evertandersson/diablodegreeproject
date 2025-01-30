@@ -63,11 +63,11 @@ public class InfoWindow : MonoBehaviour
 
             for (int i = 0; i < bonusStat.Length; i++)
             {
-                if (i >= equipment.bonusStats.Length)
-                    break;
-
-                if (bonusStat[i] == null)
+                if (i >= equipment.bonusStats.Length || bonusStat[i] == null)
+                {
+                    bonusStat[i].gameObject.SetActive(false);
                     continue;
+                }
 
                 bonusStat[i].gameObject.SetActive(true);
                 bonusStat[i].text = equipment.bonusStats[i].statText + " " + equipment.bonusStats[i].statImprovement;
@@ -103,11 +103,11 @@ public class InfoWindow : MonoBehaviour
 
         for (int i = 0; i < bonusStat.Length; i++)
         {
-            if (i >= skill.statsImprovements.Length)
-                break;
-
-            if (bonusStat[i] == null)
+            if (i >= skill.statsImprovements.Length || bonusStat[i] == null)
+            {
+                bonusStat[i].gameObject.SetActive(false);
                 continue;
+            }
 
             bonusStat[i].gameObject.SetActive(true);
             skill.GetStatIncrease();
