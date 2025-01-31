@@ -20,12 +20,14 @@ MonoBehaviour:
   prefab: {fileID: 1224305259278186917, guid: b466e9aad01644f46839b2ce08b3fb88, type: 3}
   isStackable: 0
   equipmentType: 1
-  damageIncrease: 0
-  defenseIncrease: 2
-  healthIncrease: 0
-  movementSpeedIncrease: 0
+  mainStat:
+    type: 1
+    statText: 'Additional Defense:'
+    statImprovement: 2
   bonusStats:
   - type: 3
+    statText: 'Health Regeneration:'
     statImprovement: 1
   - type: 2
-    statImprovement: 5
+    statText: 'Additional Health:'
+    statImprovement: 20

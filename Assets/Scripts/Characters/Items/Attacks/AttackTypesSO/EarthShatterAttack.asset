@@ -16,11 +16,11 @@ MonoBehaviour:
   itemDescription: Time to fuck some shit up!
   statText: 'Damage per hit:'
   levelRequired: 2
-  itemIcon: {fileID: 2800000, guid: 03a188aeeaecbb9478d9ae70eae185f6, type: 3}
+  itemIcon: {fileID: 2800000, guid: 15ec14e5b409878459a708d32847779e, type: 3}
   prefab: {fileID: 0}
   isStackable: 0
   cooldown: 4
-  timerCooldown: 4.0263524
+  timerCooldown: 4.0010815
   damageMultiplier: 0.8
   nextAttackDelay: 1
   bufferedInputDelay: 0.5

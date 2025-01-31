@@ -63,7 +63,8 @@ public class InfoWindow : MonoBehaviour
         {
             statText.gameObject.SetActive(true);
 
-            statText.text = item.statText + " " + equipment.GetStatIncrease();
+            equipment.UpdateStatDisplay();
+            statText.text = item.statText + " " + equipment.mainStat.statImprovement;
 
             if (equipment.bonusStats.Length <= 0)
                 return;

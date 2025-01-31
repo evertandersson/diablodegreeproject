@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.AI;
@@ -245,57 +246,68 @@ namespace Game
 
         public void ApplySkillPoint(SkillSO skill)
         {
-            ApplyStats(skill);
+            // Apply skill stats
+            foreach (Stat bonusStat in skill.Stats)
+            {
+                ApplyStats(bonusStat);
+            }
 
-            healthBar.SetMaxValue(maxHealth);
-            manaBar.SetMaxValue((int)maxMana);
+            SetOrbsValues();
+
             statsDisplay.UpdateStatsText();
         }
 
         public void SetEquipment(EquipmentSO equipment, int apply = 1)
         {
-            maxHealth += equipment.healthIncrease * apply;
-            damage += equipment.damageIncrease * apply;
-            defense += equipment.defenseIncrease * apply;
+            // Apply main stat
+            ApplyStats(equipment.mainStat, apply);
+            // Apply bonus stats
+            foreach (Stat bonusStat in equipment.Stats)
+            {
+                ApplyStats(bonusStat, apply);
+            }
 
-            ApplyStats(equipment, apply);
+            SetOrbsValues();
 
-            healthBar.SetMaxValue(maxHealth, true);
-            manaBar.SetMaxValue((int)maxMana);
             statsDisplay.UpdateStatsText();
         }
 
-        private void ApplyStats(IHasInfo addOn, int apply = 1)
+        private void SetOrbsValues()
         {
-            foreach (Stat bonusStat in addOn.Stats)
+            health = MaxMana;
+            currentMana = MaxMana;
+            healthBar.SetMaxValue(maxHealth);
+            manaBar.SetMaxValue((int)maxMana);
+        }
+
+        private void ApplyStats(Stat stat, int apply = 1)
+        {
+            switch (stat.type)
             {
-                switch (bonusStat.type)
-                {
-                    case BonusStatType.Damage:
-                        damage += (int)bonusStat.statImprovement * apply;
-                        break;
-                    case BonusStatType.Defense:
-                        defense += (int)bonusStat.statImprovement * apply;
-                        break;
-                    case BonusStatType.Health:
-                        maxHealth += (int)bonusStat.statImprovement * apply;
-                        break;
-                    case BonusStatType.HealthRegen:
-                        healthRegeneration += bonusStat.statImprovement * apply;
-                        break;
-                    case BonusStatType.Mana:
-                        maxMana += bonusStat.statImprovement * apply;
-                        break;
-                    case BonusStatType.ManaRegen:
-                        manaRegeneration += bonusStat.statImprovement * apply;
-                        break;
-                    case BonusStatType.Movement:
-                        // TODO: Add movement speed
-                        break;
-                    case BonusStatType.AttackSpeed:
-                        attackSpeed += bonusStat.statImprovement * apply;
-                        break;
-                }
+                case BonusStatType.Damage:
+                    damage += (int)stat.statImprovement * apply;
+                    break;
+                case BonusStatType.Defense:
+                    defense += (int)stat.statImprovement * apply;
+                    break;
+                case BonusStatType.Health:
+                    maxHealth += (int)stat.statImprovement * apply;
+                    break;
+                case BonusStatType.HealthRegen:
+                    healthRegeneration += stat.statImprovement * apply;
+                    break;
+                case BonusStatType.Mana:
+                    maxMana += stat.statImprovement * apply;
+                    break;
+                case BonusStatType.ManaRegen:
+                    manaRegeneration += stat.statImprovement * apply;
+                    break;
+                case BonusStatType.Movement:
+                    // TODO: Add movement speed
+                    break;
+                case BonusStatType.AttackSpeed:
+                    attackSpeed += stat.statImprovement * apply;
+                    break;
             }
         }
 

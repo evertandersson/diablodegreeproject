@@ -20,7 +20,8 @@ MonoBehaviour:
   prefab: {fileID: 8360131347987408477, guid: 10f5add84fa828842b856745fb824f77, type: 3}
   isStackable: 0
   equipmentType: 0
-  damageIncrease: 0
-  defenseIncrease: 1
-  healthIncrease: 0
-  movementSpeedIncrease: 0
+  mainStat:
+    type: 1
+    statText: 
+    statImprovement: 1
+  bonusStats: []

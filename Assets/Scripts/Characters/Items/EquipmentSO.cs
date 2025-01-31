@@ -58,28 +58,18 @@ namespace Game
     {
         public EquipmentType equipmentType;
 
-        public int damageIncrease;
-        public int defenseIncrease;
-        public int healthIncrease;
-        public float movementSpeedIncrease;
-
+        public Stat mainStat;
         public Stat[] bonusStats;
 
         public Stat[] Stats { get => bonusStats; set => Stats = bonusStats; }
 
-        public override string GetStatIncrease()
+        public void UpdateStatDisplay()
         {
+            mainStat.UpdateStatText();
+
             foreach(Stat stat in bonusStats)
             {
                 stat.UpdateStatText();
-            }
-
-            switch (equipmentType)
-            {
-                case EquipmentType.FirstHandWeapon:
-                    return damageIncrease.ToString();
-                default:
-                    return defenseIncrease.ToString();
             }
         }
     }

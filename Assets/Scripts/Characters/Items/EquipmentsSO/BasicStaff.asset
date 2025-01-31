@@ -20,10 +20,10 @@ MonoBehaviour:
   prefab: {fileID: 6638243990525132539, guid: 1a9e5833b9ef8554db624d98f43dec4b, type: 3}
   isStackable: 0
   equipmentType: 3
-  damageIncrease: 3
-  defenseIncrease: 0
-  healthIncrease: 0
-  movementSpeedIncrease: 0
+  mainStat:
+    type: 0
+    statText: 
+    statImprovement: 5
   bonusStats:
   - type: 7
     statText: 'Attack Speed:'
