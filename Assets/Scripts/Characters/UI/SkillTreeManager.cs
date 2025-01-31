@@ -51,6 +51,13 @@ public class SkillTreeManager : Popup
         UpdateSkillPointsText();
     }
 
+    [ExecuteAlways]
+    public void ViewTreeInEditor()
+    {
+        allSkills = new List<SkillButton>(GetComponentsInChildren<SkillButton>(true));
+        DrawLines();
+    }
+
     private void DrawLines()
     {
         foreach (SkillButton skill in allSkills)
