@@ -101,7 +101,7 @@ public class SkillTreeManager : Popup
         rectTransform.position = (startPos + endPos) / 2;
 
         float distance = Vector3.Distance(startPos, endPos);
-        rectTransform.sizeDelta = new Vector2(distance, 5f);
+        rectTransform.sizeDelta = new Vector2(distance * 0.6f, 5f);
         Vector3 dir = (endPos - startPos).normalized;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         rectTransform.rotation = Quaternion.Euler(0, 0, angle);
