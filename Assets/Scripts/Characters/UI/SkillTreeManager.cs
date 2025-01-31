@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SkillTreeManager : Popup
 {
@@ -13,6 +14,12 @@ public class SkillTreeManager : Popup
 
     public int skillPoints = 0;
     [SerializeField] private TextMeshProUGUI skillPointsText;
+
+    public Transform lineParent;
+    public Sprite lineSprite;
+    public Transform startPoint;
+
+    private HashSet<string> drawnLines = new HashSet<string>();
 
     private void Awake()
     {
@@ -40,7 +47,64 @@ public class SkillTreeManager : Popup
             skillButton.UpdateButtonState(skillButton);
         }
 
+        DrawLines();
         UpdateSkillPointsText();
+    }
+
+    private void DrawLines()
+    {
+        foreach (SkillButton skill in allSkills)
+        {
+            if (skill.neighbouringSkills.Length < 1)
+            {
+                DrawUniqueLine(skill.transform, startPoint);
+            }
+
+            foreach (SkillButton neighbourSkill in skill.neighbouringSkills)
+            {
+                DrawUniqueLine(skill.transform, neighbourSkill.transform);
+            }
+        }
+    }
+
+    private void DrawUniqueLine(Transform start, Transform end)
+    {
+        string key = GetLineKey(start, end);
+        if (drawnLines.Contains(key)) return; // Prevent duplicate lines
+
+        DrawUILine(start, end);
+        drawnLines.Add(key); // Mark the line as drawn
+    }
+
+    private string GetLineKey(Transform a, Transform b)
+    {
+        // Ensure key is the same regardless of order (A->B and B->A should be the same)
+        return a.GetInstanceID() < b.GetInstanceID() ? $"{a.GetInstanceID()}_{b.GetInstanceID()}" : $"{b.GetInstanceID()}_{a.GetInstanceID()}";
+    }
+
+    private void DrawUILine(Transform start, Transform end)
+    {
+        GameObject lineObj = new GameObject("SkillLine", typeof(Image));
+        lineObj.transform.SetParent(lineParent, false);
+        lineObj.transform.SetAsFirstSibling();
+
+        Image lineImage = lineObj.GetComponent<Image>();
+        lineImage.sprite = lineSprite;
+        lineImage.color = Color.white;
+
+        RectTransform rectTransform = lineObj.GetComponent<RectTransform>();
+        rectTransform.anchorMin = Vector2.zero;
+        rectTransform.anchorMax = Vector2.zero;
+
+        Vector3 startPos = start.position;
+        Vector3 endPos = end.position;
+        rectTransform.position = (startPos + endPos) / 2;
+
+        float distance = Vector3.Distance(startPos, endPos);
+        rectTransform.sizeDelta = new Vector2(distance, 5f);
+        Vector3 dir = (endPos - startPos).normalized;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        rectTransform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
     private void AddSkillPoint(object sender, System.EventArgs e)
@@ -64,9 +128,9 @@ public class SkillTreeManager : Popup
     {
         if (skill.isUnlocked) return false;
 
-        if (skill.previousSkillsNeeded.Length > 0)
+        if (skill.neighbouringSkills.Length > 0)
         {
-            foreach (SkillButton previousSkill in skill.previousSkillsNeeded)
+            foreach (SkillButton previousSkill in skill.neighbouringSkills)
             {
                 if (!previousSkill.isUnlocked)
                 {

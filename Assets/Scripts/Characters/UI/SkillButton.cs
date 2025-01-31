@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class SkillButton : Loadable, IPointerEnterHandler, IPointerExitHandler
 {
     public SkillSO skill;
-    public SkillButton[] previousSkillsNeeded;
+    public SkillButton[] neighbouringSkills;
     public bool isUnlocked;
 
     public Button button;
