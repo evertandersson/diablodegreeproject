@@ -12,7 +12,7 @@ public class SkillTreeManager : Popup
     public List<SkillButton> allSkills;
     public List<SkillButton> unlockedSkills;
 
-    public int skillPoints = 0;
+    public int skillPoints = 20;
     [SerializeField] private TextMeshProUGUI skillPointsText;
 
     public Transform lineParent;
@@ -128,18 +128,18 @@ public class SkillTreeManager : Popup
     {
         if (skill.isUnlocked) return false;
 
-        if (skill.neighbouringSkills.Length > 0)
+        if (skill.neighbouringSkills.Length == 0)
+            return true;
+
+        foreach (SkillButton previousSkill in skill.neighbouringSkills)
         {
-            foreach (SkillButton previousSkill in skill.neighbouringSkills)
+            if (previousSkill.isUnlocked)
             {
-                if (!previousSkill.isUnlocked)
-                {
-                    return false;
-                }
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
     public void UnlockSkill(SkillButton skill)
