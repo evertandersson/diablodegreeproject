@@ -245,10 +245,10 @@ namespace Game
 
         public void ApplySkillPoint(SkillSO skill)
         {
-            healthBar.SetMaxValue(maxHealth);
-
             ApplyStats(skill);
 
+            healthBar.SetMaxValue(maxHealth);
+            manaBar.SetMaxValue((int)maxMana);
             statsDisplay.UpdateStatsText();
         }
 
@@ -257,10 +257,11 @@ namespace Game
             maxHealth += equipment.healthIncrease * apply;
             damage += equipment.damageIncrease * apply;
             defense += equipment.defenseIncrease * apply;
-            healthBar.SetMaxValue(maxHealth, true);
 
             ApplyStats(equipment, apply);
 
+            healthBar.SetMaxValue(maxHealth, true);
+            manaBar.SetMaxValue((int)maxMana);
             statsDisplay.UpdateStatsText();
         }
 
