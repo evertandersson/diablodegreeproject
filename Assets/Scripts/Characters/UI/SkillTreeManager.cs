@@ -47,7 +47,7 @@ public class SkillTreeManager : Popup
             skillButton.UpdateButtonState(skillButton);
         }
 
-        DrawLines();
+        RedrawLines();
         UpdateSkillPointsText();
     }
 
@@ -55,7 +55,7 @@ public class SkillTreeManager : Popup
     public void ViewTreeInEditor()
     {
         allSkills = new List<SkillButton>(GetComponentsInChildren<SkillButton>(true));
-        DrawLines();
+        RedrawLines();
     }
 
     private void DrawLines()
@@ -64,24 +64,38 @@ public class SkillTreeManager : Popup
         {
             if (skill.neighbouringSkills.Length < 1)
             {
-                DrawUniqueLine(skill.transform, startPoint);
+                DrawUniqueLine(skill, null);
             }
 
             foreach (SkillButton neighbourSkill in skill.neighbouringSkills)
             {
-                DrawUniqueLine(skill.transform, neighbourSkill.transform);
+                DrawUniqueLine(skill, neighbourSkill);
             }
         }
     }
 
-    private void DrawUniqueLine(Transform start, Transform end)
+    private void DrawUniqueLine(SkillButton skill, SkillButton neighbourSkill)
     {
-        string key = GetLineKey(start, end);
-        if (drawnLines.Contains(key)) return; // Prevent duplicate lines
+        if (neighbourSkill == null)
+        {
+            // Handle case where a skill is connected to startPoint
+            string key = GetLineKey(skill.transform, startPoint);
+            if (drawnLines.Contains(key)) return;
 
-        DrawUILine(start, end);
-        drawnLines.Add(key); // Mark the line as drawn
+            DrawUILine(skill.transform, startPoint, skill.isUnlocked);
+            drawnLines.Add(key);
+            return;
+        }
+
+        string key2 = GetLineKey(skill.transform, neighbourSkill.transform);
+        if (drawnLines.Contains(key2)) return;
+
+        bool bothUnlocked = skill.isUnlocked && neighbourSkill.isUnlocked;
+        DrawUILine(skill.transform, neighbourSkill.transform, bothUnlocked);
+        drawnLines.Add(key2);
     }
+
+
 
     private string GetLineKey(Transform a, Transform b)
     {
@@ -89,7 +103,7 @@ public class SkillTreeManager : Popup
         return a.GetInstanceID() < b.GetInstanceID() ? $"{a.GetInstanceID()}_{b.GetInstanceID()}" : $"{b.GetInstanceID()}_{a.GetInstanceID()}";
     }
 
-    private void DrawUILine(Transform start, Transform end)
+    private void DrawUILine(Transform start, Transform end, bool isUnlocked)
     {
         GameObject lineObj = new GameObject("SkillLine", typeof(Image));
         lineObj.transform.SetParent(lineParent, false);
@@ -97,7 +111,7 @@ public class SkillTreeManager : Popup
 
         Image lineImage = lineObj.GetComponent<Image>();
         lineImage.sprite = lineSprite;
-        lineImage.color = Color.white;
+        lineImage.color = isUnlocked ? Color.white : Color.grey;
 
         RectTransform rectTransform = lineObj.GetComponent<RectTransform>();
         rectTransform.anchorMin = Vector2.zero;
@@ -112,6 +126,20 @@ public class SkillTreeManager : Popup
         Vector3 dir = (endPos - startPos).normalized;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         rectTransform.rotation = Quaternion.Euler(0, 0, angle);
+    }
+
+    private void RedrawLines()
+    {
+        foreach (Transform child in lineParent)
+        {
+            if (child.name == "SkillLine")
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
+        drawnLines.Clear();
+        DrawLines(); // Redraw with updated colors
     }
 
     private void AddSkillPoint(object sender, System.EventArgs e)
@@ -149,18 +177,22 @@ public class SkillTreeManager : Popup
         return false;
     }
 
-    public void UnlockSkill(SkillButton skill)
+    public void UnlockSkill(SkillButton skill, string id, bool saveToList)
     {
         if (CanUnlock(skill) && skillPoints > 0)
         {
             skill.isUnlocked = true;
             RemoveSkillPoint();
             unlockedSkills.Add(skill); // Add to unlockedSkills, not allSkills
+            if (saveToList) SaveManager.Instance.AddObjectToList(id, SaveManager.Instance.skillsUnlockedList);
             foreach (SkillButton skillButton in allSkills)
             {
                 skillButton.UpdateButtonState(skillButton);
             }
             PlayerManager.Instance.ApplySkillPoint(skill.skill);
+
+            // Redraw lines to update colors
+            RedrawLines();
         }
     }
 
