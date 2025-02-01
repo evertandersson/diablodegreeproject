@@ -274,7 +274,7 @@ namespace Game
 
         private void SetOrbsValues()
         {
-            health = MaxMana;
+            health = MaxHealth;
             currentMana = MaxMana;
             healthBar.SetMaxValue(maxHealth);
             manaBar.SetMaxValue((int)maxMana);
