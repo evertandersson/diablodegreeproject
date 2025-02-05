@@ -81,22 +81,6 @@ public abstract class Character : MonoBehaviour
         originalColor = renderers[0].material.color;
     }
 
-
-    public virtual void SetStats()
-    {
-        if (level > 1)
-        {
-            for (int i = 0; i < level - 1; i++)
-            {
-                float statsMultiplier = 1.5f;
-                maxHealth = Mathf.RoundToInt(maxHealth * statsMultiplier);
-                health = maxHealth;
-                damage = Mathf.RoundToInt(damage * statsMultiplier);
-                defense = Mathf.RoundToInt(defense * statsMultiplier);
-            }
-        }
-    }
-
     public virtual void TakeDamage(int damage)
     {
         health -= damage;

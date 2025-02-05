@@ -26,8 +26,13 @@ public class EnemyHealthBar : HealthBar
     {
         if (health <= 0)
         {
-            gameObject.SetActive(false);
+            DisplayHealthBar(false);
         }
         base.SetHealth(health);
+    }
+
+    public void DisplayHealthBar(bool show)
+    {
+        gameObject.SetActive(show);
     }
 }

@@ -231,9 +231,8 @@ namespace Game
             EnableRagdoll(false);
         }
 
-        public override void SetStats()
+        public void SetStats()
         {
-            base.SetStats();
             statsDisplay.UpdateStatsText();
         }
 

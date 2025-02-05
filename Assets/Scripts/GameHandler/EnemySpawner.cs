@@ -1,45 +1,47 @@
-using Game;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemySpawner : MonoBehaviour
+namespace Game
 {
-    [Serializable]
-    private class EnemyToSpawn
+    public class EnemySpawner : MonoBehaviour
     {
-        [SerializeField] private string enemyTag;
-        [SerializeField] public int level;
-        [SerializeField] private int count;
-
-        public string EnemyTag => enemyTag;
-        public int Count => count;
-    }
-
-    [SerializeField] private EnemyToSpawn[] enemiesToSpawn; // Array of enemies to spawn
-    [SerializeField] private float spawnInterval = 1f; // Delay between each spawn
-
-    public IEnumerator SpawnEnemies()
-    {
-        foreach (var enemyToSpawn in enemiesToSpawn)
+        [Serializable]
+        private class EnemyToSpawn
         {
-            for (int i = 0; i < enemyToSpawn.Count; i++)
+            [SerializeField] private string enemyTag;
+            [SerializeField] public int level;
+            [SerializeField] private int count;
+
+            public string EnemyTag => enemyTag;
+            public int Count => count;
+        }
+
+        [SerializeField] private EnemyToSpawn[] enemiesToSpawn; // Array of enemies to spawn
+        [SerializeField] private float spawnInterval = 1f; // Delay between each spawn
+
+        public IEnumerator SpawnEnemies()
+        {
+            foreach (var enemyToSpawn in enemiesToSpawn)
             {
-                yield return new WaitForSeconds(spawnInterval);
-
-                // Spawn enemy from pool
-                GameObject go = ObjectPooling.Instance.SpawnFromPool(enemyToSpawn.EnemyTag, transform.position, Quaternion.identity);
-                Enemy enemy = go.GetComponent<Enemy>();
-                enemy.SetLevel(enemyToSpawn.level);
-
-                NavMeshHit closestHit;
-                if (NavMesh.SamplePosition(transform.position, out closestHit, 500, 1))
+                for (int i = 0; i < enemyToSpawn.Count; i++)
                 {
-                    go.transform.position = closestHit.position;
+                    yield return new WaitForSeconds(spawnInterval);
+
+                    // Spawn enemy from pool
+                    GameObject go = ObjectPooling.Instance.SpawnFromPool(enemyToSpawn.EnemyTag, transform.position, Quaternion.identity);
+                    Enemy enemy = go.GetComponent<Enemy>();
+                    enemy.SetLevel(enemyToSpawn.level);
+
+                    NavMeshHit closestHit;
+                    if (NavMesh.SamplePosition(transform.position, out closestHit, 500, 1))
+                    {
+                        go.transform.position = closestHit.position;
+                    }
                 }
             }
         }
     }
+
 }

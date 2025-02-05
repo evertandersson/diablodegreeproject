@@ -1,11 +1,18 @@
 using UnityEngine;
 
-public class EnemySpawnerTrigger : MonoBehaviour
+namespace Game
 {
-    [SerializeField] private EnemySpawner enemySpawner;
-
-    private void OnTriggerEnter(Collider other)
+    public class EnemySpawnerTrigger : MonoBehaviour
     {
-        enemySpawner.StartCoroutine("SpawnEnemies");
+        [SerializeField] private EnemySpawner enemySpawner;
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.GetComponent<PlayerManager>())
+            {
+                enemySpawner.StartCoroutine("SpawnEnemies");
+                gameObject.SetActive(false);
+            }
+        }
     }
 }
