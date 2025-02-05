@@ -11,7 +11,8 @@ public class EnemySpawner : MonoBehaviour
     private class EnemyToSpawn
     {
         [SerializeField] private string enemyTag;
-        [SerializeField] private int count; 
+        [SerializeField] public int level;
+        [SerializeField] private int count;
 
         public string EnemyTag => enemyTag;
         public int Count => count;
@@ -20,12 +21,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private EnemyToSpawn[] enemiesToSpawn; // Array of enemies to spawn
     [SerializeField] private float spawnInterval = 1f; // Delay between each spawn
 
-    private void Start()
-    {
-        StartCoroutine(SpawnEnemies());
-    }
-
-    private IEnumerator SpawnEnemies()
+    public IEnumerator SpawnEnemies()
     {
         foreach (var enemyToSpawn in enemiesToSpawn)
         {
@@ -35,6 +31,8 @@ public class EnemySpawner : MonoBehaviour
 
                 // Spawn enemy from pool
                 GameObject go = ObjectPooling.Instance.SpawnFromPool(enemyToSpawn.EnemyTag, transform.position, Quaternion.identity);
+                Enemy enemy = go.GetComponent<Enemy>();
+                enemy.SetLevel(enemyToSpawn.level);
 
                 NavMeshHit closestHit;
                 if (NavMesh.SamplePosition(transform.position, out closestHit, 500, 1))

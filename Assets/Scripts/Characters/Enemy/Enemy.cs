@@ -61,6 +61,12 @@ namespace Game
             SetNewEvent<EnemyIdle>();
         }
 
+        public void SetLevel(int level)
+        {
+            this.level = level;
+            SetStats();
+        }
+
         protected void Awake()
         {
             // Cache components on Awake
