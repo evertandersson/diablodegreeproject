@@ -12,6 +12,7 @@ public class LightningEffect : MonoBehaviour, IPooledObject
     [SerializeField] private float flickerDuration = 0.5f; // Duration of the lightning flicker
 
     private LineRenderer lineRenderer;
+    private static Enemy[] allEnemies; // Array of all enemies
     private List<Enemy> chainedEnemies = new List<Enemy>(); // Track chained enemies
     private Vector3 offset = new Vector3(0, 1.2f, 0);
     private GameObject[] lightningEffects;
@@ -55,7 +56,9 @@ public class LightningEffect : MonoBehaviour, IPooledObject
 
     private void ChainToClosestEnemy(Vector3 startPosition)
     {
+        allEnemies = FindObjectsByType<Enemy>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
         lightningEffects = new GameObject[maxChains];
+        
         for (int i = 0; i < maxChains; i++)
         {
             // Find the closest enemy that hasn't been chained yet
@@ -88,14 +91,13 @@ public class LightningEffect : MonoBehaviour, IPooledObject
 
     private Enemy FindClosestEnemy(Vector3 position, bool firstTime)
     {
-        Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
         Enemy closestEnemy = null;
         float closestDistance = PlayerManager.Instance.visionRange;
 
-        foreach (Enemy enemy in enemies)
+        foreach (Enemy enemy in allEnemies)
         {
             // Skip already chained or dead enemies
-            if (chainedEnemies.Contains(enemy) || enemy.IsDead) continue;
+            if (chainedEnemies.Contains(enemy) || enemy.IsDead || enemy.standStill) continue;
 
             float distance = Vector3.Distance(position, enemy.transform.position);
             // Check if this enemy is closer and visible
