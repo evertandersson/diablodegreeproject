@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Game
 {
-    public enum StatType
+    public enum BonusStatType
     {
         Damage,
         Defense,
@@ -17,7 +17,7 @@ namespace Game
     [System.Serializable]
     public class Stat
     {
-        public StatType type;
+        public BonusStatType type;
         [HideInInspector] public string statText;
         public float statImprovement;
 
@@ -25,28 +25,28 @@ namespace Game
         {
             switch (type)
             {
-                case StatType.Damage:
+                case BonusStatType.Damage:
                     statText = "Additional Damage:";
                     break;
-                case StatType.Defense:
+                case BonusStatType.Defense:
                     statText = "Additional Defense:";
                     break;
-                case StatType.Health:
+                case BonusStatType.Health:
                     statText = "Additional Health:";
                     break;
-                case StatType.HealthRegen:
+                case BonusStatType.HealthRegen:
                     statText = "Health Regeneration:";
                     break;
-                case StatType.Mana:
+                case BonusStatType.Mana:
                     statText = "Additional Mana:";
                     break;
-                case StatType.ManaRegen:
+                case BonusStatType.ManaRegen:
                     statText = "Mana Regeneration:";
                     break;
-                case StatType.Movement:
+                case BonusStatType.Movement:
                     statText = "Movement Speed:";
                     break;
-                case StatType.AttackSpeed:
+                case BonusStatType.AttackSpeed:
                     statText = "Attack Speed:";
                     break;
             }
