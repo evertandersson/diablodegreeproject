@@ -9,6 +9,7 @@ namespace Game
 
         public override void OnBegin(bool firstTime)
         {
+            base.OnBegin(firstTime);
             if (!IsCloseToPlayer(enemy.distanceToAttack + 0.5f))
             {
                 isDone = true;
