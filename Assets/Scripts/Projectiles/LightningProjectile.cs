@@ -9,7 +9,6 @@ public class LightningEffect : MonoBehaviour, IPooledObject
 
     [SerializeField] private int maxChains = 5; // Maximum number of enemies to chain to
     [SerializeField] private Material lightningMaterial; // Material for the lightning effect
-    [SerializeField] private float flickerDuration = 0.5f; // Duration of the lightning flicker
 
     private LineRenderer lineRenderer;
     private List<Enemy> chainedEnemies = new List<Enemy>(); // Track chained enemies
@@ -63,7 +62,7 @@ public class LightningEffect : MonoBehaviour, IPooledObject
 
             if (closestEnemy == null)
             {
-                break; // No more enemies to chain to
+                break;
             }
 
             // Add the enemy to the chain
@@ -75,7 +74,7 @@ public class LightningEffect : MonoBehaviour, IPooledObject
             // Move the lightning to the enemy
             transform.position = closestEnemy.transform.position;
 
-            // Add a point to the line renderer for the lightning visual
+            // Add point to the line renderer
             if (lineRenderer != null)
             {
                 lineRenderer.positionCount = chainedEnemies.Count + 1;

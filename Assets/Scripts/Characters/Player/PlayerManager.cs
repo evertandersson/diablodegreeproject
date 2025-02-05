@@ -1,9 +1,5 @@
 using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.UI;
 
 namespace Game
@@ -284,28 +280,28 @@ namespace Game
         {
             switch (stat.type)
             {
-                case BonusStatType.Damage:
+                case StatType.Damage:
                     damage += (int)stat.statImprovement * apply;
                     break;
-                case BonusStatType.Defense:
+                case StatType.Defense:
                     defense += (int)stat.statImprovement * apply;
                     break;
-                case BonusStatType.Health:
+                case StatType.Health:
                     maxHealth += (int)stat.statImprovement * apply;
                     break;
-                case BonusStatType.HealthRegen:
+                case StatType.HealthRegen:
                     healthRegeneration += stat.statImprovement * apply;
                     break;
-                case BonusStatType.Mana:
+                case StatType.Mana:
                     maxMana += stat.statImprovement * apply;
                     break;
-                case BonusStatType.ManaRegen:
+                case StatType.ManaRegen:
                     manaRegeneration += stat.statImprovement * apply;
                     break;
-                case BonusStatType.Movement:
+                case StatType.Movement:
                     // TODO: Add movement speed
                     break;
-                case BonusStatType.AttackSpeed:
+                case StatType.AttackSpeed:
                     attackSpeed += stat.statImprovement * apply;
                     break;
             }

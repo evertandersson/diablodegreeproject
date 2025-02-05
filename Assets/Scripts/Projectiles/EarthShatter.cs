@@ -38,7 +38,6 @@ namespace Game
 
         private void Update()
         {
-            // Despawn object when particle system is no longer alive
             if (!particle.IsAlive(true))
             {
                 enemiesHit.Clear();
@@ -52,10 +51,8 @@ namespace Game
 
             currentTimer += Time.deltaTime;
 
-            // Deal damage to enemies at intervals
             if (currentTimer > damageTimer)
             {
-                // Create a temporary list of keys to iterate over
                 var enemiesToProcess = new List<Enemy>(enemiesHit.Keys);
 
                 foreach (var enemy in enemiesToProcess)
@@ -66,7 +63,7 @@ namespace Game
                         enemiesHit[enemy] += 1;
                     }
                 }
-                currentTimer = 0; // Reset timer after processing all enemies
+                currentTimer = 0;
             }
         }
     }
