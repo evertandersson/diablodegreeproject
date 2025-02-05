@@ -33,7 +33,6 @@ namespace Game
 
         // Trigger names:
         [HideInInspector] public int attackTrigger = Animator.StringToHash("Attack");
-        [HideInInspector] public int endAttackTrigger = Animator.StringToHash("EndAttack");
         [HideInInspector] public int isHitTrigger = Animator.StringToHash("IsHit");
         [HideInInspector] public int rangedAttackTrigger = Animator.StringToHash("RangedAttack");
 

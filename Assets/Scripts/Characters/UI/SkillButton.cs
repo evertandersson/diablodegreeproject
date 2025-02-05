@@ -44,6 +44,7 @@ public class SkillButton : Loadable, IPointerEnterHandler, IPointerExitHandler
     public void UnlockSkill(bool saveToList)
     {
         skillTreeManager.UnlockSkill(this, id, saveToList);
+
     }
 
     public void OnPointerEnter(PointerEventData eventData)
