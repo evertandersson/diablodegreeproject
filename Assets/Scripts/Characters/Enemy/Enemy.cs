@@ -52,13 +52,32 @@ namespace Game
             isDead = false;
             health = maxHealth;
             healthBar.SetMaxHealth(maxHealth);
+            healthBar.DisplayHealthBar(true);
 
             Agent.enabled = false;
 
             EnemyEventHandler.EventStack.Clear();
             EnableRagdoll(false);
+            standStill = false;
 
             SetNewEvent<EnemyIdle>();
+        }
+
+        public void SetLevel(int level)
+        {
+            this.level = level;
+            if (level > 1)
+            {
+                for (int i = 0; i < level - 1; i++)
+                {
+                    float statsMultiplier = 1.5f;
+                    maxHealth = Mathf.RoundToInt(maxHealth * statsMultiplier);
+                    health = maxHealth;
+                    damage = Mathf.RoundToInt(damage * statsMultiplier);
+                    defense = Mathf.RoundToInt(defense * statsMultiplier);
+                    experienceOnDeath = Mathf.RoundToInt(experienceOnDeath * statsMultiplier);
+                }
+            }
         }
 
         protected void Awake()

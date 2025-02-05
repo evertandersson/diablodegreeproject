@@ -33,7 +33,7 @@ namespace Game
             targetTimer += Time.deltaTime;
 
 
-            if (IsCloseToPlayer(enemy.distanceToAttack))
+            if (IsCloseToPlayer(enemy.distanceToAttack) && !IsAnyAttackAnimationPlaying())
             {
                 enemy.Attack();
                 return;

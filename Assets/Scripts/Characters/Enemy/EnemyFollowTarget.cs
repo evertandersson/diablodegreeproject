@@ -36,7 +36,7 @@ namespace Game
             // Update target timer
             targetTimer += Time.deltaTime;
 
-            if (IsCloseToPlayer(enemy.distanceToAttack))
+            if (IsCloseToPlayer(enemy.distanceToAttack) && !IsAnyAttackAnimationPlaying())
             {
                 enemy.Attack();
             }
