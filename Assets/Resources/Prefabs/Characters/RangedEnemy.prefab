@@ -635,7 +635,7 @@ MonoBehaviour:
   visionRange: 10
   detectionMask:
     serializedVersion: 2
-    m_Bits: 3201
+    m_Bits: 7297
   experienceOnDeath: 50
   standStill: 0
   isAggro: 0

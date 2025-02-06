@@ -13,6 +13,7 @@ namespace Game
             [SerializeField] private string enemyTag;
             [SerializeField] public int level;
             [SerializeField] private int count;
+            [SerializeField] public bool isAggro;
 
             public string EnemyTag => enemyTag;
             public int Count => count;
@@ -33,6 +34,7 @@ namespace Game
                     GameObject go = ObjectPooling.Instance.SpawnFromPool(enemyToSpawn.EnemyTag, transform.position, Quaternion.identity);
                     Enemy enemy = go.GetComponent<Enemy>();
                     enemy.SetLevel(enemyToSpawn.level);
+                    enemy.isAggro = enemyToSpawn.isAggro;
 
                     NavMeshHit closestHit;
                     if (NavMesh.SamplePosition(transform.position, out closestHit, 500, 1))

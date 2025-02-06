@@ -38,7 +38,17 @@ namespace Game
 
             if (IsCloseToPlayer(enemy.distanceToAttack) && !IsAnyAttackAnimationPlaying())
             {
-                enemy.Attack();
+                if (enemy is RangedEnemy)
+                {
+                    if (IsTargetedAtPlayer())
+                    {
+                        enemy.Attack();
+                    }
+                }
+                else
+                {
+                    enemy.Attack();
+                }
             }
 
             if (targetTimer > updateTargetDelay)
