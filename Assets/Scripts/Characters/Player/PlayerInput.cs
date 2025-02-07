@@ -1,5 +1,8 @@
 using System;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
 namespace Game
@@ -22,6 +25,9 @@ namespace Game
 
         bool isMoving = false;
         bool isClickInteraction = false;
+        private Vector3 distanceSave;
+
+        public LayerMask layerMask;
 
         public static event Action HighlightItems;
         public static event Action HideItems;
@@ -145,18 +151,97 @@ namespace Game
                 return;
             }
 
-            // Handle movement input when holding
             if (playerMovement.ReadyForAnotherInput(GetCurrentTimer(), GetWaitForNextBufferedInputTimer()))
             {
-                playerMovement.BufferInput(PlayerManager.Instance.mouseInput.mouseInputPosition);
+                Vector3 targetPosition = PlayerManager.Instance.mouseInput.mouseInputPosition;
+
+                // Validate if target position is reachable using NavMesh
+                if (NavMesh.SamplePosition(targetPosition, out NavMeshHit navHit, 1.0f, NavMesh.AllAreas))
+                {
+                    playerMovement.BufferInput(navHit.position);
+                }
                 return;
             }
 
             if (PlayerManager.Instance.CurrentPlayerState != PlayerManager.State.Inventory && !PlayerManager.Instance.isInteracting)
             {
-                playerMovement.SetDestination(PlayerManager.Instance.mouseInput.mouseInputPosition);
+                NavMeshAgent navMeshAgent = PlayerManager.Instance.Agent;
+
+                if (navMeshAgent == null || !navMeshAgent.enabled)
+                    return;
+
+                Vector3 targetPosition = PlayerManager.Instance.mouseInput.mouseInputPosition;
+                float distance = Vector3.Distance(PlayerManager.Instance.transform.position, targetPosition);
+                Vector3 direction = (targetPosition - transform.position).normalized;
+                direction.y = 0;
+
+                // Calculate perpendicular vectors (left and right) based on the direction to the mouse
+                Vector3 leftOffset = new Vector3(-direction.z, 0f, direction.x) * 1f;  // Perpendicular vector to the left
+                Vector3 rightOffset = new Vector3(direction.z, 0f, -direction.x) * 1f; // Perpendicular vector to the right
+
+                // Apply vertical offset (upward) and a small offset forward/backward to avoid collisions at player feet
+                leftOffset += transform.up * 1.2f + direction * -0.2f;
+                rightOffset += transform.up * 1.2f + direction * -0.2f;
+
+                // Calculate the raycast origins using the new left and right offsets
+                Vector3 leftOrigin = transform.position + leftOffset;
+                Vector3 rightOrigin = transform.position + rightOffset;
+
+                // Perform the spherecasts to check if the left or right sides are blocked
+                bool leftBlocked = Physics.SphereCast(leftOrigin, 0.2f, direction, out RaycastHit leftHit, distance, layerMask);
+                bool rightBlocked = Physics.SphereCast(rightOrigin, 0.2f, direction, out RaycastHit rightHit, distance, layerMask);
+
+                // Debug the raycasts for visualization
+                Debug.DrawRay(leftOrigin, direction * distance, leftBlocked ? Color.red : Color.green);
+                Debug.DrawRay(rightOrigin, direction * distance, rightBlocked ? Color.red : Color.green);
+
+                // Determine the final destination: start with the target position, adjust if blocked
+                Vector3 finalDestination = targetPosition;
+
+                if (leftBlocked && rightBlocked || distance > 7)
+                {
+                    // If both sides are blocked, perform a raycast to find an alternative destination
+                    if (Physics.Raycast(transform.position, direction, out RaycastHit hit, distance, layerMask))
+                    {
+                        finalDestination = hit.point;
+                    }
+                }
+
+                // Validate the final position using the NavMesh before moving
+                if (NavMesh.SamplePosition(finalDestination, out NavMeshHit validHit, 1.0f, NavMesh.AllAreas))
+                {
+                    playerMovement.SetDestination(validHit.position);
+                }
             }
         }
+
+
+
+
+        void OnDrawGizmos()
+        {
+            if (!Application.isPlaying)
+                return;
+
+            if (PlayerManager.Instance == null || PlayerManager.Instance.Agent == null)
+                return;
+
+            NavMeshAgent agent = PlayerManager.Instance.Agent;
+
+            // Ensure there's a path to draw
+            if (!agent.hasPath || agent.path.corners.Length < 2)
+                return;
+
+            Gizmos.color = Color.green; // Path color
+            Vector3[] pathCorners = agent.path.corners;
+
+            // Draw lines between path corners
+            for (int i = 0; i < pathCorners.Length - 1; i++)
+            {
+                Gizmos.DrawLine(pathCorners[i], pathCorners[i + 1]);
+            }
+        }
+
 
         private void HandleInteraction()
         {

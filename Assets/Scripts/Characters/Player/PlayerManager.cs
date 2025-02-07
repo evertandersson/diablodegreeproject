@@ -346,9 +346,6 @@ namespace Game
             slotManager.HandleCooldowns();
             playerAnimator.HandleAnimations(IsAttacking);
 
-            // Handle movement
-            if (playerInput.IsMoving()) playerInput.Move();
-
             attackIndicator.enabled = IsAttacking;
             
             // Handle attacking
@@ -385,6 +382,12 @@ namespace Game
                 lastYPosition = currentYPosition;
                 OnYValueChanged?.Invoke(currentYPosition); // Trigger the event
             }
+        }
+
+        private void FixedUpdate()
+        {
+            // Handle movement
+            if (playerInput.IsMoving()) playerInput.Move();
         }
 
         public void SetCurrentObject(Interactable obj)
