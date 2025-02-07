@@ -43,11 +43,13 @@ namespace Game
                     if (IsTargetedAtPlayer())
                     {
                         enemy.Attack();
+                        return;
                     }
                 }
                 else
                 {
                     enemy.Attack();
+                    return;
                 }
             }
 

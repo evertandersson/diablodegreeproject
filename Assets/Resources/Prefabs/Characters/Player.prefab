@@ -17280,9 +17280,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5251107426523682287}
     m_Modifications:
+    - target: {fileID: 1473353547583274, guid: c1c88308ebb5d2541a282905b854ee4c, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 1722726733478836, guid: c1c88308ebb5d2541a282905b854ee4c, type: 3}
       propertyPath: m_Name
       value: BigSplash
+      objectReference: {fileID: 0}
+    - target: {fileID: 1722726733478836, guid: c1c88308ebb5d2541a282905b854ee4c, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4079391813584830, guid: c1c88308ebb5d2541a282905b854ee4c, type: 3}
       propertyPath: m_LocalPosition.x

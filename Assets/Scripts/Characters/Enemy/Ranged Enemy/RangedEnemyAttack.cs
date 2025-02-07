@@ -6,6 +6,24 @@ namespace Game
     {
         public GameObject projectilePrefab;
 
+        protected override void HandleAnimationCombo()
+        {
+            if (IsAnimationPlaying(enemy.damageAnim))
+                return;
+
+            if (!enemy.IsAnimationPlaying(enemy.attackAnims[0]))
+            {
+                if (IsCloseToPlayer(enemy.distanceToAttack + 0.5f) && IsTargetedAtPlayer())
+                {
+                    enemy.CharacterAnimator.SetTrigger(enemy.attackTrigger); // Trigger next animation
+                }
+                else
+                {
+                    isDone = true; // End combo if not close to the player
+                }
+            }
+        }
+
         public void SpawnProjectile()
         {
             // Calculate direction to the player

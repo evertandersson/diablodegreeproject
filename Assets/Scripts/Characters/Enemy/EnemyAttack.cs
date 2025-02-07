@@ -29,7 +29,7 @@ namespace Game
             HandleAnimationCombo();
         }
 
-        protected void HandleAnimationCombo()
+        protected virtual void HandleAnimationCombo()
         {
             // Don't attack while in take damage animation
             if (IsAnimationPlaying(enemy.damageAnim))

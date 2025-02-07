@@ -80,7 +80,7 @@ namespace Game
             }
         }
 
-        protected void Awake()
+        protected virtual void Awake()
         {
             // Cache components on Awake
             Initialize();
