@@ -170,92 +170,47 @@ namespace Game
                     return;
 
                 Vector3 targetPosition = PlayerManager.Instance.mouseInput.mouseInputPosition;
-                float distance = Vector3.Distance(PlayerManager.Instance.transform.position, targetPosition);
                 Vector3 direction = (targetPosition - transform.position).normalized;
                 direction.y = 0;
 
-                // Define the angle for the offset
-                float angleOffset = 45f;
+                float distance = Vector3.Distance(transform.position, targetPosition);
 
-                // Calculate new directions rotated 45 degrees relative to the mouse direction
-                Vector3 leftDirection = Quaternion.AngleAxis(-angleOffset, Vector3.up) * direction;
-                Vector3 rightDirection = Quaternion.AngleAxis(angleOffset, Vector3.up) * direction;
+                int rayCount = 5;
+                float spreadAngle = 45f;
+                bool allHit = true;
+                RaycastHit[] hits = new RaycastHit[rayCount];
 
-                // Perform raycasts at 45-degree angles in front of the mouse direction
-                RaycastHit leftHit, rightHit;
-                bool leftBlocked = Physics.Raycast(transform.position, leftDirection, out leftHit, 2.4f, layerMask);
-                bool rightBlocked = Physics.Raycast(transform.position, rightDirection, out rightHit, 2.4f, layerMask);
-
-                // Debug visualization
-                Debug.DrawRay(transform.position, leftDirection * 2.4f, leftBlocked ? Color.red : Color.green);
-                Debug.DrawRay(transform.position, rightDirection * 2.4f, rightBlocked ? Color.red : Color.green);
-
-                float leftDistance = leftBlocked ? leftHit.distance : distance;
-                float rightDistance = rightBlocked ? rightHit.distance : distance;
-
-                float maxWallCheckDistance = 2.4f;
-
-                // Default values for offsets
-                float leftOffsetDistance = 1.2f;
-                float rightOffsetDistance = 1.2f;
-
-                // Adjust only the closest side if necessary
-                if (leftDistance < maxWallCheckDistance || rightDistance < maxWallCheckDistance)
+                for (int i = 0; i < rayCount; i++)
                 {
-                    float leftNormalized = Mathf.Clamp01(leftDistance / maxWallCheckDistance);
-                    leftOffsetDistance = Mathf.Lerp(-0.8f, 1.2f, leftNormalized);
-                    float rightNormalized = Mathf.Clamp01(rightDistance / maxWallCheckDistance);
-                    rightOffsetDistance = Mathf.Lerp(-0.8f, 1.2f, rightNormalized);
+                    float angle = -spreadAngle / 2 + (spreadAngle / (rayCount - 1)) * i;
+                    Vector3 rayDirection = Quaternion.AngleAxis(angle, Vector3.up) * direction;
+
+                    if (!Physics.Raycast(transform.position, rayDirection, out hits[i], distance, layerMask))
+                    {
+                        allHit = false;
+                    }
+
+                    Debug.DrawRay(transform.position, rayDirection * distance, hits[i].collider != null ? Color.red : Color.green);
                 }
-
-
-                // Adjust perpendicular offsets based on distance to walls
-                Vector3 leftOffset = new Vector3(-direction.z, 0f, direction.x) * leftOffsetDistance;
-                Vector3 rightOffset = new Vector3(direction.z, 0f, -direction.x) * rightOffsetDistance;
-
-                // Move the raycast positions slightly behind the player
-                Vector3 backwardOffset = -direction; // Adjust this value to move further back
-
-                // Maintain a consistent height for both origins
-                float fixedHeight = transform.position.y + 1.2f;
-
-                // Base positions for raycast origins
-                Vector3 baseLeftOrigin = transform.position + leftOffset + backwardOffset;
-                Vector3 baseRightOrigin = transform.position + rightOffset + backwardOffset;
-
-                // Apply height adjustment to prevent stuttering
-                Vector3 leftOrigin = new Vector3(baseLeftOrigin.x, fixedHeight, baseLeftOrigin.z);
-                Vector3 rightOrigin = new Vector3(baseRightOrigin.x, fixedHeight, baseRightOrigin.z);
-
-                // Perform SphereCasts from the new positions
-                bool leftWallBlocked = Physics.SphereCast(leftOrigin, 0.2f, direction, out RaycastHit leftHit2, distance, layerMask);
-                bool rightWallBlocked = Physics.SphereCast(rightOrigin, 0.2f, direction, out RaycastHit rightHit2, distance, layerMask);
-
-                // Draw debug rays to visualize
-                Debug.DrawRay(leftOrigin, direction * (leftWallBlocked ? leftHit2.distance : distance), leftWallBlocked ? Color.red : Color.green);
-                Debug.DrawRay(rightOrigin, direction * (rightWallBlocked ? rightHit2.distance : distance), rightWallBlocked ? Color.red : Color.green);
-
 
                 Vector3 finalDestination = targetPosition;
 
-                if (leftWallBlocked && rightWallBlocked)
+                if (allHit)
                 {
-                    if (Physics.Raycast(transform.position, direction, out RaycastHit hit2, distance, layerMask))
-                    {
-                        finalDestination = hit2.point;
-                    }
+                    finalDestination = hits[rayCount / 2].point;
                 }
 
-                if (NavMesh.SamplePosition(finalDestination, out NavMeshHit validHit2, 1.0f, NavMesh.AllAreas))
+                if (NavMesh.SamplePosition(finalDestination, out NavMeshHit validHit, 1.0f, NavMesh.AllAreas))
                 {
                     NavMeshPath path = new NavMeshPath();
-                    if (navMeshAgent.CalculatePath(validHit2.position, path) && path.status == NavMeshPathStatus.PathComplete)
+                    if (navMeshAgent.CalculatePath(validHit.position, path) && path.status == NavMeshPathStatus.PathComplete)
                     {
-                        playerMovement.SetDestination(validHit2.position);
+                        playerMovement.SetDestination(validHit.position);
                     }
                 }
             }
         }
+
 
 
         void OnDrawGizmos()
