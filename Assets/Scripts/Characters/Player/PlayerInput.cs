@@ -178,26 +178,16 @@ namespace Game
                 bool leftBlocked = Physics.Raycast(transform.position, -transform.right, out leftHit, distance, layerMask);
                 bool rightBlocked = Physics.Raycast(transform.position, transform.right, out rightHit, distance, layerMask);
 
-                float leftDistance = leftBlocked ? leftHit.distance : distance;
-                float rightDistance = rightBlocked ? rightHit.distance : distance;
-
                 float maxWallCheckDistance = 2.4f;
 
-                // Default values for offsets
-                float leftOffsetDistance = 1.2f;
-                float rightOffsetDistance = 1.2f;
+                float leftDistance = leftBlocked ? leftHit.distance : maxWallCheckDistance;
+                float rightDistance = rightBlocked ? rightHit.distance : maxWallCheckDistance;
 
-                // Adjust only the closest side if necessary
-                if (leftBlocked && leftDistance < maxWallCheckDistance)
-                {
-                    float leftNormalized = Mathf.Clamp01(leftDistance / maxWallCheckDistance);
-                    leftOffsetDistance = Mathf.Lerp(-0.8f, 1.2f, leftNormalized);
-                }
-                if (rightBlocked && rightDistance < maxWallCheckDistance)
-                {
-                    float rightNormalized = Mathf.Clamp01(rightDistance / maxWallCheckDistance);
-                    rightOffsetDistance = Mathf.Lerp(-0.8f, 1.2f, rightNormalized);
-                }
+                float leftNormalized = Mathf.Clamp01(leftDistance / maxWallCheckDistance);
+                float rightNormalized = Mathf.Clamp01(rightDistance / maxWallCheckDistance);
+
+                float leftOffsetDistance = Mathf.Lerp(-0.8f, 1.2f, leftNormalized);
+                float rightOffsetDistance = Mathf.Lerp(-0.8f, 1.2f, rightNormalized);
 
                 // Adjust perpendicular offsets based on distance to walls
                 Vector3 leftOffset = new Vector3(-direction.z, 0f, direction.x) * leftOffsetDistance;
