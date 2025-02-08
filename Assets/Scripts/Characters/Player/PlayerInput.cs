@@ -25,7 +25,7 @@ namespace Game
 
         bool isMoving = false;
         bool isClickInteraction = false;
-        private Vector3 distanceSave;
+        float distanceToWall;
 
         public LayerMask layerMask;
 
@@ -147,7 +147,7 @@ namespace Game
             if (isClickInteraction)
             {
                 HandleInteraction();
-                isClickInteraction = false; // Reset interaction state after handling
+                isClickInteraction = false;
                 return;
             }
 
@@ -155,7 +155,6 @@ namespace Game
             {
                 Vector3 targetPosition = PlayerManager.Instance.mouseInput.mouseInputPosition;
 
-                // Validate if target position is reachable using NavMesh
                 if (NavMesh.SamplePosition(targetPosition, out NavMeshHit navHit, 1.0f, NavMesh.AllAreas))
                 {
                     playerMovement.BufferInput(navHit.position);
@@ -166,7 +165,6 @@ namespace Game
             if (PlayerManager.Instance.CurrentPlayerState != PlayerManager.State.Inventory && !PlayerManager.Instance.isInteracting)
             {
                 NavMeshAgent navMeshAgent = PlayerManager.Instance.Agent;
-
                 if (navMeshAgent == null || !navMeshAgent.enabled)
                     return;
 
@@ -175,47 +173,79 @@ namespace Game
                 Vector3 direction = (targetPosition - transform.position).normalized;
                 direction.y = 0;
 
-                // Calculate perpendicular vectors (left and right) based on the direction to the mouse
-                Vector3 leftOffset = new Vector3(-direction.z, 0f, direction.x) * 1f;  // Perpendicular vector to the left
-                Vector3 rightOffset = new Vector3(direction.z, 0f, -direction.x) * 1f; // Perpendicular vector to the right
+                // Check left and right distances
+                RaycastHit leftHit, rightHit;
+                bool leftBlocked = Physics.Raycast(transform.position, -transform.right, out leftHit, distance, layerMask);
+                bool rightBlocked = Physics.Raycast(transform.position, transform.right, out rightHit, distance, layerMask);
 
-                // Apply vertical offset (upward) and a small offset forward/backward to avoid collisions at player feet
-                leftOffset += transform.up * 1.2f + direction * -0.2f;
-                rightOffset += transform.up * 1.2f + direction * -0.2f;
+                float leftDistance = leftBlocked ? leftHit.distance : distance;
+                float rightDistance = rightBlocked ? rightHit.distance : distance;
 
-                // Calculate the raycast origins using the new left and right offsets
-                Vector3 leftOrigin = transform.position + leftOffset;
-                Vector3 rightOrigin = transform.position + rightOffset;
+                float maxWallCheckDistance = 2.4f;
 
-                // Perform the spherecasts to check if the left or right sides are blocked
-                bool leftBlocked = Physics.SphereCast(leftOrigin, 0.2f, direction, out RaycastHit leftHit, distance, layerMask);
-                bool rightBlocked = Physics.SphereCast(rightOrigin, 0.2f, direction, out RaycastHit rightHit, distance, layerMask);
+                // Default values for offsets
+                float leftOffsetDistance = 1.2f;
+                float rightOffsetDistance = 1.2f;
 
-                // Debug the raycasts for visualization
-                Debug.DrawRay(leftOrigin, direction * distance, leftBlocked ? Color.red : Color.green);
-                Debug.DrawRay(rightOrigin, direction * distance, rightBlocked ? Color.red : Color.green);
+                // Adjust only the closest side if necessary
+                if (leftBlocked && leftDistance < maxWallCheckDistance)
+                {
+                    float leftNormalized = Mathf.Clamp01(leftDistance / maxWallCheckDistance);
+                    leftOffsetDistance = Mathf.Lerp(-0.8f, 1.2f, leftNormalized);
+                }
+                if (rightBlocked && rightDistance < maxWallCheckDistance)
+                {
+                    float rightNormalized = Mathf.Clamp01(rightDistance / maxWallCheckDistance);
+                    rightOffsetDistance = Mathf.Lerp(-0.8f, 1.2f, rightNormalized);
+                }
 
-                // Determine the final destination: start with the target position, adjust if blocked
+                // Adjust perpendicular offsets based on distance to walls
+                Vector3 leftOffset = new Vector3(-direction.z, 0f, direction.x) * leftOffsetDistance;
+                Vector3 rightOffset = new Vector3(direction.z, 0f, -direction.x) * rightOffsetDistance;
+
+                // Move the raycast positions slightly behind the player
+                Vector3 backwardOffset = -direction; // Adjust this value to move further back
+
+                // Maintain a consistent height for both origins
+                float fixedHeight = transform.position.y + 1.2f;
+
+                // Base positions for raycast origins
+                Vector3 baseLeftOrigin = transform.position + leftOffset + backwardOffset;
+                Vector3 baseRightOrigin = transform.position + rightOffset + backwardOffset;
+
+                // Apply height adjustment to prevent stuttering
+                Vector3 leftOrigin = new Vector3(baseLeftOrigin.x, fixedHeight, baseLeftOrigin.z);
+                Vector3 rightOrigin = new Vector3(baseRightOrigin.x, fixedHeight, baseRightOrigin.z);
+
+                // Perform SphereCasts from the new positions
+                bool leftWallBlocked = Physics.SphereCast(leftOrigin, 0.2f, direction, out RaycastHit leftHit2, distance, layerMask);
+                bool rightWallBlocked = Physics.SphereCast(rightOrigin, 0.2f, direction, out RaycastHit rightHit2, distance, layerMask);
+
+                // Draw debug rays to visualize
+                Debug.DrawRay(leftOrigin, direction * (leftWallBlocked ? leftHit2.distance : distance), leftWallBlocked ? Color.red : Color.green);
+                Debug.DrawRay(rightOrigin, direction * (rightWallBlocked ? rightHit2.distance : distance), rightWallBlocked ? Color.red : Color.green);
+
+
                 Vector3 finalDestination = targetPosition;
 
-                if (leftBlocked && rightBlocked || distance > 7)
+                if (leftWallBlocked && rightWallBlocked)
                 {
-                    // If both sides are blocked, perform a raycast to find an alternative destination
-                    if (Physics.Raycast(transform.position, direction, out RaycastHit hit, distance, layerMask))
+                    if (Physics.Raycast(transform.position, direction, out RaycastHit hit2, distance, layerMask))
                     {
-                        finalDestination = hit.point;
+                        finalDestination = hit2.point;
                     }
                 }
 
-                // Validate the final position using the NavMesh before moving
-                if (NavMesh.SamplePosition(finalDestination, out NavMeshHit validHit, 1.0f, NavMesh.AllAreas))
+                if (NavMesh.SamplePosition(finalDestination, out NavMeshHit validHit2, 1.0f, NavMesh.AllAreas))
                 {
-                    playerMovement.SetDestination(validHit.position);
+                    NavMeshPath path = new NavMeshPath();
+                    if (navMeshAgent.CalculatePath(validHit2.position, path) && path.status == NavMeshPathStatus.PathComplete)
+                    {
+                        playerMovement.SetDestination(validHit2.position);
+                    }
                 }
             }
         }
-
-
 
 
         void OnDrawGizmos()
