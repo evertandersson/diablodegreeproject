@@ -3,6 +3,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace Game
@@ -173,10 +174,21 @@ namespace Game
                 Vector3 direction = (targetPosition - transform.position).normalized;
                 direction.y = 0;
 
-                // Check left and right distances
+                // Define the angle for the offset
+                float angleOffset = 45f;
+
+                // Calculate new directions rotated 45 degrees relative to the mouse direction
+                Vector3 leftDirection = Quaternion.AngleAxis(-angleOffset, Vector3.up) * direction;
+                Vector3 rightDirection = Quaternion.AngleAxis(angleOffset, Vector3.up) * direction;
+
+                // Perform raycasts at 45-degree angles in front of the mouse direction
                 RaycastHit leftHit, rightHit;
-                bool leftBlocked = Physics.Raycast(transform.position, -transform.right, out leftHit, distance, layerMask);
-                bool rightBlocked = Physics.Raycast(transform.position, transform.right, out rightHit, distance, layerMask);
+                bool leftBlocked = Physics.Raycast(transform.position, leftDirection, out leftHit, 2.4f, layerMask);
+                bool rightBlocked = Physics.Raycast(transform.position, rightDirection, out rightHit, 2.4f, layerMask);
+
+                // Debug visualization
+                Debug.DrawRay(transform.position, leftDirection * 2.4f, leftBlocked ? Color.red : Color.green);
+                Debug.DrawRay(transform.position, rightDirection * 2.4f, rightBlocked ? Color.red : Color.green);
 
                 float leftDistance = leftBlocked ? leftHit.distance : distance;
                 float rightDistance = rightBlocked ? rightHit.distance : distance;
@@ -188,16 +200,14 @@ namespace Game
                 float rightOffsetDistance = 1.2f;
 
                 // Adjust only the closest side if necessary
-                if (leftBlocked && leftDistance < maxWallCheckDistance)
+                if (leftDistance < maxWallCheckDistance || rightDistance < maxWallCheckDistance)
                 {
                     float leftNormalized = Mathf.Clamp01(leftDistance / maxWallCheckDistance);
                     leftOffsetDistance = Mathf.Lerp(-0.8f, 1.2f, leftNormalized);
-                }
-                if (rightBlocked && rightDistance < maxWallCheckDistance)
-                {
                     float rightNormalized = Mathf.Clamp01(rightDistance / maxWallCheckDistance);
                     rightOffsetDistance = Mathf.Lerp(-0.8f, 1.2f, rightNormalized);
                 }
+
 
                 // Adjust perpendicular offsets based on distance to walls
                 Vector3 leftOffset = new Vector3(-direction.z, 0f, direction.x) * leftOffsetDistance;
