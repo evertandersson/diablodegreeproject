@@ -175,35 +175,29 @@ namespace Game
 
                 // Check left and right distances
                 RaycastHit leftHit, rightHit;
+                bool leftBlocked = Physics.Raycast(transform.position, -transform.right, out leftHit, distance, layerMask);
+                bool rightBlocked = Physics.Raycast(transform.position, transform.right, out rightHit, distance, layerMask);
 
-                // Define the angle for the offset
-                float angleOffset = 45f;
+                float leftDistance = leftBlocked ? leftHit.distance : distance;
+                float rightDistance = rightBlocked ? rightHit.distance : distance;
 
-                // Calculate new directions rotated 45 degrees forward-left and forward-right
-                Vector3 leftDirection = Quaternion.AngleAxis(-angleOffset, Vector3.up) * direction;
-                Vector3 rightDirection = Quaternion.AngleAxis(angleOffset, Vector3.up) * direction;
-                
                 float maxWallCheckDistance = 2.4f;
 
-                // Perform raycasts at 45-degree angles in front of the player
-                bool leftBlocked = Physics.Raycast(transform.position, leftDirection, out leftHit, maxWallCheckDistance, layerMask);
-                bool rightBlocked = Physics.Raycast(transform.position, rightDirection, out rightHit, maxWallCheckDistance, layerMask);
-
-                // Debug visualization
-                Debug.DrawRay(transform.position, leftDirection * maxWallCheckDistance, leftBlocked ? Color.red : Color.green);
-                Debug.DrawRay(transform.position, rightDirection * maxWallCheckDistance, rightBlocked ? Color.red : Color.green);
-
-
-                float leftDistance = leftBlocked ? leftHit.distance : 2.4f;
-                float rightDistance = rightBlocked ? rightHit.distance : 2.4f;
-
+                // Default values for offsets
+                float leftOffsetDistance = 1.2f;
+                float rightOffsetDistance = 1.2f;
 
                 // Adjust only the closest side if necessary
-                float leftNormalized = Mathf.Clamp01(leftDistance / maxWallCheckDistance);
-                float rightNormalized = Mathf.Clamp01(rightDistance / maxWallCheckDistance);
-
-                float leftOffsetDistance = Mathf.Lerp(-0.8f, 1.2f, leftNormalized);
-                float rightOffsetDistance = Mathf.Lerp(-0.8f, 1.2f, rightNormalized);                
+                if (leftBlocked && leftDistance < maxWallCheckDistance)
+                {
+                    float leftNormalized = Mathf.Clamp01(leftDistance / maxWallCheckDistance);
+                    leftOffsetDistance = Mathf.Lerp(-0.8f, 1.2f, leftNormalized);
+                }
+                if (rightBlocked && rightDistance < maxWallCheckDistance)
+                {
+                    float rightNormalized = Mathf.Clamp01(rightDistance / maxWallCheckDistance);
+                    rightOffsetDistance = Mathf.Lerp(-0.8f, 1.2f, rightNormalized);
+                }
 
                 // Adjust perpendicular offsets based on distance to walls
                 Vector3 leftOffset = new Vector3(-direction.z, 0f, direction.x) * leftOffsetDistance;
@@ -228,8 +222,8 @@ namespace Game
                 bool rightWallBlocked = Physics.SphereCast(rightOrigin, 0.2f, direction, out RaycastHit rightHit2, distance, layerMask);
 
                 // Draw debug rays to visualize
-                Debug.DrawRay(leftOrigin, direction * (leftWallBlocked ? leftHit2.distance : 2.4f), leftWallBlocked ? Color.red : Color.green);
-                Debug.DrawRay(rightOrigin, direction * (rightWallBlocked ? rightHit2.distance : 2.4f), rightWallBlocked ? Color.red : Color.green);
+                Debug.DrawRay(leftOrigin, direction * (leftWallBlocked ? leftHit2.distance : distance), leftWallBlocked ? Color.red : Color.green);
+                Debug.DrawRay(rightOrigin, direction * (rightWallBlocked ? rightHit2.distance : distance), rightWallBlocked ? Color.red : Color.green);
 
 
                 Vector3 finalDestination = targetPosition;
@@ -238,11 +232,11 @@ namespace Game
                 {
                     if (Physics.Raycast(transform.position, direction, out RaycastHit hit2, distance, layerMask))
                     {
-                        finalDestination = hit2.point - (direction * 0.5f);
+                        finalDestination = hit2.point;
                     }
                 }
 
-                if (NavMesh.SamplePosition(finalDestination, out NavMeshHit validHit2, 2.0f, NavMesh.AllAreas))
+                if (NavMesh.SamplePosition(finalDestination, out NavMeshHit validHit2, 1.0f, NavMesh.AllAreas))
                 {
                     NavMeshPath path = new NavMeshPath();
                     if (navMeshAgent.CalculatePath(validHit2.position, path) && path.status == NavMeshPathStatus.PathComplete)
