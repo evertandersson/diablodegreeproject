@@ -36,9 +36,13 @@ namespace Game
             // Update animation timer
             CheckAnimationInterval();
 
+            if (enemy.Agent.isStopped != isAttackAnimationPlaying)
+                enemy.Agent.isStopped = isAttackAnimationPlaying;
+
             // Skip if an attack animation is playing
             if (isAttackAnimationPlaying)
                 return;
+
 
             // Update target timer
             targetTimer += Time.deltaTime;
