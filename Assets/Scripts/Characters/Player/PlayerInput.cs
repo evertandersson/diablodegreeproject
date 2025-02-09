@@ -190,7 +190,7 @@ namespace Game
                         allHit = false;
                     }
 
-                    Debug.DrawRay(transform.position, rayDirection * distance, hits[i].collider != null ? Color.red : Color.green);
+                    //Debug.DrawRay(transform.position, rayDirection * distance, hits[i].collider != null ? Color.red : Color.green);
                 }
 
                 Vector3 finalDestination = targetPosition;

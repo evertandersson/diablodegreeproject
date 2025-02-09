@@ -92,32 +92,22 @@ namespace Game
 
         private void FixedUpdate()
         {
-            if (playerManager.CurrentPlayerState == PlayerManager.State.Rolling && IsCollidingWithWall())
+            if (playerManager.CurrentPlayerState == PlayerManager.State.Rolling && IsLookingTowardsWall())
             {
-                RollEnd();
                 playerManager.CurrentPlayerState = PlayerManager.State.Idle;
+                RollEnd();
             }
-        }
-
-        private bool IsCollidingWithWall()
-        {
-            float collisionRadius = 0.5f;
-            Vector3 position = transform.position + offset;
-
-            return (Physics.CheckSphere(position, collisionRadius, LayerMask.GetMask("Wall")) ||
-                    Physics.CheckSphere(position, collisionRadius, LayerMask.GetMask("Obstacle")))
-                    && IsLookingTowardsWall();
         }
 
         private bool IsLookingTowardsWall()
         {
             RaycastHit hit;
-            float checkDistance = 0.5f;
+            float checkDistance = 4f;
 
-            if (Physics.Raycast(transform.position, GetRollDirection(), out hit, checkDistance))
+            if (Physics.Raycast(transform.position, rollDirection, out hit, checkDistance))
             {
                 string layerName = LayerMask.LayerToName(hit.transform.gameObject.layer);
-                return layerName == "Wall" || layerName == "Obstacle";
+                return (layerName == "Wall" || layerName == "Obstacle") && hit.distance < 0.5f;
             }
 
             return false;
@@ -179,7 +169,7 @@ namespace Game
 
         public void RollUpdate()
         {
-            rollTimer += Time.deltaTime;
+            rollTimer += Time.deltaTime;    
 
             if (rollTimer > 0.4f)
             {
