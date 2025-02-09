@@ -8,7 +8,6 @@ namespace Game
     public class MouseInput : MonoBehaviour
     {
         public Vector3 mouseInputPosition;
-        private CinemachineCamera virtualCamera;
 
         [SerializeField]
         private LayerMask raycastLayers;
@@ -25,7 +24,6 @@ namespace Game
         private void Awake()
         {
             followComponent = GetComponent<CinemachineFollow>();
-            virtualCamera = GetComponent<CinemachineCamera>();
             followOffset = followComponent.FollowOffset;
         }
 
@@ -120,7 +118,5 @@ namespace Game
             float zoomSpeed = 10f;
             followComponent.FollowOffset = Vector3.Lerp(followComponent.FollowOffset, followOffset, zoomSpeed * Time.deltaTime);
         }
-        
-
     }
 }   
