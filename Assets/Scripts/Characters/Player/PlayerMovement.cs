@@ -88,6 +88,8 @@ namespace Game
                 ResetBufferedInput();
                 return;
             }
+
+            playerManager.CurrentPlayerState = PlayerManager.State.Idle;
         }
 
         private void FixedUpdate()
@@ -191,8 +193,6 @@ namespace Game
             }
 
             ProcessBufferedInput();
-            return;
-
         }
 
         private void RollEnd()
