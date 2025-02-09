@@ -26,7 +26,7 @@ namespace Game
             if (!enemy.Agent.enabled)
                 return;
 
-            if (enemy.IsAnimationPlaying(enemy.damageAnim))
+            if (enemy.IsAnimationPlayingStrict(enemy.damageAnim))
             {
                 if (Vector3.Distance(enemy.Agent.destination, transform.position) > 0.5f)
                     SetNewDestination(transform.position);

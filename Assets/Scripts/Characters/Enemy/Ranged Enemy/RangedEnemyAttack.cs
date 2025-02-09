@@ -11,7 +11,7 @@ namespace Game
             if (IsAnimationPlaying(enemy.damageAnim))
                 return;
 
-            if (!enemy.IsAnimationPlaying(enemy.attackAnims[0]))
+            if (!enemy.IsAnimationPlayingStrict(enemy.attackAnims[0]))
             {
                 if (IsCloseToPlayer(enemy.distanceToAttack + 0.5f) && IsTargetedAtPlayer())
                 {

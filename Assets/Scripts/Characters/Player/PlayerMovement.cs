@@ -129,11 +129,25 @@ namespace Game
             playerManager.Agent.SetDestination(destinationPosition);
         }
 
+        private Vector3 GetRollDirection()
+        {
+            // Use the mouseInputPosition from the MouseInput script
+            Vector3 mouseWorldPosition = playerManager.mouseInput.mouseInputPosition;
+
+            if (mouseWorldPosition == transform.position) mouseWorldPosition = transform.forward;
+
+            // Calculate the direction from the player to the mouse position
+            Vector3 direction = (mouseWorldPosition - transform.position).normalized;
+            direction.y = 0;
+
+            return direction;
+        }
+
         public void RollStart()
         {
             playerManager.ClearAttack();
             rollTimer = 0;
-            
+
             // Store the initial Y position
             initialYPosition = transform.position.y;
 
@@ -153,45 +167,32 @@ namespace Game
             playerManager.CharacterAnimator.SetTrigger(rollTrigger);
         }
 
-        private Vector3 GetRollDirection()
-        {
-            // Use the mouseInputPosition from the MouseInput script
-            Vector3 mouseWorldPosition = playerManager.mouseInput.mouseInputPosition;
-
-            if (mouseWorldPosition == transform.position) mouseWorldPosition = transform.forward;
-
-            // Calculate the direction from the player to the mouse position
-            Vector3 direction = (mouseWorldPosition - transform.position).normalized;
-            direction.y = 0;
-
-            return direction;
-        }
-
         public void RollUpdate()
         {
-            rollTimer += Time.deltaTime;    
-
-            if (rollTimer > 0.4f)
+            if (playerManager.IsAnimationPlaying(rollTrigger))
             {
-                if (hasBufferedRoll || hasBufferedMovement)
-                {
-                    ProcessBufferedInput();
-                    return;
-                }
+                rollTimer = playerManager.CharacterAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
 
-                if (hasBufferedAttack && rollTimer > 0.5f)
+                if (rollTimer >= 0.6f)
                 {
-                    ProcessBufferedInput();
-                    return;
-                }
+                    if (hasBufferedRoll || hasBufferedMovement)
+                    {
+                        ProcessBufferedInput();
+                        return;
+                    }
 
-                if (!playerManager.IsAnimationPlaying(rollTrigger))
-                {
-                    RollEnd();
-                    playerManager.CurrentPlayerState = PlayerManager.State.Idle;
-                    ResetBufferedInput();
+                    if (hasBufferedAttack && rollTimer >= 0.7f)
+                    {
+                        ProcessBufferedInput();
+                        return;
+                    }
                 }
+                return;
             }
+
+            ProcessBufferedInput();
+            return;
+
         }
 
         private void RollEnd()

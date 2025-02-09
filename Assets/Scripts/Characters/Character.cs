@@ -149,12 +149,18 @@ public abstract class Character : MonoBehaviour
         return false;
     }
 
-    public bool IsAnimationPlaying(int animationHash)
+    public bool IsAnimationPlayingStrict(int animationHash)
     {
         var currentState = CharacterAnimator.GetCurrentAnimatorStateInfo(0);
         var nextState = CharacterAnimator.GetNextAnimatorStateInfo(0);
 
         return currentState.shortNameHash == animationHash || nextState.shortNameHash == animationHash;
+    }
+
+    public bool IsAnimationPlaying(int animationHash)
+    {
+        var currentState = CharacterAnimator.GetCurrentAnimatorStateInfo(0);
+        return currentState.shortNameHash == animationHash;
     }
 
     public virtual void EnableRagdoll(bool enable)

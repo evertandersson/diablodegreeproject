@@ -32,7 +32,7 @@ namespace Game
         protected virtual void HandleAnimationCombo()
         {
             // Don't attack while in take damage animation
-            if (enemy.IsAnimationPlaying(enemy.damageAnim))
+            if (enemy.IsAnimationPlayingStrict(enemy.damageAnim))
                 return;
 
             // If current attack animation is playing
