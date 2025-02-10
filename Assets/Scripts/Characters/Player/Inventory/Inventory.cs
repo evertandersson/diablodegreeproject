@@ -37,16 +37,28 @@ public class Inventory : Popup
 
     public bool AddItemToInventory(ItemSO item)
     {
+        ActionSlot[] actionSlots = PlayerManager.Instance.slotManager.actionSlots;
+        for (int i = 0; i < actionSlots.Length; i++)
+        {
+            if (actionSlots[i].item != null)
+            {
+                if (actionSlots[i].item.itemName == item.itemName && actionSlots[i].item.isStackable)
+                {
+                    actionSlots[i].itemAmount++;
+                    actionSlots[i].UpdateItemAmountText();
+                    Debug.Log("Item stacked succesfully");
+                    return true; // Item stacked successfully
+                }
+            }
+        }
+
+        InventorySlot inventorySlot = null;
         for (int i = 0; i < inventory.Count; i++)
         {
             if (inventory[i].item == null)
             {
-                inventory[i].item = item;
-                inventory[i].artwork.texture = item.itemIcon;
-                inventory[i].itemAmount++;
-                inventory[i].UpdateItemAmountText();
-                Debug.Log("Item added succesfully");
-                return true; // Item added successfully
+                if (inventorySlot == null)
+                    inventorySlot = inventory[i];
             }
             else if (inventory[i].item.isStackable && inventory[i].item.itemName == item.itemName)
             {
@@ -56,6 +68,17 @@ public class Inventory : Popup
                 return true; // Item stacked successfully
             }
         }
+
+        if (inventorySlot != null)
+        {
+            inventorySlot.item = item;
+            inventorySlot.artwork.texture = item.itemIcon;
+            inventorySlot.itemAmount++;
+            inventorySlot.UpdateItemAmountText();
+            Debug.Log("Item added succesfully");
+            return true; // Item added successfully
+        }
+
         Debug.Log("Inventory full");
         return false; // Inventory is full
     }
