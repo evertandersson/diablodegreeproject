@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 namespace Game
 {
@@ -26,7 +27,6 @@ namespace Game
 
         bool isMoving = false;
         bool isClickInteraction = false;
-        float distanceToWall;
 
         public LayerMask layerMask;
 
@@ -175,33 +175,7 @@ namespace Game
 
                 float distance = Vector3.Distance(transform.position, targetPosition);
 
-                int rayCount = 5;
-                float spreadAngle = 50;
-
-                bool allHit = true;
-                RaycastHit[] hits = new RaycastHit[rayCount];
-
-                for (int i = 0; i < rayCount; i++)
-                {
-                    float angle = -spreadAngle / 2 + (spreadAngle / (rayCount - 1)) * i;
-                    Vector3 rayDirection = Quaternion.AngleAxis(angle, Vector3.up) * direction;
-
-                    if (!Physics.Raycast(transform.position, rayDirection, out hits[i], distance, layerMask))
-                    {
-                        allHit = false;
-                    }
-
-                    Debug.DrawRay(transform.position, rayDirection * distance, hits[i].collider != null ? Color.red : Color.green);
-                }
-
-                Vector3 finalDestination = targetPosition;
-
-                if (allHit)
-                {
-                    finalDestination = hits[rayCount / 2].point;
-                }
-
-                if (NavMesh.SamplePosition(finalDestination, out NavMeshHit validHit, 1.0f, NavMesh.AllAreas))
+                if (NavMesh.SamplePosition(targetPosition, out NavMeshHit validHit, 1.0f, NavMesh.AllAreas))
                 {
                     NavMeshPath path = new NavMeshPath();
                     if (navMeshAgent.CalculatePath(validHit.position, path) && path.status == NavMeshPathStatus.PathComplete)

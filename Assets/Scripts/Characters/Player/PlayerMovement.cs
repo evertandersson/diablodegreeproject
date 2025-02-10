@@ -11,7 +11,6 @@ namespace Game
         public float rollTimer = 0;
         public float idleTimer;
         private Vector3 rollDirection; // To store the roll direction
-        private float initialYPosition; // To store the initial Y position
         private Vector3 offset = new Vector3(0, 1.2f, 0);
 
         // Buffer variables:
@@ -89,41 +88,18 @@ namespace Game
                 ResetBufferedInput();
                 return;
             }
-
-
         }
 
-        private void FixedUpdate()
+        public void HandleSwitchToIdle()
         {
-            idleTimer += Time.fixedDeltaTime;
+            idleTimer += Time.deltaTime;
 
             if (playerManager.CurrentPlayerState == PlayerManager.State.Rolling && idleTimer > 1)
             {
                 playerManager.CurrentPlayerState = PlayerManager.State.Idle;
                 RollEnd();
             }
-
-            if (playerManager.CurrentPlayerState == PlayerManager.State.Rolling && IsLookingTowardsWall())
-            {
-                playerManager.CurrentPlayerState = PlayerManager.State.Idle;
-                RollEnd();
-            }
         }
-
-        private bool IsLookingTowardsWall()
-        {
-            RaycastHit hit;
-            float checkDistance = 4f;
-
-            if (Physics.Raycast(transform.position, rollDirection, out hit, checkDistance))
-            {
-                string layerName = LayerMask.LayerToName(hit.transform.gameObject.layer);
-                return (layerName == "Wall" || layerName == "Obstacle") && hit.distance < 0.5f;
-            }
-
-            return false;
-        }
-
 
         private void ResetBufferedInput()
         {
@@ -160,17 +136,10 @@ namespace Game
             rollTimer = 0;
             idleTimer = 0;
 
-            // Store the initial Y position
-            initialYPosition = transform.position.y;
-
             rollDirection = GetRollDirection();
 
             // Disable NavMeshAgent and enable root motion for rolling
-            if (playerManager.Agent.enabled)
-            {
-                playerManager.Agent.isStopped = true;
-                playerManager.Agent.enabled = false;
-            }
+            if (playerManager.Agent.enabled) playerManager.Agent.isStopped = true;
 
             // Lock rotation to prevent unwanted turning and face the roll direction
             playerManager.transform.rotation = Quaternion.LookRotation(rollDirection);
@@ -181,6 +150,8 @@ namespace Game
 
         public void RollUpdate()
         {
+            playerManager.Agent.Warp(transform.position);
+
             if (playerManager.IsAnimationPlaying(rollTrigger))
             {
                 rollTimer = playerManager.CharacterAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
@@ -210,13 +181,7 @@ namespace Game
         private void RollEnd()
         {
             // Re-enable NavMeshAgent and disable root motion after the roll
-            playerManager.Agent.enabled = true;
             playerManager.Agent.isStopped = false;
-
-            // Update the NavMeshAgent's position to prevent snapping
-            Vector3 currentPosition = transform.position;
-            playerManager.Agent.Warp(currentPosition);
-
             rollTimer = 0;
         }
 
@@ -224,36 +189,9 @@ namespace Game
         {
             if (playerManager.CurrentPlayerState != PlayerManager.State.Rolling) return;
 
-            Vector3 newPosition = transform.position + playerManager.CharacterAnimator.deltaPosition;
+            transform.position = transform.position + playerManager.CharacterAnimator.deltaPosition;
 
-            // Get ground height difference
-            float groundAdjustment = DistanceToGround();
-
-            // Adjust Y position based on ground height
-            float targetY = newPosition.y - groundAdjustment;
-
-            newPosition.y = Mathf.Lerp(transform.position.y, targetY, 0.5f);
-
-            transform.position = newPosition;
-
-            // Maintain roll direction
             playerManager.transform.rotation = Quaternion.LookRotation(rollDirection);
-        }
-
-
-
-        public float DistanceToGround()
-        {
-            RaycastHit hit;
-            float raycastLength = 2f;
-            Vector3 rayOrigin = transform.position + Vector3.up * 0.5f;
-
-            if (Physics.Raycast(rayOrigin, Vector3.down, out hit, raycastLength, groundLayer))
-            {
-                return transform.position.y - hit.point.y;
-            }
-
-            return 0f;
         }
     }
 }
