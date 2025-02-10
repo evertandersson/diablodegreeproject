@@ -341,7 +341,6 @@ namespace Game
             HandleAttackDelay();
             slotManager.HandleCooldowns();
             playerAnimator.HandleAnimations(IsAttacking);
-            playerMovement.HandleSwitchToIdle();
 
             attackIndicator.enabled = IsAttacking;
             

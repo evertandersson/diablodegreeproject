@@ -205,9 +205,6 @@ namespace Game
             return length;
         }
 
-
-
-
         void OnDrawGizmos()
         {
             if (!Application.isPlaying)

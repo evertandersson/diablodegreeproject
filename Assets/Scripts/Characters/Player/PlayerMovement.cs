@@ -9,7 +9,7 @@ namespace Game
         Rigidbody rb;
 
         public float rollTimer = 0;
-        public float idleTimer;
+
         private Vector3 rollDirection; // To store the roll direction
         private Vector3 offset = new Vector3(0, 1.2f, 0);
 
@@ -90,17 +90,6 @@ namespace Game
             }
         }
 
-        public void HandleSwitchToIdle()
-        {
-            idleTimer += Time.deltaTime;
-
-            if (playerManager.CurrentPlayerState == PlayerManager.State.Rolling && idleTimer > 1)
-            {
-                playerManager.CurrentPlayerState = PlayerManager.State.Idle;
-                RollEnd();
-            }
-        }
-
         private void ResetBufferedInput()
         {
             hasBufferedMovement = false;
@@ -134,17 +123,12 @@ namespace Game
         {
             playerManager.ClearAttack();
             rollTimer = 0;
-            idleTimer = 0;
 
             rollDirection = GetRollDirection();
 
-            // Disable NavMeshAgent and enable root motion for rolling
             if (playerManager.Agent.enabled) playerManager.Agent.isStopped = true;
 
-            // Lock rotation to prevent unwanted turning and face the roll direction
             playerManager.transform.rotation = Quaternion.LookRotation(rollDirection);
-
-            // Trigger the roll animation
             playerManager.CharacterAnimator.SetTrigger(rollTrigger);
         }
 
@@ -152,31 +136,31 @@ namespace Game
         {
             playerManager.Agent.Warp(transform.position);
 
-            if (playerManager.IsAnimationPlaying(rollTrigger))
+            rollTimer += Time.deltaTime;
+
+            if (rollTimer > 0.4f)
             {
-                rollTimer = playerManager.CharacterAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
-
-                if (rollTimer >= 0.6f)
+                if (hasBufferedRoll || hasBufferedMovement)
                 {
-                    if (hasBufferedRoll || hasBufferedMovement)
-                    {
-                        ProcessBufferedInput();
-                        return;
-                    }
-
-                    if (hasBufferedAttack && rollTimer >= 0.7f)
-                    {
-                        ProcessBufferedInput();
-                        return;
-                    }
+                    ProcessBufferedInput();
+                    return;
                 }
-                return;
+
+                if (hasBufferedAttack && rollTimer > 0.5f)
+                {
+                    ProcessBufferedInput();
+                    return;
+                }
+
+                if (!playerManager.IsAnimationPlaying(rollTrigger))
+                {
+                    RollEnd();
+                    playerManager.CurrentPlayerState = PlayerManager.State.Idle;
+                    ResetBufferedInput();
+                }
             }
-
-            ProcessBufferedInput();
-            return;
-
         }
+
 
         private void RollEnd()
         {
