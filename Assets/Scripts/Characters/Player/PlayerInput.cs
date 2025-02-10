@@ -176,15 +176,7 @@ namespace Game
                 float distance = Vector3.Distance(transform.position, targetPosition);
 
                 int rayCount = 5;
-
-                float maxSpread = 50f;
-                float minSpread = 10f;
-                float maxDistance = 10f; // Distance at which spread is at its minimum
-
-                float clampedDistance = Mathf.Clamp(distance, 1f, maxDistance);
-
-                // Calculate dynamic spread angle
-                float spreadAngle = maxSpread - ((clampedDistance / maxDistance) * (maxSpread - minSpread));
+                float spreadAngle = 50;
 
                 bool allHit = true;
                 RaycastHit[] hits = new RaycastHit[rayCount];
@@ -214,11 +206,31 @@ namespace Game
                     NavMeshPath path = new NavMeshPath();
                     if (navMeshAgent.CalculatePath(validHit.position, path) && path.status == NavMeshPathStatus.PathComplete)
                     {
+                        float pathLength = CalculatePathLength(path);
+                        float directDistance = Vector3.Distance(transform.position, validHit.position);
+
+                        if (pathLength > directDistance * 2f) // Prevent long detours
+                        {
+                            return; // Stop movement
+                        }
+
                         playerMovement.SetDestination(validHit.position);
                     }
                 }
             }
         }
+
+        // Helper function to calculate the total path distance
+        private float CalculatePathLength(NavMeshPath path)
+        {
+            float length = 0f;
+            for (int i = 1; i < path.corners.Length; i++)
+            {
+                length += Vector3.Distance(path.corners[i - 1], path.corners[i]);
+            }
+            return length;
+        }
+
 
 
 
