@@ -9,6 +9,7 @@ namespace Game
         Rigidbody rb;
 
         public float rollTimer = 0;
+        public float idleTimer;
         private Vector3 rollDirection; // To store the roll direction
         private float initialYPosition; // To store the initial Y position
         private Vector3 offset = new Vector3(0, 1.2f, 0);
@@ -88,10 +89,20 @@ namespace Game
                 ResetBufferedInput();
                 return;
             }
+
+
         }
 
         private void FixedUpdate()
         {
+            idleTimer += Time.fixedDeltaTime;
+
+            if (playerManager.CurrentPlayerState == PlayerManager.State.Rolling && idleTimer > 1)
+            {
+                playerManager.CurrentPlayerState = PlayerManager.State.Idle;
+                RollEnd();
+            }
+
             if (playerManager.CurrentPlayerState == PlayerManager.State.Rolling && IsLookingTowardsWall())
             {
                 playerManager.CurrentPlayerState = PlayerManager.State.Idle;
@@ -147,6 +158,7 @@ namespace Game
         {
             playerManager.ClearAttack();
             rollTimer = 0;
+            idleTimer = 0;
 
             // Store the initial Y position
             initialYPosition = transform.position.y;
