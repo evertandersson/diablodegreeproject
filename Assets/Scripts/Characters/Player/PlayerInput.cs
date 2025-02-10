@@ -29,7 +29,6 @@ namespace Game
         float distanceToWall;
 
         public LayerMask layerMask;
-        public LayerMask groundLayerMask;
 
         public static event Action HighlightItems;
         public static event Action HideItems;
@@ -171,13 +170,6 @@ namespace Game
                     return;
 
                 Vector3 targetPosition = PlayerManager.Instance.mouseInput.mouseInputPosition;
-                Vector3 rayCastPosition = new Vector3(targetPosition.x, transform.position.y + 2, targetPosition.z);
-
-                if (Physics.Raycast(rayCastPosition, -transform.up, out RaycastHit hit, Mathf.Infinity, groundLayerMask))
-                {
-                    targetPosition.y = hit.point.y;
-                }
-
                 Vector3 direction = (targetPosition - transform.position).normalized;
                 direction.y = 0;
 
