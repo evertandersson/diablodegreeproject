@@ -176,7 +176,16 @@ namespace Game
                 float distance = Vector3.Distance(transform.position, targetPosition);
 
                 int rayCount = 5;
-                float spreadAngle = 45f;
+
+                float maxSpread = 50f;
+                float minSpread = 10f;
+                float maxDistance = 10f; // Distance at which spread is at its minimum
+
+                float clampedDistance = Mathf.Clamp(distance, 1f, maxDistance);
+
+                // Calculate dynamic spread angle
+                float spreadAngle = maxSpread - ((clampedDistance / maxDistance) * (maxSpread - minSpread));
+
                 bool allHit = true;
                 RaycastHit[] hits = new RaycastHit[rayCount];
 
@@ -190,7 +199,7 @@ namespace Game
                         allHit = false;
                     }
 
-                    //Debug.DrawRay(transform.position, rayDirection * distance, hits[i].collider != null ? Color.red : Color.green);
+                    Debug.DrawRay(transform.position, rayDirection * distance, hits[i].collider != null ? Color.red : Color.green);
                 }
 
                 Vector3 finalDestination = targetPosition;
