@@ -6,7 +6,6 @@
 //  Copyright © 2018 Chris Nolet. All rights reserved.
 //
 
-using Game;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -100,8 +99,7 @@ public class Outline : MonoBehaviour {
         // Apply material properties immediately
         needsUpdate = true;
 
-        if (!GetComponent<PlayerManager>() && !GetComponent<Enemy>())
-            enabled = false;
+        enabled = false;
   }
 
     void OnEnable() {
