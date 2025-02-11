@@ -16,11 +16,11 @@ MonoBehaviour:
   itemDescription: Causes a chained lightning attack
   statText: 'Damage per hit:'
   levelRequired: 2
-  itemIcon: {fileID: 2800000, guid: bef348517eaa7034b85daa49c535b764, type: 3}
+  itemIcon: {fileID: 2800000, guid: 4dc051a0301cecb4aa1a85036ace2a58, type: 3}
   prefab: {fileID: 8568345371341501179, guid: 96e21130f10aae845bf312d26cd72047, type: 3}
   isStackable: 0
   cooldown: 3
-  timerCooldown: 3.000815
+  timerCooldown: 3.001663
   damageMultiplier: 1.2
   nextAttackDelay: 1.3
   bufferedInputDelay: 0.7
