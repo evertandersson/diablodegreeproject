@@ -2,49 +2,45 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnEffect : MonoBehaviour
-{
-    public float spawnEffectTime = 2f;
-    public float pause = 1f;
+public class SpawnEffect : MonoBehaviour {
+
+    public float spawnEffectTime = 2;
+    public float pause = 1;
     public AnimationCurve fadeIn;
 
-    public bool despawn = false;
+    ParticleSystem ps;
+    float timer = 0;
+    Renderer _renderer;
 
-    private ParticleSystem ps;
-    private float timer = 0f;
-    private Renderer _renderer;
-    private int shaderProperty;
-    private bool hasStartedDissolving = false; // New flag to prevent looping
+    int shaderProperty;
 
-    void Start()
+	void Start ()
     {
         shaderProperty = Shader.PropertyToID("_cutoff");
         _renderer = GetComponent<Renderer>();
-        ps = GetComponentInChildren<ParticleSystem>();
+        ps = GetComponentInChildren <ParticleSystem>();
 
         var main = ps.main;
         main.duration = spawnEffectTime;
+
+        ps.Play();
+
     }
-
-    void Update()
+	
+	void Update ()
     {
-        if (despawn && !hasStartedDissolving) // Start dissolve only once
+        if (timer < spawnEffectTime + pause)
         {
-            hasStartedDissolving = true; // Mark dissolve as started
-            ps.Play(); // Play dissolve effect
+            timer += Time.deltaTime;
+        }
+        else
+        {
+            ps.Play();
+            timer = 0;
         }
 
-        if (hasStartedDissolving)
-        {
-            if (timer < spawnEffectTime)
-            {
-                timer += Time.deltaTime;
-                _renderer.material.SetFloat(shaderProperty, fadeIn.Evaluate(Mathf.InverseLerp(0, spawnEffectTime, timer)));
-            }
-            else
-            {
-                Destroy(gameObject); // Remove the enemy after dissolve
-            }
-        }
+
+        _renderer.material.SetFloat(shaderProperty, fadeIn.Evaluate( Mathf.InverseLerp(0, spawnEffectTime, timer)));
+        
     }
 }

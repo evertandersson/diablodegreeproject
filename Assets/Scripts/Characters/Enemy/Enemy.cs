@@ -45,8 +45,6 @@ namespace Game
         [Header("Drop rate")]
         [SerializeField] private List<ItemDrop> itemDropRates;
 
-        [SerializeField] private SpawnEffect spawnEffect;
-
         public GolemBoss golem;
 
         public void OnObjectSpawn()
@@ -209,7 +207,6 @@ namespace Game
             isDead = true;
             PlayerManager.Instance.levelSystem.AddExperience(experienceOnDeath);
             HandleItemDrops();
-            if (spawnEffect) spawnEffect.despawn = true;
         }
 
         private void HandleItemDrops()
