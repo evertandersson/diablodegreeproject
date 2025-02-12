@@ -229,6 +229,7 @@ namespace Game
 
         public void SetStats()
         {
+            level = levelSystem.GetCurrentLevel();
             statsDisplay.UpdateStatsText();
         }
 

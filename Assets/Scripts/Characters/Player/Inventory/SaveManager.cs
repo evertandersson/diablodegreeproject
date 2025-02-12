@@ -184,9 +184,12 @@ namespace Game
             // Debugging Loaded Values
             Debug.Log($"Applied Level: {levelSystem.GetCurrentLevel()}, XP: {levelSystem.GetExperience()}");
 
+
             // Update the UI
             PlayerManager.Instance.SetStats();
             PlayerManager.Instance.progressBar.SetLevelSystem(levelSystem);
+            
+            Debug.Log(PlayerManager.Instance.Level);
 
             levelSystem.OnLevelChanged += PlayerManager.Instance.UpgradeLevel;
 
