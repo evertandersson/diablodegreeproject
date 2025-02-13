@@ -18,6 +18,7 @@ namespace Game
         [SerializeField] float followOffsetMinY = 10f;
         [SerializeField] float followOffsetMaxY = 50f;
 
+
         Outline highlightedObject = null;
         private bool highlightEnabled = true;
 
@@ -107,14 +108,24 @@ namespace Game
 
         private void HandleCameraZoom()
         {
-            float zoomAmount = 2f;
-            if (Input.mouseScrollDelta.y > 0)
+            if (EventHandler.Main.CurrentEvent is DialougeManager)
             {
-                followOffset.y -= zoomAmount;
+                if (DialougeManager.Instance.currentNPC != null)
+                {
+                    followOffset.y = DialougeManager.Instance.currentNPC.transform.position.y;
+                }
             }
-            if (Input.mouseScrollDelta.y < 0)
+            else
             {
-                followOffset.y += zoomAmount;
+                float zoomAmount = 2f;
+                if (Input.mouseScrollDelta.y > 0)
+                {
+                    followOffset.y -= zoomAmount;
+                }
+                if (Input.mouseScrollDelta.y < 0)
+                {
+                    followOffset.y += zoomAmount;
+                }
             }
 
             followOffset.y = Mathf.Clamp(followOffset.y, followOffsetMinY, followOffsetMaxY);

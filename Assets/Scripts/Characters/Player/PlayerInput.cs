@@ -293,7 +293,8 @@ namespace Game
         private bool CanNotDoAction()
         {
             return PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead ||
-                PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Inventory;
+                PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Inventory ||
+                EventHandler.Main.CurrentEvent is DialougeManager;
         }
 
         private bool CanNotOpenMenu()
