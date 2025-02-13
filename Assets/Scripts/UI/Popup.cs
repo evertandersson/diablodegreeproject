@@ -69,6 +69,10 @@ namespace Game
                 activePopups.Pop(); // Remove the popup from the stack if it's the top one
             }
 
+
+            if (PlayerManager.Instance == null)
+                return;
+
             // Check remaining active popups
             PlayerManager.Instance.CurrentPlayerState = activePopups.Count > 0 ? PlayerManager.State.Inventory : PlayerManager.State.Idle;
 
