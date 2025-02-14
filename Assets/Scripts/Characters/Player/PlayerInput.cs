@@ -271,6 +271,8 @@ namespace Game
             // Allow attacking during idle or buffered for after rolling
             if (playerMovement.ReadyForAnotherInput(GetCurrentTimer(), GetWaitForNextBufferedInputTimer()))
             {
+                if (PlayerManager.Instance.slotManager.actionSlots[attackIndex].item is PotionSO)
+                    return;
                 playerMovement.BufferAttack(attackIndex);
                 return;
             }
