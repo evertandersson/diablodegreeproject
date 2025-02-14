@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,11 +11,44 @@ namespace Game
         public ActionSlot[] actionSlots;
         [SerializeField] private RectTransform actionPanel;
 
+        [SerializeField] private Transform[] hideableChildren;
+
         private void Awake()
         {
             Instance = this;
 
             SetFirstInLayer();
+
+            DialougeManager.startDialouge += HideUI;
+            DialougeManager.endDialouge += ShowUI;
+        }
+
+
+        private void OnDisable()
+        {
+            DialougeManager.startDialouge -= HideUI;
+            DialougeManager.endDialouge -= ShowUI;
+        }
+
+        private void HideUI()
+        {
+            ToggleUI(false);
+        }
+
+        private void ShowUI()
+        {
+            ToggleUI(true);
+        }
+
+        private void ToggleUI(bool show)
+        {
+            foreach (Transform child in hideableChildren)
+            {
+                if (child != null)
+                {
+                    child.gameObject.SetActive(show);
+                }
+            }
         }
 
         public void GetActionSlots()

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -11,9 +12,12 @@ public class DialougeManager : EventHandler.GameEventBehaviour
     public TextMeshProUGUI dialougeText;
     public NPC currentNPC;
 
+    public static event Action startDialouge;
+    public static event Action endDialouge;
+
     bool isDone = false;
 
-    private Queue<string> sentences;
+    private Queue<Expression> expressions;
 
     private void Awake()
     {
@@ -23,7 +27,7 @@ public class DialougeManager : EventHandler.GameEventBehaviour
     void Start()
     {
         dialougeBox.SetActive(false);
-        sentences = new Queue<string>();        
+        expressions = new Queue<Expression>();        
     }
 
     public void StartDialouge(Dialouge dialouge, NPC npc)
@@ -33,16 +37,20 @@ public class DialougeManager : EventHandler.GameEventBehaviour
         currentNPC = npc;
 
         EventHandler.Main.PushEvent(this);
+        startDialouge?.Invoke();
+
 
         dialougeBox.SetActive(true);
+        
+        dialougeBox.transform.SetAsLastSibling();
 
         nameText.text = dialouge.name;
 
-        sentences.Clear();
+        expressions.Clear();
 
-        foreach(string sentence in dialouge.sentences)
+        foreach(Expression expression in dialouge.expressions)
         {
-            sentences.Enqueue(sentence);
+            expressions.Enqueue(expression);
         }
 
         DisplayNextSentence();
@@ -50,21 +58,24 @@ public class DialougeManager : EventHandler.GameEventBehaviour
 
     public void DisplayNextSentence()
     {
-        if (sentences.Count == 0)
+        if (expressions.Count == 0)
         {
             isDone = true;
             return;
         }
 
-        string sentence = sentences.Dequeue();
-        dialougeText.text = sentence;
-
+        Expression expression = expressions.Dequeue();
+        dialougeText.text = expression.sentence;
+        
+        if (expression.animation != "")
+            currentNPC.animator.CrossFade(expression.animation, 0.2f);
     }
 
     public override void OnEnd()
     {
         base.OnEnd();
         currentNPC = null;
+        endDialouge?.Invoke();
         dialougeBox.SetActive(false);
     }
 

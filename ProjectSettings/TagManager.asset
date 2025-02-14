@@ -8,6 +8,7 @@ TagManager:
   - FxTemporaire
   - Door
   - Hidable
+  - DialougeBox
   layers:
   - Default
   - TransparentFX

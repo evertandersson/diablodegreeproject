@@ -110,18 +110,6 @@ namespace Game
 
         private void HandleCameraZoom()
         {
-            if (EventHandler.Main.CurrentEvent is DialougeManager)
-            {
-                if (DialougeManager.Instance.currentNPC != null)
-                {
-                    SwitchToDialogueCamera(true);
-                }
-            }
-            else
-            {
-                SwitchToDialogueCamera(false);
-            }
-
             float zoomAmount = 2f;
             if (Input.mouseScrollDelta.y > 0)
             {
@@ -136,6 +124,19 @@ namespace Game
 
             float zoomSpeed = 10f;
             followComponent.FollowOffset = Vector3.Lerp(followComponent.FollowOffset, followOffset, zoomSpeed * Time.deltaTime);
+
+            if (EventHandler.Main.CurrentEvent is DialougeManager && dialougeCamera != null)
+            {
+                if (DialougeManager.Instance.currentNPC != null)
+                {
+                    SwitchToDialogueCamera(true);
+                }
+            }
+            else
+            {
+                SwitchToDialogueCamera(false);
+            }
+
         }
 
         private void SwitchToDialogueCamera(bool isDialogueActive)

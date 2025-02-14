@@ -11,6 +11,7 @@ public class WomanNPC : NPC, Interactable
     private void Start()
     {
         originalRotation = transform.rotation;
+        animator = GetComponent<Animator>();
     }
 
     public Vector3 GetCenterPoint()
