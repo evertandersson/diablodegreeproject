@@ -18,7 +18,7 @@ namespace Game
         public bool hasBufferedMovement;
         private int bufferedAttackIndex;
         public bool hasBufferedAttack;
-        private bool hasBufferedRoll;
+        public bool hasBufferedRoll;
         [SerializeField] private LayerMask groundLayer;
 
         public bool hasBufferedInput => hasBufferedAttack || hasBufferedRoll || hasBufferedMovement;
@@ -65,6 +65,13 @@ namespace Game
 
         public void ProcessBufferedInput(bool previousActionIsAttack = false)
         {
+            if (hasBufferedAttack)
+            {
+                playerManager.CurrentPlayerState = PlayerManager.State.Idle;
+                RollEnd();
+                PlayerManager.Instance.Attack(bufferedAttackIndex);
+                return;
+            }
             if (hasBufferedRoll)
             {
                 PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Rolling;
@@ -80,23 +87,18 @@ namespace Game
                 SetDestination(bufferedDestination);
                 return;
             }
-
-            if (hasBufferedAttack)
-            {
-                playerManager.CurrentPlayerState = PlayerManager.State.Idle;
-                RollEnd();
-                PlayerManager.Instance.Attack(bufferedAttackIndex);
-                return;
-            }
         }
 
-        public void ResetBufferedInput()
+        public void ResetBufferedInput(bool resetTimers = true)
         {
             hasBufferedMovement = false;
             hasBufferedAttack = false;
             hasBufferedRoll = false;
-            rollTimer = 0;
-            playerManager.attackTimer = 0;
+            if (resetTimers)
+            {
+                rollTimer = 0;
+                playerManager.attackTimer = 0;
+            }
         }
 
         public void SetDestination(Vector3 destinationPosition)

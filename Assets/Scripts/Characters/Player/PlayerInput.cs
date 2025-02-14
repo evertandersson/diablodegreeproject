@@ -155,10 +155,14 @@ namespace Game
             if (playerMovement.ReadyForAnotherInput(GetCurrentTimer(), GetWaitForNextBufferedInputTimer()))
             {
                 Vector3 targetPosition = PlayerManager.Instance.mouseInput.mouseInputPosition;
-
+            
                 if (NavMesh.SamplePosition(targetPosition, out NavMeshHit navHit, 1.0f, NavMesh.AllAreas))
                 {
-                    playerMovement.BufferInput(navHit.position);
+                    if (!playerMovement.hasBufferedAttack && !playerMovement.hasBufferedRoll)
+                    {
+                        playerMovement.ResetBufferedInput(false);
+                        playerMovement.BufferInput(navHit.position);
+                    }
                 }
                 return;
             }
@@ -254,6 +258,7 @@ namespace Game
             // Start rolling only if the player is not already rolling
             if (playerMovement.ReadyForAnotherInput(GetCurrentTimer(), GetWaitForNextBufferedInputTimer()))
             {
+                playerMovement.ResetBufferedInput(false);
                 playerMovement.BufferRoll();
             }
             else if (!PlayerManager.Instance.isInteracting)
@@ -273,6 +278,7 @@ namespace Game
             {
                 if (PlayerManager.Instance.slotManager.actionSlots[attackIndex].item is PotionSO)
                     return;
+                playerMovement.ResetBufferedInput(false);
                 playerMovement.BufferAttack(attackIndex);
                 return;
             }
