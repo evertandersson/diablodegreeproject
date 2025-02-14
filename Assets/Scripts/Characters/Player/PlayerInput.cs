@@ -258,6 +258,7 @@ namespace Game
             }
             else if (!PlayerManager.Instance.isInteracting)
             {
+                playerMovement.ResetBufferedInput();
                 PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Rolling;
                 playerMovement.RollStart();
             }
@@ -275,6 +276,7 @@ namespace Game
             }
             else if (!PlayerManager.Instance.isInteracting)
             {
+                playerMovement.ResetBufferedInput();
                 PlayerManager.Instance.Attack(attackIndex);
             }
         }
