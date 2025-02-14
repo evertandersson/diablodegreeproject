@@ -9,6 +9,7 @@ namespace Game
         Rigidbody rb;
 
         public float rollTimer = 0;
+        float rollSpeed = 1;
 
         private Vector3 rollDirection; // To store the roll direction
         private Vector3 offset = new Vector3(0, 1.2f, 0);
@@ -17,12 +18,14 @@ namespace Game
         private Vector3 bufferedDestination;
         public bool hasBufferedMovement;
         private int bufferedAttackIndex;
-        private bool hasBufferedAttack;
+        public bool hasBufferedAttack;
         private bool hasBufferedRoll;
         [SerializeField] private LayerMask groundLayer;
 
+        public bool hasBufferedInput => hasBufferedAttack || hasBufferedRoll || hasBufferedMovement;
+
         // Animation names:
-        private int rollTrigger = Animator.StringToHash("Roll");
+        public int rollTrigger = Animator.StringToHash("Roll");
 
         private void Start()
         {
@@ -74,23 +77,21 @@ namespace Game
             if (hasBufferedMovement && !playerManager.IsAttacking)
             {
                 playerManager.CurrentPlayerState = PlayerManager.State.Idle;
-                if (!previousActionIsAttack) RollEnd();
+                RollEnd();
                 SetDestination(bufferedDestination);
-                ResetBufferedInput();
                 return;
             }
 
             if (hasBufferedAttack)
             {
                 playerManager.CurrentPlayerState = PlayerManager.State.Idle;
-                if (!previousActionIsAttack) RollEnd();
+                RollEnd();
                 PlayerManager.Instance.Attack(bufferedAttackIndex);
-                ResetBufferedInput();
                 return;
             }
         }
 
-        private void ResetBufferedInput()
+        public void ResetBufferedInput()
         {
             hasBufferedMovement = false;
             hasBufferedAttack = false;
@@ -162,6 +163,7 @@ namespace Game
         }
 
 
+
         private void RollEnd()
         {
             // Re-enable NavMeshAgent and disable root motion after the roll
@@ -173,9 +175,17 @@ namespace Game
         {
             if (playerManager.CurrentPlayerState != PlayerManager.State.Rolling) return;
 
-            transform.position = transform.position + playerManager.CharacterAnimator.deltaPosition;
+            // Apply animator movement (root motion)
+            Vector3 movement = playerManager.CharacterAnimator.deltaPosition;
 
+            // Add additional forward force to ensure movement
+            movement += rollDirection * rollSpeed * Time.deltaTime;
+
+            transform.position += movement;
+
+            // Ensure rotation follows roll direction
             playerManager.transform.rotation = Quaternion.LookRotation(rollDirection);
         }
+
     }
 }

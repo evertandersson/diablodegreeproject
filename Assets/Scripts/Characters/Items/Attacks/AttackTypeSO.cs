@@ -10,6 +10,8 @@ public abstract class AttackTypeSO : ActionItemSO
     public string attackTrigger;
     public int manaCost;
 
+    public int attackHashString;
+
     public override string GetStatIncrease()
     {
         return Mathf.RoundToInt(PlayerManager.Instance.Damage * damageMultiplier).ToString();

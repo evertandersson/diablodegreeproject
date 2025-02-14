@@ -4,8 +4,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "LightningAttack", menuName = "Attacks/Lightning")]
 public class LightningAttackSO : AttackTypeSO
 {
-    [HideInInspector] public int attackTriggerHash = Animator.StringToHash("LightningAttack");
-
     LightningAttackSO()
     {
         cooldown = 2.0f;
@@ -17,8 +15,9 @@ public class LightningAttackSO : AttackTypeSO
     public override void PerformAction(Animator animator)
     {
         Debug.Log("Lightning Attack");
+        attackHashString = Animator.StringToHash("LightningAttack");
         SoundManager.PlaySound(SoundType.LIGHTNINGATTACK);
-        animator.SetTrigger(attackTriggerHash);
+        animator.SetTrigger(attackHashString);
         timerCooldown = 0;
     }
 }

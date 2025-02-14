@@ -105,6 +105,7 @@ namespace Game
                     case State.Idle:
                         isRolling = false;
                         CanAttack = true;
+                        playerMovement.ResetBufferedInput();
                         break;
 
                     case State.Attack:
@@ -476,15 +477,21 @@ namespace Game
             {
                 if (currentAction is AttackTypeSO attackTypeAction)
                 {
-                    if (attackTimer <= StatsCalculator.CalculateAttackSpeed(attackTypeAction.nextAttackDelay))
+                    attackTimer += Time.deltaTime;
+                    
+                    if (attackTimer >= StatsCalculator.CalculateAttackSpeed(attackTypeAction.nextAttackDelay))
                     {
-                        attackTimer += Time.deltaTime;
-                    }
-                    else
-                    {
-                        ClearAttack();
-                        currentPlayerState = State.Idle;
-                        playerMovement.ProcessBufferedInput(true);
+                        if (playerMovement.hasBufferedInput)
+                        {
+                            ClearAttack();
+                            currentPlayerState = State.Idle;
+                            playerMovement.ProcessBufferedInput(true);
+                        }
+
+                        if (!IsAnimationPlaying(attackTypeAction.attackHashString) && !playerMovement.hasBufferedAttack)
+                        {
+                            ClearAttack();
+                        }
                     }
                 }
             }
