@@ -25,6 +25,8 @@ namespace Game
         [SerializeField] private Texture2D cursorTexture;
         private Vector2 hotspot = Vector2.zero;
 
+        [SerializeField] private CinemachineCamera dialougeCamera;
+
         private void Awake()
         {
             followComponent = GetComponent<CinemachineFollow>();
@@ -112,20 +114,22 @@ namespace Game
             {
                 if (DialougeManager.Instance.currentNPC != null)
                 {
-                    followOffset.y = DialougeManager.Instance.currentNPC.transform.position.y;
+                    SwitchToDialogueCamera(true);
                 }
             }
             else
             {
-                float zoomAmount = 2f;
-                if (Input.mouseScrollDelta.y > 0)
-                {
-                    followOffset.y -= zoomAmount;
-                }
-                if (Input.mouseScrollDelta.y < 0)
-                {
-                    followOffset.y += zoomAmount;
-                }
+                SwitchToDialogueCamera(false);
+            }
+
+            float zoomAmount = 2f;
+            if (Input.mouseScrollDelta.y > 0)
+            {
+                followOffset.y -= zoomAmount;
+            }
+            if (Input.mouseScrollDelta.y < 0)
+            {
+                followOffset.y += zoomAmount;
             }
 
             followOffset.y = Mathf.Clamp(followOffset.y, followOffsetMinY, followOffsetMaxY);
@@ -133,5 +137,18 @@ namespace Game
             float zoomSpeed = 10f;
             followComponent.FollowOffset = Vector3.Lerp(followComponent.FollowOffset, followOffset, zoomSpeed * Time.deltaTime);
         }
+
+        private void SwitchToDialogueCamera(bool isDialogueActive)
+        {
+            if (isDialogueActive)
+            {
+                dialougeCamera.Priority = 3; // Higher priority to take control
+            }
+            else
+            {
+                dialougeCamera.Priority = 0; // Lower priority, so normal camera takes over
+            }
+        }
+
     }
 }   

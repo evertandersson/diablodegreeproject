@@ -357,6 +357,14 @@ namespace Game
                 playerMovement.RollUpdate();
             }
 
+            if (EventHandler.Main.CurrentEvent is DialougeManager)
+            {
+                if (DialougeManager.Instance.currentNPC != null)
+                {
+                    HandleRotation(DialougeManager.Instance.currentNPC.transform.position);
+                }
+            }
+
             isInteracting = isRolling || isAttacking;
 
 
