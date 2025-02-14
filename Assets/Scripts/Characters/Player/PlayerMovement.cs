@@ -9,7 +9,6 @@ namespace Game
         Rigidbody rb;
 
         public float rollTimer = 0;
-        float rollSpeed = 1;
 
         private Vector3 rollDirection; // To store the roll direction
         private Vector3 offset = new Vector3(0, 1.2f, 0);
@@ -96,6 +95,8 @@ namespace Game
             hasBufferedMovement = false;
             hasBufferedAttack = false;
             hasBufferedRoll = false;
+            rollTimer = 0;
+            playerManager.attackTimer = 0;
         }
 
         public void SetDestination(Vector3 destinationPosition)
@@ -153,7 +154,7 @@ namespace Game
                     return;
                 }
 
-                if (!playerManager.IsAnimationPlaying(rollTrigger))
+                if (!playerManager.IsAnimationPlayingStrict(rollTrigger))
                 {
                     RollEnd();
                     playerManager.CurrentPlayerState = PlayerManager.State.Idle;
@@ -179,7 +180,7 @@ namespace Game
             Vector3 movement = playerManager.CharacterAnimator.deltaPosition;
 
             // Add additional forward force to ensure movement
-            movement += rollDirection * rollSpeed * Time.deltaTime;
+            movement += rollDirection * playerManager.rollSpeed * Time.deltaTime;
 
             transform.position += movement;
 

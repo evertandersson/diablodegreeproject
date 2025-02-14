@@ -10,7 +10,7 @@ public abstract class AttackTypeSO : ActionItemSO
     public string attackTrigger;
     public int manaCost;
 
-    public int attackHashString;
+    public int attackHashString = 0;
 
     public override string GetStatIncrease()
     {

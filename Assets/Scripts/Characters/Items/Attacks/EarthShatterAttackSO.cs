@@ -14,8 +14,9 @@ public class EarthShatterAttackSO : AttackTypeSO
 
     public override void PerformAction(Animator animator)
     {
-        Debug.Log("Fire Attack");
-        attackHashString = Animator.StringToHash("EarthShatterAttack");
+        Debug.Log("Earth Shatter Attack");
+        if (attackHashString == 0) attackHashString = Animator.StringToHash("EarthShatterAttack");
+        
         SoundManager.PlaySound(SoundType.FIREATTACK);
         animator.SetTrigger(attackHashString);
         timerCooldown = 0;

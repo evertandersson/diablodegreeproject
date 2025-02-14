@@ -102,7 +102,7 @@ namespace Game
         {
             if (PlayerManager.Instance.IsAttacking)
                 return PlayerManager.Instance.attackTimer;
-            else if (PlayerManager.Instance.IsRolling)
+            else if (PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Rolling)
                 return playerMovement.rollTimer;
             else
                 return 0;
@@ -116,7 +116,7 @@ namespace Game
                 float bufferedInput = StatsCalculator.CalculateAttackSpeed(attack.bufferedInputDelay);
                 return bufferedInput;
             }
-            else if (PlayerManager.Instance.IsRolling)
+            else if (PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Rolling)
                 return 0.2f;
             else
                 return 0;
@@ -259,6 +259,7 @@ namespace Game
             else if (!PlayerManager.Instance.isInteracting)
             {
                 PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Rolling;
+                playerMovement.RollStart();
             }
         }
 

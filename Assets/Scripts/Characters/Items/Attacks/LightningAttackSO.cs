@@ -15,7 +15,7 @@ public class LightningAttackSO : AttackTypeSO
     public override void PerformAction(Animator animator)
     {
         Debug.Log("Lightning Attack");
-        attackHashString = Animator.StringToHash("LightningAttack");
+        if (attackHashString == 0) attackHashString = Animator.StringToHash("LightningAttack");
         SoundManager.PlaySound(SoundType.LIGHTNINGATTACK);
         animator.SetTrigger(attackHashString);
         timerCooldown = 0;

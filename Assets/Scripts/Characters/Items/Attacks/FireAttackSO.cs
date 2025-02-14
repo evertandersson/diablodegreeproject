@@ -14,7 +14,7 @@ public class FireAttackSO : AttackTypeSO
     public override void PerformAction(Animator animator)
     {
         Debug.Log("Fire Attack");
-        attackHashString = Animator.StringToHash("FireAttack");
+        if (attackHashString == 0) attackHashString = Animator.StringToHash("FireAttack");
         SoundManager.PlaySound(SoundType.FIREATTACK);
         animator.SetTrigger(attackHashString);
         timerCooldown = 0;

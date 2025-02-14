@@ -28,7 +28,7 @@ namespace Game
         //Components and fields
         private PlayerAnimator playerAnimator;
         public PlayerInput playerInput;
-        private PlayerMovement playerMovement;
+        public PlayerMovement playerMovement;
         private ProjectileSpawner projectileSpawner;
 
         [SerializeField]
@@ -52,13 +52,18 @@ namespace Game
 
         // Mana:
         private float currentMana;
+        [Header("Player Stats")]
+
         [Header("Mana")]
         [SerializeField] private float maxMana = 50;
         [SerializeField] private float manaRegeneration = 2;
         [SerializeField] private float healthRegeneration = 0;
 
-        public bool isInteracting;
-        private bool isAttacking;
+        [Header("Rolling")]
+        public float rollSpeed = 1;
+
+        [HideInInspector] public bool isInteracting;
+        public bool isAttacking;
         private bool canAttack = true;
         private bool isRolling;
 
@@ -112,7 +117,6 @@ namespace Game
                         break;
 
                     case State.Rolling:
-                        playerMovement.RollStart();
                         isRolling = true;
                         CanAttack = false;
                         break;
@@ -152,7 +156,7 @@ namespace Game
         public bool IsAttacking
         {
             get => isAttacking;
-            private set
+            set
             {
                 isAttacking = value;
                 if (value == true)
@@ -200,6 +204,8 @@ namespace Game
             attackIndicator.enabled = false;
 
             Initialize();
+
+            //Time.timeScale = 0.3f;
         }
 
         protected override void Start()
@@ -484,13 +490,14 @@ namespace Game
                         if (playerMovement.hasBufferedInput)
                         {
                             ClearAttack();
-                            currentPlayerState = State.Idle;
                             playerMovement.ProcessBufferedInput(true);
+                            return;
                         }
 
-                        if (!IsAnimationPlaying(attackTypeAction.attackHashString) && !playerMovement.hasBufferedAttack)
+                        if (!IsAnimationPlayingStrict(attackTypeAction.attackHashString) && !playerMovement.hasBufferedAttack)
                         {
                             ClearAttack();
+                            playerMovement.ResetBufferedInput();
                         }
                     }
                 }
