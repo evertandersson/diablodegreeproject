@@ -126,6 +126,8 @@ namespace Game
         {
             playerManager.ClearAttack();
 
+            rollTimer = 0;
+
             rollDirection = GetRollDirection();
 
             if (playerManager.Agent.enabled) playerManager.Agent.isStopped = true;
@@ -148,7 +150,13 @@ namespace Game
                     return;
                 }
 
-                if ((hasBufferedAttack || hasBufferedMovement) && rollTimer > 0.5f)
+                if (hasBufferedMovement && rollTimer > 0.45f)
+                {
+                    ProcessBufferedInput();
+                    return;
+                }
+
+                if (hasBufferedAttack && rollTimer > 0.5f)
                 {
                     ProcessBufferedInput();
                     return;

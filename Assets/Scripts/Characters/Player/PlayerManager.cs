@@ -144,12 +144,6 @@ namespace Game
 
                 ActionItemSO previousAction = currentAction;
                 currentAction = value;
-
-                // Reset the attack timer if the action changes
-                if (previousAction != currentAction)
-                {
-                    attackTimer = 0;
-                }
             }
         }
 
@@ -205,7 +199,7 @@ namespace Game
 
             Initialize();
 
-            //Time.timeScale = 0.2f;
+            Time.timeScale = 0.2f;
         }
 
         protected override void Start()
@@ -436,6 +430,7 @@ namespace Game
                         {
                             if (currentMana > attackTypeAction.manaCost)
                             {
+                                Agent.SetDestination(transform.position);
                                 attackTypeAction.PerformAction(CharacterAnimator);
 
                                 // Handle mana
@@ -497,7 +492,7 @@ namespace Game
                         if (!IsAnimationPlayingStrict(attackTypeAction.attackHashString) && !playerMovement.hasBufferedAttack)
                         {
                             ClearAttack();
-                            playerMovement.ResetBufferedInput();
+                            playerMovement.ProcessBufferedInput(true);
                         }
                     }
                 }
