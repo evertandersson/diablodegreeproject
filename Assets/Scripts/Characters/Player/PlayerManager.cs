@@ -436,6 +436,7 @@ namespace Game
                         {
                             if (currentMana > attackTypeAction.manaCost)
                             {
+                                Agent.SetDestination(transform.position);
                                 attackTypeAction.PerformAction(CharacterAnimator);
 
                                 // Handle mana

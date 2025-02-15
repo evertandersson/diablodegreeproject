@@ -126,6 +126,8 @@ namespace Game
         {
             playerManager.ClearAttack();
 
+            rollTimer = 0;
+
             rollDirection = GetRollDirection();
 
             if (playerManager.Agent.enabled) playerManager.Agent.isStopped = true;
