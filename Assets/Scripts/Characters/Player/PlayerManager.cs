@@ -205,7 +205,7 @@ namespace Game
 
             Initialize();
 
-            //Time.timeScale = 0.3f;
+            //Time.timeScale = 0.2f;
         }
 
         protected override void Start()

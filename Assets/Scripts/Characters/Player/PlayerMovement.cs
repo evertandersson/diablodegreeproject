@@ -96,7 +96,6 @@ namespace Game
             hasBufferedRoll = false;
             if (resetTimers)
             {
-                rollTimer = 0;
                 playerManager.attackTimer = 0;
             }
         }
@@ -126,7 +125,6 @@ namespace Game
         public void RollStart()
         {
             playerManager.ClearAttack();
-            rollTimer = 0;
 
             rollDirection = GetRollDirection();
 
@@ -144,13 +142,13 @@ namespace Game
 
             if (rollTimer > 0.4f)
             {
-                if (hasBufferedRoll || hasBufferedMovement)
+                if (hasBufferedRoll)
                 {
                     ProcessBufferedInput();
                     return;
                 }
 
-                if (hasBufferedAttack && rollTimer > 0.5f)
+                if ((hasBufferedAttack || hasBufferedMovement) && rollTimer > 0.5f)
                 {
                     ProcessBufferedInput();
                     return;
@@ -160,7 +158,6 @@ namespace Game
                 {
                     RollEnd();
                     playerManager.CurrentPlayerState = PlayerManager.State.Idle;
-                    ResetBufferedInput();
                 }
             }
         }
