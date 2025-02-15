@@ -17,7 +17,7 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.1
+  m_TransitionDuration: 0.2
   m_TransitionOffset: 0
   m_ExitTime: 0.94140625
   m_HasExitTime: 0
@@ -197,7 +197,7 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.24999988
+  m_TransitionDuration: 0.2
   m_TransitionOffset: 0.12821771
   m_ExitTime: 0.721282
   m_HasExitTime: 0
@@ -392,7 +392,7 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 6692989136887221836}
-  m_Tag: 
+  m_Tag: BlendTree
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
