@@ -154,45 +154,52 @@ namespace Game
 
             if (playerMovement.ReadyForAnotherInput(GetCurrentTimer(), GetWaitForNextBufferedInputTimer()))
             {
-                Vector3 targetPosition = PlayerManager.Instance.mouseInput.mouseInputPosition;
-            
-                if (NavMesh.SamplePosition(targetPosition, out NavMeshHit navHit, 1.0f, NavMesh.AllAreas))
+                if (!playerMovement.hasBufferedAttack && !playerMovement.hasBufferedRoll)
                 {
-                    if (!playerMovement.hasBufferedAttack && !playerMovement.hasBufferedRoll)
-                    {
-                        playerMovement.ResetBufferedInput(false);
-                        playerMovement.BufferInput(navHit.position);
-                    }
+                    CalculateDestination(true);
                 }
                 return;
             }
 
             if (PlayerManager.Instance.CurrentPlayerState != PlayerManager.State.Inventory && !PlayerManager.Instance.isInteracting)
             {
-                NavMeshAgent navMeshAgent = PlayerManager.Instance.Agent;
-                if (navMeshAgent == null || !navMeshAgent.enabled)
-                    return;
+                CalculateDestination(false);
+            }
+        }
 
-                Vector3 targetPosition = PlayerManager.Instance.mouseInput.mouseInputPosition;
-                Vector3 direction = (targetPosition - transform.position).normalized;
-                direction.y = 0;
+        private void CalculateDestination(bool buffer)
+        {
+            NavMeshAgent navMeshAgent = PlayerManager.Instance.Agent;
+            if (navMeshAgent == null || !navMeshAgent.enabled)
+                return;
 
-                float distance = Vector3.Distance(transform.position, targetPosition);
+            Vector3 targetPosition = PlayerManager.Instance.mouseInput.mouseInputPosition;
+            Vector3 direction = (targetPosition - transform.position).normalized;
+            direction.y = 0;
 
-                if (NavMesh.SamplePosition(targetPosition, out NavMeshHit validHit, 1.0f, NavMesh.AllAreas))
+            float distance = Vector3.Distance(transform.position, targetPosition);
+
+            if (NavMesh.SamplePosition(targetPosition, out NavMeshHit validHit, 1.0f, NavMesh.AllAreas))
+            {
+                NavMeshPath path = new NavMeshPath();
+                if (navMeshAgent.CalculatePath(validHit.position, path) && path.status == NavMeshPathStatus.PathComplete)
                 {
-                    NavMeshPath path = new NavMeshPath();
-                    if (navMeshAgent.CalculatePath(validHit.position, path) && path.status == NavMeshPathStatus.PathComplete)
+                    float pathLength = CalculatePathLength(path);
+                    float directDistance = Vector3.Distance(transform.position, validHit.position);
+
+                    if (pathLength > directDistance * 2f) // Prevent long detours
                     {
-                        float pathLength = CalculatePathLength(path);
-                        float directDistance = Vector3.Distance(transform.position, validHit.position);
+                        return; // Stop movement
+                    }
 
-                        if (pathLength > directDistance * 2f) // Prevent long detours
-                        {
-                            return; // Stop movement
-                        }
-
+                    if (!buffer)
+                    {
                         playerMovement.SetDestination(validHit.position);
+                    }
+                    else
+                    {
+                        playerMovement.ResetBufferedInput(false);
+                        playerMovement.BufferInput(validHit.position);
                     }
                 }
             }
