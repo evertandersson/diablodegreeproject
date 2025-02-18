@@ -169,7 +169,8 @@ namespace Game
         private void RollEnd()
         {
             // Re-enable NavMeshAgent and disable root motion after the roll
-            playerManager.Agent.isStopped = false;
+            if (playerManager.Agent.enabled)
+                playerManager.Agent.isStopped = false;
             rollTimer = 0;
         }
 

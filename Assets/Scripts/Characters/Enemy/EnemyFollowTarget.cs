@@ -26,18 +26,8 @@ namespace Game
             if (!enemy.Agent.enabled)
                 return;
 
-            if (enemy.IsAnimationPlayingStrict(enemy.damageAnim))
-            {
-                if (Vector3.Distance(enemy.Agent.destination, transform.position) > 0.5f)
-                    SetNewDestination(transform.position);
-                return;
-            }
-
             // Update animation timer
             CheckAnimationInterval();
-
-            if (enemy.Agent.isStopped != IsAnyAttackAnimationPlaying())
-                enemy.Agent.isStopped = IsAnyAttackAnimationPlaying();
 
             // Skip if an attack animation is playing
             if (isAttackAnimationPlaying)
@@ -49,19 +39,8 @@ namespace Game
 
             if (IsCloseToPlayer(enemy.distanceToAttack) && !IsAnyAttackAnimationPlaying())
             {
-                if (enemy is RangedEnemy)
-                {
-                    if (IsTargetedAtPlayer())
-                    {
-                        enemy.Attack();
-                        return;
-                    }
-                }
-                else
-                {
-                    enemy.Attack();
-                    return;
-                }
+                enemy.Attack();
+                return;   
             }
 
             if (targetTimer > updateTargetDelay)

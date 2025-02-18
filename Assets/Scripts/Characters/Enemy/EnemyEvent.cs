@@ -114,8 +114,11 @@ namespace Game
 
             if (Physics.Raycast(enemy.transform.position + offset, transform.forward, out hit, enemy.detectionMask))
             {
-                // Check if the raycast hit the player
-                return hit.transform == enemy.Player;
+                if (hit.transform.CompareTag("Player"))
+                {
+                    Debug.Log(hit.transform.gameObject);
+                    return true;
+                }
             }
 
             return false; // Raycast did not hit the player

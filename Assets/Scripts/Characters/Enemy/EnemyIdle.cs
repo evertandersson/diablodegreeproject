@@ -26,7 +26,7 @@ namespace Game
             if (enemy.CanSeeTarget(PlayerManager.Instance.transform, offset)) // When sees player, transition to follow target
             {
                 standStillTimer = 0;
-                enemy.SetNewEvent<EnemyFollowTarget>();
+                enemy.FollowTarget();
             }
 
             if (standStillTimer > 2.0f) // After 2 seconds, transition to roaming

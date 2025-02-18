@@ -34,8 +34,8 @@ namespace Game
             if (enemy.CanSeeTarget(PlayerManager.Instance.transform, offset))
             {
                 isDone = true;
-                enemy.EnemyEventHandler.RemoveEvent(this);
-                enemy.SetNewEvent<EnemyFollowTarget>();
+
+                enemy.FollowTarget();
             }
 
             // Wait for the NavMeshAgent to calculate the path

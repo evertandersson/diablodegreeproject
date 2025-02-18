@@ -14,6 +14,11 @@ namespace Game
         {
             SetNewEvent<RangedEnemyAttack>();
         }
+
+        public override void FollowTarget()
+        {
+            SetNewEvent<RangedEnemyFollowTarget>();
+        }
     }
 
 }
