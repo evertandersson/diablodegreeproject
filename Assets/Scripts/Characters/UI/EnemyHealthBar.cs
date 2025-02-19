@@ -1,8 +1,11 @@
+using TMPro;
 using UnityEngine;
 
 public class EnemyHealthBar : HealthBar
 {
     private Transform cameraTransform; // Reference to the camera
+    [SerializeField] private TextMeshProUGUI levelText;
+
 
     void Start()
     {
@@ -34,5 +37,10 @@ public class EnemyHealthBar : HealthBar
     public void DisplayHealthBar(bool show)
     {
         gameObject.SetActive(show);
+    }
+
+    public void SetLevelText(int level)
+    {
+        levelText.text = level.ToString();
     }
 }

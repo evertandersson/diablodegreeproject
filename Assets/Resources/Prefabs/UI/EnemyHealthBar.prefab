@@ -393,6 +393,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 4995050311440765977}
   backgroundSlider: {fileID: 6613106803708121092}
+  levelText: {fileID: 5743399657972593801}
 --- !u!1 &6649694057515285828
 GameObject:
   m_ObjectHideFlags: 0

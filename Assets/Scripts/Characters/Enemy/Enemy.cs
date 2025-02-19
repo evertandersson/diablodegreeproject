@@ -19,7 +19,13 @@ namespace Game
     {
         [SerializeField] private int experienceOnDeath = 20;
 
-        private Transform player; // Reference to the player
+        // Base stats: 
+        private int baseMaxHealth;
+        private int baseDamage;
+        private int baseDefense;
+        private int baseExperienceOnDeath;
+
+        private Transform player;
 
         public bool standStill = false;
         public bool isAggro = false;
@@ -66,17 +72,16 @@ namespace Game
         public void SetLevel(int level)
         {
             this.level = level;
+            healthBar.SetLevelText(level);
+
             if (level > 1)
             {
-                for (int i = 0; i < level - 1; i++)
-                {
-                    float statsMultiplier = 1.5f;
-                    maxHealth = Mathf.RoundToInt(maxHealth * statsMultiplier);
-                    health = maxHealth;
-                    damage = Mathf.RoundToInt(damage * statsMultiplier);
-                    defense = Mathf.RoundToInt(defense * statsMultiplier);
-                    experienceOnDeath = Mathf.RoundToInt(experienceOnDeath * statsMultiplier);
-                }
+                float statsMultiplier = 1.5f;
+                maxHealth = Mathf.RoundToInt(baseMaxHealth * Mathf.Pow(statsMultiplier, level - 1));
+                health = maxHealth;
+                damage = Mathf.RoundToInt(baseDamage * Mathf.Pow(statsMultiplier, level - 1));
+                defense = Mathf.RoundToInt(baseDefense * Mathf.Pow(statsMultiplier, level - 1));
+                experienceOnDeath = Mathf.RoundToInt(baseExperienceOnDeath * Mathf.Pow(statsMultiplier, level - 1));
             }
         }
 
@@ -84,6 +89,9 @@ namespace Game
         {
             // Cache components on Awake
             Initialize();
+
+            SetBaseStats();
+
             CharacterAnimator = GetComponent<Animator>();
             EnemyEventHandler = EventHandler.CreateEventHandler();
             EnableRagdoll(false);
@@ -96,6 +104,14 @@ namespace Game
             }
 
             Events = new List<EnemyEvent>(GetComponents<EnemyEvent>());
+        }
+
+        private void SetBaseStats()
+        {
+            baseMaxHealth = maxHealth;
+            baseDamage = damage;
+            baseDefense = defense;
+            baseExperienceOnDeath = experienceOnDeath;
         }
 
         protected virtual void OnEnable()
@@ -136,6 +152,9 @@ namespace Game
         protected override void Start()
         {
             base.Start();
+            
+            SetLevel(level);
+
             healthBar.SetMaxHealth(maxHealth);
 
             player = PlayerManager.Instance.gameObject.transform;
