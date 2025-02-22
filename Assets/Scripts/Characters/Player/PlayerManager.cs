@@ -41,6 +41,7 @@ namespace Game
         public Inventory inventory;
         private StatsDisplay statsDisplay;
         public SkillTreeManager skillTree;
+        public PauseMenu pauseMenu;
 
         private ActionItemSO currentAction;
 
@@ -198,6 +199,8 @@ namespace Game
 
             _instance = this;
             //DontDestroyOnLoad(gameObject);
+
+            Debug.Log(Popup.activePopups);
 
             statsDisplay = GetComponentInChildren<StatsDisplay>(true);
 

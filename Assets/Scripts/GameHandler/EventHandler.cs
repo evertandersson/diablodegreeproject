@@ -3,14 +3,16 @@ using UnityEngine;
 
 public class EventHandler : MonoBehaviour
 {
+    // Interface for events
     public interface IEvent
     {
-        void OnBegin(bool firstTime);
-        void OnUpdate();
-        void OnEnd();
-        bool IsDone();
+        void OnBegin(bool firstTime); // Called on start
+        void OnUpdate(); // Called every frame
+        void OnEnd(); // Calls at the end of event
+        bool IsDone(); // Checks if event is finished
     }
 
+    // Abstract class that is used as base for event behaviors
     public abstract class GameEventBehaviour : MonoBehaviour, IEvent
     {
         public virtual void OnBegin(bool firstTime) { }
@@ -19,11 +21,11 @@ public class EventHandler : MonoBehaviour
         public virtual bool IsDone() { return true; }
     }
 
-    private static EventHandler main;
+    private static EventHandler main; // Singleton instance of the main event handler
 
-    private List<IEvent> eventStack = new List<IEvent>();
-    private HashSet<IEvent> startedEvents = new HashSet<IEvent>();
-    private IEvent currentEvent;
+    private List<IEvent> eventStack = new List<IEvent>(); // Stack to store active events
+    private HashSet<IEvent> startedEvents = new HashSet<IEvent>(); // Tracks started events
+    private IEvent currentEvent; // Currently active event
 
     public static EventHandler Main
     {
@@ -39,15 +41,16 @@ public class EventHandler : MonoBehaviour
         }
     }
 
-    private static List<EventHandler> eventHandlers = new List<EventHandler>();
+    private static List<EventHandler> eventHandlers = new List<EventHandler>(); // List of all event handlers created, uses eventhandlers for enemy as well
 
     #region Properties
 
-    public IEvent CurrentEvent => currentEvent;
-    public List<IEvent> EventStack => eventStack;
+    public IEvent CurrentEvent => currentEvent;  // Get the currently active event
+    public List<IEvent> EventStack => eventStack; // Get the event stack
 
     #endregion
 
+    // Creates a new event handler instance and adds it to the list
     public static EventHandler CreateEventHandler()
     {
         GameObject go = new GameObject("EventHandler_" + eventHandlers.Count);
@@ -56,19 +59,26 @@ public class EventHandler : MonoBehaviour
         return newHandler;
     }
 
+    public void ResetCurrentEvent()
+    {
+        currentEvent = eventStack.Count > 0 ? currentEvent = eventStack[0] : null;
+    }
+
+    // Pushes an event onto the stack, ensuring no duplicates
     public void PushEvent(IEvent evt)
     {
         if (evt != null)
         {
             eventStack.RemoveAll(e => e == evt);
-            eventStack.Insert(0, evt);
+            eventStack.Insert(0, evt); // Add the event to the front of the stack
             if (currentEvent != null && currentEvent != evt)
             {
-                currentEvent = null;
+                currentEvent = null; // Reset the current event if it's different
             }
         }
     }
 
+    // Removes an event from the stack, calling OnEnd() if necessary
     public void RemoveEvent(IEvent evt)
     {
         if (evt == null || !eventStack.Contains(evt)) return;
@@ -83,13 +93,15 @@ public class EventHandler : MonoBehaviour
 
     private void Update()
     {
-        UpdateEvents();
+        UpdateEvents(); // Updates events every frame
     }
 
+    // Handles the logic of managing events in the stack
     private void UpdateEvents()
     {
         if (eventStack.Count == 0) return;
 
+        // If no current event, set the next event as the current event
         if (currentEvent == null)
         {
             currentEvent = eventStack[0];
@@ -98,10 +110,12 @@ public class EventHandler : MonoBehaviour
             currentEvent.OnBegin(firstTime);
         }
 
+        // Update the current event
         if (currentEvent != null)
         {
             currentEvent.OnUpdate();
 
+            // If the event is done, remove it and move to the next one
             if (eventStack.Count > 0 && currentEvent == eventStack[0] && currentEvent.IsDone())
             {
                 eventStack.RemoveAt(0);
@@ -112,6 +126,7 @@ public class EventHandler : MonoBehaviour
         }
     }
 
+    // Debug UI to display event stack in the Unity Editor
     private void OnGUI()
     {
         if (this != Main) return;

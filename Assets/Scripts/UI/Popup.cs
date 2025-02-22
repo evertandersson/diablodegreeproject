@@ -7,11 +7,11 @@ namespace Game
     public class Popup : EventHandler.GameEventBehaviour
     {
         protected bool isDone = false;
-        private CanvasGroup group = null;
+        protected CanvasGroup group = null;
 
         private float fadeSpeed = 5.0f;
 
-        public static Stack<Popup> activePopups = new Stack<Popup>();
+        public static Stack<Popup> activePopups = new Stack<Popup>(); // A stack that keeps track of which popups are currently active
 
         private void OnEnable()
         {
@@ -30,7 +30,7 @@ namespace Game
             group.interactable = true;
             group.blocksRaycasts = true;
 
-            // Move this popup to the top of the hierarchy
+            // Moves this popup to the bottom of the hierarchy to be in front of all other popups
             transform.SetAsLastSibling();
 
             if (!activePopups.Contains(this))
@@ -44,6 +44,32 @@ namespace Game
             base.OnUpdate();
 
             if (group) group.alpha = Mathf.MoveTowards(group.alpha, isDone ? 0.0f : 1.0f, fadeSpeed * Time.deltaTime);
+        }
+
+        protected void ClearEvents()
+        {
+            // Create a list to hold events to remove
+            var eventsToRemove = new List<EventHandler.IEvent>();
+
+            // Identify events to remove
+            foreach (var ev in EventHandler.Main.EventStack)
+            {
+                if (ev is not GameManager)
+                {
+                    eventsToRemove.Add(ev);
+                }
+            }
+
+            // Remove the identified events from the stack
+            foreach (var ev in eventsToRemove)
+            {
+                EventHandler.Main.EventStack.Remove(ev);
+            }
+
+            // Clear all popups
+            activePopups.Clear();
+
+            EventHandler.Main.ResetCurrentEvent();
         }
 
         public virtual void OnOkay()
@@ -62,7 +88,7 @@ namespace Game
             base.OnEnd();
             group.interactable = false;
             group.blocksRaycasts = false;
-            group.alpha = 0.0f; // Fully fade out when done
+            group.alpha = 0.0f; 
 
             if (activePopups.Count > 0 && activePopups.Peek() == this)
             {
@@ -84,6 +110,8 @@ namespace Game
             return isDone && group.alpha < 0.001f;
         }
 
+        /* This function is used to check if the popup doesnt exist in the scene already,
+         * if it does, it simply activates it. But if it doesn't, it creates a new instance of the object */
         public static T Create<T>() where T : Popup, EventHandler.IEvent
         {
             // Look for an existing object of type T in the scene
@@ -100,7 +128,7 @@ namespace Game
                     EventHandler.Main.PushEvent(existingObject);
                 }
 
-                return existingObject; // Return the found instance
+                return existingObject; // Return the found object
             }
             else
             {

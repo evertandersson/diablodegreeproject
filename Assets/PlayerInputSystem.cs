@@ -366,6 +366,15 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OpenPauseMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""33d8bd61-1d58-43b6-886d-b8d3c089e711"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -808,6 +817,28 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
                     ""action"": ""OpenSkillTree"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e37d068a-d47a-4578-adb9-50dedc90bd97"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenPauseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bd6e939d-cf76-4eda-9392-0cfd898f604e"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenPauseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -900,6 +931,7 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
         m_UI_OpenInventory = m_UI.FindAction("OpenInventory", throwIfNotFound: true);
         m_UI_OpenSkillTree = m_UI.FindAction("OpenSkillTree", throwIfNotFound: true);
+        m_UI_OpenPauseMenu = m_UI.FindAction("OpenPauseMenu", throwIfNotFound: true);
     }
 
     ~@PlayerInputSystem()
@@ -1089,6 +1121,7 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_TrackedDeviceOrientation;
     private readonly InputAction m_UI_OpenInventory;
     private readonly InputAction m_UI_OpenSkillTree;
+    private readonly InputAction m_UI_OpenPauseMenu;
     public struct UIActions
     {
         private @PlayerInputSystem m_Wrapper;
@@ -1105,6 +1138,7 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
         public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
         public InputAction @OpenInventory => m_Wrapper.m_UI_OpenInventory;
         public InputAction @OpenSkillTree => m_Wrapper.m_UI_OpenSkillTree;
+        public InputAction @OpenPauseMenu => m_Wrapper.m_UI_OpenPauseMenu;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1150,6 +1184,9 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
             @OpenSkillTree.started += instance.OnOpenSkillTree;
             @OpenSkillTree.performed += instance.OnOpenSkillTree;
             @OpenSkillTree.canceled += instance.OnOpenSkillTree;
+            @OpenPauseMenu.started += instance.OnOpenPauseMenu;
+            @OpenPauseMenu.performed += instance.OnOpenPauseMenu;
+            @OpenPauseMenu.canceled += instance.OnOpenPauseMenu;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -1190,6 +1227,9 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
             @OpenSkillTree.started -= instance.OnOpenSkillTree;
             @OpenSkillTree.performed -= instance.OnOpenSkillTree;
             @OpenSkillTree.canceled -= instance.OnOpenSkillTree;
+            @OpenPauseMenu.started -= instance.OnOpenPauseMenu;
+            @OpenPauseMenu.performed -= instance.OnOpenPauseMenu;
+            @OpenPauseMenu.canceled -= instance.OnOpenPauseMenu;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -1278,5 +1318,6 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
         void OnOpenInventory(InputAction.CallbackContext context);
         void OnOpenSkillTree(InputAction.CallbackContext context);
+        void OnOpenPauseMenu(InputAction.CallbackContext context);
     }
 }

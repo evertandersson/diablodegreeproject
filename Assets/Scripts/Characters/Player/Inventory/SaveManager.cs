@@ -2,32 +2,35 @@ using Leguar.TotalJSON;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Game
 {
     public class SaveManager : MonoBehaviour
     {
-        private static SaveManager _instance;
+        private static SaveManager _instance; // Singleton instance
 
-        [SerializeField] private ItemDataBaseSO itemDB;
+        [SerializeField] private ItemDataBaseSO itemDB; // Reference to item database
 
-        private SerializableListString inventoryList = new SerializableListString();
-        private SerializableListString actionSlotList = new SerializableListString();
-        private SerializableListString equipmentList = new SerializableListString();
+        // Lists to store saved intentory data
+        private SerializableList inventoryList = new SerializableList();
+        private SerializableList actionSlotList = new SerializableList();
+        private SerializableList equipmentList = new SerializableList();
 
-        private int playerLevel;
+        private int playerLevel; 
         private int playerExperience;
 
-        public SerializableListString pickedUpItemsList = new SerializableListString();
-        public SerializableListString doorsOpenedList = new SerializableListString();
+        public SerializableList pickedUpItemsList = new SerializableList(); // List of picked up world items
+        public SerializableList doorsOpenedList = new SerializableList(); // List of which doors player has opened
 
-        public SerializableListString skillsUnlockedList = new SerializableListString();
+        public SerializableList skillsUnlockedList = new SerializableList(); // Lists of skills unlocked
         
-        public static event Action LoadWorldObjects; 
+        public static event Action LoadWorldObjects; // Event triggered when world objects are loaded
 
+        private bool useEncryption = true; // Bool to enable/disable encryption
+        private readonly string encryptionCodeWord = "word"; // Simple encryption key
+
+        // Singleton setup
         public static SaveManager Instance
         {
             get
@@ -55,41 +58,40 @@ namespace Game
 
         public void Load()
         {
+            // Clear existing data before loading
             inventoryList.serializableList.Clear();
             actionSlotList.serializableList.Clear();
             equipmentList.serializableList.Clear();
 
-            LoadScriptables();
-            ImportSaveData();
+            LoadDataFromFile(); // Load data from file
+            ImportSaveData(); // Apply loaded data to game objects
         }
 
         public void Save()
         {
-            inventoryList.serializableList.Clear();
-            actionSlotList.serializableList.Clear();
-            equipmentList.serializableList.Clear();
-
-            BuildSaveData();
-            SaveScriptables();
+            BuildSaveData(); // Collect data from game objects
+            SaveDataToFile(); // Write data to file
 
             Debug.Log("Data saved successfully.");
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.X))
+            if (Input.GetKeyDown(KeyCode.X)) // Press X to reset save
                 SaveReset();
 
-            if (Input.GetKeyDown(KeyCode.S))
+            if (Input.GetKeyDown(KeyCode.S)) // Press S to save
                 Save();
         }
 
         private void BuildSaveData()
         {
+            // Clear lists to avoid duplicates
             inventoryList.serializableList.Clear();
             actionSlotList.serializableList.Clear();
             equipmentList.serializableList.Clear();
 
+            // Store inventory, action slots, and equipment in save lists
             SaveSlotsToSerializableList(PlayerManager.Instance.inventory.inventory, inventoryList);
             SaveSlotsToSerializableList(PlayerManager.Instance.slotManager.actionSlots, actionSlotList);
             SaveSlotsToSerializableList(EquipmentManager.Instance.equipmentSlots, equipmentList);
@@ -99,13 +101,13 @@ namespace Game
             playerExperience = PlayerManager.Instance.levelSystem.GetExperience();
         }
 
-        private void SaveSlotsToSerializableList(IEnumerable<InventorySlot> slots, SerializableListString targetList)
+        private void SaveSlotsToSerializableList(IEnumerable<InventorySlot> slots, SerializableList targetList)
         {
             foreach (var slot in slots)
             {
                 if (slot != null && slot.item != null)
                 {
-                    SerializableListString.SerialItem SI = new SerializableListString.SerialItem
+                    SerializableList.SerialItem SI = new SerializableList.SerialItem
                     {
                         name = slot.item.name,
                         count = slot.itemAmount
@@ -116,12 +118,13 @@ namespace Game
             }
         }
 
-        public void SaveScriptables()
+        public void SaveDataToFile()
         {
             Debug.Log("Saving to: " + Application.persistentDataPath);
 
             string filepath = Application.persistentDataPath + "/player_save.json";
 
+            // Create save data object
             SaveData saveData = new SaveData
             {
                 inventory = inventoryList,
@@ -137,17 +140,23 @@ namespace Game
                 skillsUnlocked = skillsUnlockedList
             };
 
-            string saveJson = JSON.Serialize(saveData).CreatePrettyString();
-            File.WriteAllText(filepath, saveJson);
+            string saveJson = JSON.Serialize(saveData).CreatePrettyString(); // Convert to JSON
+
+            if (useEncryption)
+            {
+                saveJson = EncryptDecrypt(saveJson); // Encrypt JSON 
+            }
+
+            File.WriteAllText(filepath, saveJson); // Save to file
 
             Debug.Log("Save completed.");
         }
 
-        public void AddObjectToList(string objectId, SerializableListString targetList)
+        public void AddObjectToList(string objectId, SerializableList targetList)
         {
             if (!targetList.serializableList.Exists(obj => obj.name == objectId))
             {
-                SerializableListString.SerialItem addedObj = new SerializableListString.SerialItem
+                SerializableList.SerialItem addedObj = new SerializableList.SerialItem
                 {
                     name = objectId,
                     count = 1
@@ -178,12 +187,14 @@ namespace Game
             // Apply Level and XP from save data
             LevelSystem levelSystem = PlayerManager.Instance.levelSystem;
 
-            levelSystem.SetLevel(playerLevel); // Set Level First
-            levelSystem.AddExperience(playerExperience); // Add Experience Next
+            if (playerLevel != 0)
+            {
+                levelSystem.SetLevel(playerLevel); // Set Level 
+                levelSystem.AddExperience(playerExperience); // Add Experience 
+            }
 
             // Debugging Loaded Values
             Debug.Log($"Applied Level: {levelSystem.GetCurrentLevel()}, XP: {levelSystem.GetExperience()}");
-
 
             // Update the UI
             PlayerManager.Instance.SetStats();
@@ -207,7 +218,7 @@ namespace Game
             }
         }
 
-        private void LoadSlots(IList<InventorySlot> slots, SerializableListString targetList)
+        private void LoadSlots(IList<InventorySlot> slots, SerializableList targetList)
         {
             for (int i = 0; i < targetList.serializableList.Count; i++)
             {
@@ -263,7 +274,7 @@ namespace Game
             EquipmentManager.Instance.GetStatsFromArmour();
         }
 
-        public void LoadScriptables()
+        public void LoadDataFromFile()
         {
             Debug.Log("Loading from: " + Application.persistentDataPath);
 
@@ -272,6 +283,12 @@ namespace Game
             if (File.Exists(filepath))
             {
                 string saveJson = File.ReadAllText(filepath);
+
+                if (useEncryption)
+                {
+                    saveJson = EncryptDecrypt(saveJson);
+                }
+
                 SaveData saveData = JSON.ParseString(saveJson).Deserialize<SaveData>();
 
                 inventoryList = saveData.inventory;
@@ -281,10 +298,10 @@ namespace Game
                 playerLevel = saveData.level;
                 playerExperience = saveData.experience;
 
-                pickedUpItemsList = saveData.itemsPickedUp ?? new SerializableListString();
-                doorsOpenedList = saveData.doorsOpened ?? new SerializableListString();
+                pickedUpItemsList = saveData.itemsPickedUp ?? new SerializableList();
+                doorsOpenedList = saveData.doorsOpened ?? new SerializableList();
 
-                skillsUnlockedList = saveData.skillsUnlocked ?? new SerializableListString();
+                skillsUnlockedList = saveData.skillsUnlocked ?? new SerializableList();
 
                 Debug.Log($"Loaded Inventory: {inventoryList.serializableList.Count} items");
                 Debug.Log($"Loaded Action Slots: {actionSlotList.serializableList.Count} items");
@@ -340,7 +357,7 @@ namespace Game
             PlayerManager.Instance.levelSystem.SetLevel(1); // Reset to Level 1
             PlayerManager.Instance.levelSystem.AddExperience(-PlayerManager.Instance.levelSystem.GetExperience()); // Reset XP to 0
 
-            playerLevel = 1; // Ensure save data reflects reset
+            playerLevel = 1;
             playerExperience = 0;
 
             // Update UI and other dependent systems
@@ -352,9 +369,19 @@ namespace Game
 
             // Save Reset Data
             BuildSaveData();
-            SaveScriptables();
+            SaveDataToFile();
 
             Debug.Log("Game state has been reset: Inventory, Action Slots, Equipment, Level, and Experience.");
+        }
+
+        private string EncryptDecrypt(string data)
+        {
+            string modifiedData = "";
+            for (int i = 0; i < data.Length; i++)
+            {
+                modifiedData += (char)(data[i] ^ encryptionCodeWord[i % encryptionCodeWord.Length]);
+            }
+            return modifiedData;
         }
 
     }
@@ -362,13 +389,13 @@ namespace Game
     [System.Serializable]
     public class SaveData
     {
-        public SerializableListString inventory;
-        public SerializableListString actionSlots;
-        public SerializableListString equipmentSlots;
+        public SerializableList inventory;
+        public SerializableList actionSlots;
+        public SerializableList equipmentSlots;
         public int level;
         public int experience;
-        public SerializableListString itemsPickedUp;
-        public SerializableListString doorsOpened;
-        public SerializableListString skillsUnlocked;
+        public SerializableList itemsPickedUp;
+        public SerializableList doorsOpened;
+        public SerializableList skillsUnlocked;
     }
 }

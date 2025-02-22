@@ -24,6 +24,7 @@ namespace Game
         InputAction openInventory;
         InputAction openSkillTree;
         InputAction highlightItems;
+        InputAction openPauseMenu;
 
         bool isMoving = false;
         bool isClickInteraction = false;
@@ -75,6 +76,10 @@ namespace Game
             highlightItems.performed += ShowHighlightItems;
             highlightItems.canceled += HideHighlightItems;
 
+            openPauseMenu = playerInputSystem.UI.OpenPauseMenu;
+            openPauseMenu.Enable();
+            openPauseMenu.performed += OpenPauseMenu;
+
             // Subscribe to each attack action
             for (int i = 0; i < attacks.Length; i++)
             {
@@ -92,6 +97,7 @@ namespace Game
             openInventory.Disable();
             openSkillTree.Disable();
             highlightItems.Disable();
+            openPauseMenu.Disable();
             for (int i = 0; i < attacks.Length; i++)
             {
                 attacks[i].Disable();
@@ -308,6 +314,11 @@ namespace Game
             TogglePopup(ref PlayerManager.Instance.skillTree, PlayerManager.State.Inventory);
         }
 
+        private void OpenPauseMenu(InputAction.CallbackContext context)
+        {
+            TogglePopup(ref PlayerManager.Instance.pauseMenu, PlayerManager.State.Inventory);
+        }
+
         private bool CanNotDoAction()
         {
             return PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead ||
@@ -318,7 +329,8 @@ namespace Game
         private bool CanNotOpenMenu()
         {
             return PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead ||
-                PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Rolling;
+                PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Rolling ||
+                EventHandler.Main.CurrentEvent is PauseMenu;
         }
 
         private void TogglePopup<T>(ref T popupInstance, PlayerManager.State activeState) where T : Popup
