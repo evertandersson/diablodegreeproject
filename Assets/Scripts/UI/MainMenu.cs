@@ -25,7 +25,7 @@ namespace Game
             EventHandler.Main.RemoveEvent(this);
             gameManager.EnableGameManager();
 
-            LevelTransition.Instance.Load("TheDungeon");
+            LevelTransition.Instance.Load("TheDungeon", this);
         }
 
         public void OnLoadGame()
@@ -36,7 +36,7 @@ namespace Game
             EventHandler.Main.RemoveEvent(this);
             gameManager.EnableGameManager();
 
-            LevelTransition.Instance.Load("TheDungeon");
+            LevelTransition.Instance.Load("TheDungeon", this);
         }
         
         public void OnOptions()

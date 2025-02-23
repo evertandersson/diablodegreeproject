@@ -48,24 +48,18 @@ namespace Game
             isDone = true;
         }
 
-        public void Restart()
+        public override void Restart()
         {
-            PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Dead;
-            SaveManager.Instance.Save();
-
-            ClearEvents();
-
-            OnEnd();
-
-            // Reload the current scene
-            LevelTransition.Instance.Load(SceneManager.GetActiveScene().name);
+            Time.timeScale = 1.0f;
+            base.Restart();
         }
+
         public void GoToMainMenu()
         {
             SaveManager.Instance.Save();
             ClearEvents(true);
             Time.timeScale = 1.0f;
-            LevelTransition.Instance.Load("MainMenu");
+            LevelTransition.Instance.Load("MainMenu", this);
         }
     }
 

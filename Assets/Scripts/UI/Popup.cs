@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Game
 {
@@ -74,6 +75,17 @@ namespace Game
             activePopups.Clear();
 
             EventHandler.Main.ResetCurrentEvent();
+        }
+
+        public virtual void Restart()
+        {
+            PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Dead;
+            SaveManager.Instance.Save();
+
+            ClearEvents();
+
+            // Reload the current scene
+            LevelTransition.Instance.Load(SceneManager.GetActiveScene().name, this);
         }
 
         public virtual void OnOkay()

@@ -25,23 +25,12 @@ public class DeathScreen : Popup
         StartCoroutine(EnableButtons()); // Wait a second before activating buttons
     }
 
-    public void Restart()
-    {
-        SaveManager.Instance.Save();
-
-        ClearEvents();
-
-        OnEnd();
-
-        // Reload the current scene
-        LevelTransition.Instance.Load(SceneManager.GetActiveScene().name);
-    }
     public void GoToMainMenu()
     {
         SaveManager.Instance.Save();
         ClearEvents(true);
         Time.timeScale = 1.0f;
-        LevelTransition.Instance.Load("MainMenu");
+        LevelTransition.Instance.Load("MainMenu", this);
     }
 
     IEnumerator EnableButtons()

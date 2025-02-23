@@ -25,6 +25,7 @@ namespace Game
         public SerializableList doorsOpenedList = new SerializableList(); // List of which doors player has opened
 
         private Vector3 currentSpawnPoint;
+        private Quaternion currentSpawnRotation;
         private Vector3 spawnOffset = new Vector3(0, 1f, 0);
 
         public SerializableList skillsUnlockedList = new SerializableList(); // Lists of skills unlocked
@@ -105,10 +106,14 @@ namespace Game
             playerExperience = PlayerManager.Instance.levelSystem.GetExperience();
 
             // Save player position
-            
             currentSpawnPoint = PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead 
                 ? currentSpawnPoint = GameManager.GetSpawnPositionAtLevel() 
                 : PlayerManager.Instance.transform.position;
+
+            // Save player rotation
+            currentSpawnRotation = PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead
+                ? currentSpawnRotation = Quaternion.identity
+                : PlayerManager.Instance.transform.rotation;
         }
 
         private void SaveSlotsToSerializableList(IEnumerable<InventorySlot> slots, SerializableList targetList)
@@ -149,7 +154,8 @@ namespace Game
 
                 skillsUnlocked = skillsUnlockedList,
 
-                spawnPosition = currentSpawnPoint
+                spawnPosition = currentSpawnPoint,
+                spawnRotation = currentSpawnRotation
             };
 
             string saveJson = JSON.Serialize(saveData).CreatePrettyString(); // Convert to JSON
@@ -229,6 +235,7 @@ namespace Game
             yield return new WaitForEndOfFrame();
             PlayerManager player = PlayerManager.Instance;
             player.transform.position = currentSpawnPoint + spawnOffset;
+            player.transform.rotation = currentSpawnRotation;
             player.Agent.Warp(player.transform.position);
         }
 
@@ -328,11 +335,12 @@ namespace Game
                 skillsUnlockedList = saveData.skillsUnlocked ?? new SerializableList();
 
                 currentSpawnPoint = saveData.spawnPosition;
+                currentSpawnRotation = saveData.spawnRotation;
 
-                //Debug.Log($"Loaded Inventory: {inventoryList.serializableList?.Count} items");
-                //Debug.Log($"Loaded Action Slots: {actionSlotList.serializableList?.Count} items");
-                //Debug.Log($"Loaded Equipment Slots: {equipmentList.serializableList?.Count} items");
-                //Debug.Log($"Loaded Level: {playerLevel}, XP: {playerExperience}");
+                Debug.Log($"Loaded Inventory: {inventoryList.serializableList?.Count} items");
+                Debug.Log($"Loaded Action Slots: {actionSlotList.serializableList?.Count} items");
+                Debug.Log($"Loaded Equipment Slots: {equipmentList.serializableList?.Count} items");
+                Debug.Log($"Loaded Level: {playerLevel}, XP: {playerExperience}");
             }
             else
             {
@@ -412,7 +420,7 @@ namespace Game
             playerLevel = 1;
             playerExperience = 0;
             currentSpawnPoint = Vector3.zero;
-
+            currentSpawnRotation = Quaternion.identity;
 
             SaveDataToFile();
         }
@@ -441,5 +449,6 @@ namespace Game
         public SerializableList doorsOpened;
         public SerializableList skillsUnlocked;
         public Vector3 spawnPosition;
+        public Quaternion spawnRotation;
     }
 }

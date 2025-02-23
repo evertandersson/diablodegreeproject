@@ -1,3 +1,4 @@
+using Game;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -26,18 +27,19 @@ public class LevelTransition : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    public void Load(string levelName)
+    public void Load(string levelName, EventHandler.GameEventBehaviour ev) 
     {
-        StartCoroutine(LoadLevel(levelName));
+        StartCoroutine(LoadLevel(levelName, ev));
     }
 
-    private IEnumerator LoadLevel(string levelName)
+    private IEnumerator LoadLevel(string levelName, EventHandler.GameEventBehaviour ev)
     {
         animator.SetTrigger(fadeAnimHash);
 
         yield return new WaitForSeconds(transitionTime);
 
         SceneManager.LoadScene(levelName, LoadSceneMode.Single);
+        ev?.OnEnd();
 
         yield return new WaitForSeconds(0.2f);
 
