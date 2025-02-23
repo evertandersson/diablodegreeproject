@@ -316,7 +316,10 @@ namespace Game
 
         private void OpenPauseMenu(InputAction.CallbackContext context)
         {
-            TogglePopup(ref PlayerManager.Instance.pauseMenu, PlayerManager.State.Inventory);
+            if (Popup.activePopups.Count == 0)
+                TogglePopup(ref PlayerManager.Instance.pauseMenu, PlayerManager.State.Inventory);
+            else
+                Popup.activePopups.Pop().OnCancel();
         }
 
         private bool CanNotDoAction()
