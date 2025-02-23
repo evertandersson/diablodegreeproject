@@ -18,14 +18,14 @@ namespace Game
         public void OnNewGame()
         {
             SaveManager.Instance.NewGame();
-
+            
             // Create GameManager instance 
             var gameManager = GameManager.Instance;
 
             EventHandler.Main.RemoveEvent(this);
             gameManager.EnableGameManager();
 
-            SceneManager.LoadScene("TheDungeon", LoadSceneMode.Single);
+            LevelTransition.Instance.Load("TheDungeon");
         }
 
         public void OnLoadGame()
@@ -36,7 +36,7 @@ namespace Game
             EventHandler.Main.RemoveEvent(this);
             gameManager.EnableGameManager();
 
-            SceneManager.LoadScene("TheDungeon", LoadSceneMode.Single);
+            LevelTransition.Instance.Load("TheDungeon");
         }
         
         public void OnOptions()

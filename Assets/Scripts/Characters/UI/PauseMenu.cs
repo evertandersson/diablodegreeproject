@@ -58,14 +58,14 @@ namespace Game
             OnEnd();
 
             // Reload the current scene
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            LevelTransition.Instance.Load(SceneManager.GetActiveScene().name);
         }
         public void GoToMainMenu()
         {
             SaveManager.Instance.Save();
             ClearEvents(true);
             Time.timeScale = 1.0f;
-            SceneManager.LoadScene("MainMenu");
+            LevelTransition.Instance.Load("MainMenu");
         }
     }
 
