@@ -1,5 +1,6 @@
 using Leguar.TotalJSON;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -22,6 +23,9 @@ namespace Game
 
         public SerializableList pickedUpItemsList = new SerializableList(); // List of picked up world items
         public SerializableList doorsOpenedList = new SerializableList(); // List of which doors player has opened
+
+        private Vector3 currentSpawnPoint;
+        private Vector3 spawnOffset = new Vector3(0, 1f, 0);
 
         public SerializableList skillsUnlockedList = new SerializableList(); // Lists of skills unlocked
         
@@ -96,9 +100,15 @@ namespace Game
             SaveSlotsToSerializableList(PlayerManager.Instance.slotManager.actionSlots, actionSlotList);
             SaveSlotsToSerializableList(EquipmentManager.Instance.equipmentSlots, equipmentList);
 
-            //Save level and xp
+            // Save level and xp
             playerLevel = PlayerManager.Instance.levelSystem.GetCurrentLevel();
             playerExperience = PlayerManager.Instance.levelSystem.GetExperience();
+
+            // Save player position
+            
+            currentSpawnPoint = PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead 
+                ? currentSpawnPoint = GameManager.GetSpawnPositionAtLevel() 
+                : PlayerManager.Instance.transform.position;
         }
 
         private void SaveSlotsToSerializableList(IEnumerable<InventorySlot> slots, SerializableList targetList)
@@ -137,7 +147,9 @@ namespace Game
                 itemsPickedUp = pickedUpItemsList,
                 doorsOpened = doorsOpenedList,
 
-                skillsUnlocked = skillsUnlockedList
+                skillsUnlocked = skillsUnlockedList,
+
+                spawnPosition = currentSpawnPoint
             };
 
             string saveJson = JSON.Serialize(saveData).CreatePrettyString(); // Convert to JSON
@@ -206,8 +218,20 @@ namespace Game
 
             SkillTreeManager.Instance.Initialize();
 
+            if (currentSpawnPoint != Vector3.zero)
+                StartCoroutine(SetCurrentSpawnPoint());
+
             LoadWorldObjects?.Invoke();
         }
+
+        private IEnumerator SetCurrentSpawnPoint()
+        {
+            yield return new WaitForEndOfFrame();
+            PlayerManager player = PlayerManager.Instance;
+            player.transform.position = currentSpawnPoint + spawnOffset;
+            player.Agent.Warp(player.transform.position);
+        }
+
 
         private void ClearSlots(IEnumerable<InventorySlot> slots)
         {
@@ -303,6 +327,8 @@ namespace Game
 
                 skillsUnlockedList = saveData.skillsUnlocked ?? new SerializableList();
 
+                currentSpawnPoint = saveData.spawnPosition;
+
                 Debug.Log($"Loaded Inventory: {inventoryList.serializableList.Count} items");
                 Debug.Log($"Loaded Action Slots: {actionSlotList.serializableList.Count} items");
                 Debug.Log($"Loaded Equipment Slots: {equipmentList.serializableList.Count} items");
@@ -397,5 +423,6 @@ namespace Game
         public SerializableList itemsPickedUp;
         public SerializableList doorsOpened;
         public SerializableList skillsUnlocked;
+        public Vector3 spawnPosition;
     }
 }

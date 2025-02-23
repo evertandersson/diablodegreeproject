@@ -50,6 +50,9 @@ namespace Game
 
         public void Restart()
         {
+            PlayerManager.Instance.CurrentPlayerState = PlayerManager.State.Dead;
+            SaveManager.Instance.Save();
+
             ClearEvents();
 
             OnEnd();
@@ -59,7 +62,8 @@ namespace Game
         }
         public void GoToMainMenu()
         {
-            ClearEvents();
+            SaveManager.Instance.Save();
+            ClearEvents(true);
             Time.timeScale = 1.0f;
             SceneManager.LoadScene("MainMenu");
         }

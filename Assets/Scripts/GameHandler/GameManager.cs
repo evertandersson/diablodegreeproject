@@ -1,10 +1,16 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Game
 {
     public class GameManager : EventHandler.GameEventBehaviour
     {
         private static GameManager _instance;
+
+        public static Dictionary<string, Vector3> spawnPositionAtLevel = new Dictionary<string, Vector3>() { 
+            { "TheDungeon", new Vector3(-38, -5, -30) } 
+        };
 
         #region Properties
 
@@ -29,7 +35,7 @@ namespace Game
 
         #endregion
 
-        private void OnEnable()
+        public void EnableGameManager()
         { 
             // Ensure there is only one instance of GameManager
             if (_instance != null && _instance != this)
@@ -43,6 +49,14 @@ namespace Game
 
             // Register to event system after confirming singleton setup
             EventHandler.Main.PushEvent(this);
+        }
+
+        // Called when restarting a level and wanting to get the spawn pos at this level
+        public static Vector3 GetSpawnPositionAtLevel()
+        {
+            string level = SceneManager.GetActiveScene().name;
+            Vector3 spawnPos = spawnPositionAtLevel[level];
+            return spawnPos;
         }
 
         public override void OnUpdate()

@@ -21,7 +21,7 @@ namespace Game
             var gameManager = GameManager.Instance;
 
             EventHandler.Main.RemoveEvent(this);
-
+            gameManager.EnableGameManager();
 
             SceneManager.LoadScene("TheDungeon", LoadSceneMode.Single);
         }

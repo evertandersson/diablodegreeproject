@@ -27,9 +27,10 @@ public class DeathScreen : Popup
 
     public void Restart()
     {
+        SaveManager.Instance.Save();
+
         ClearEvents();
 
-        // Trigger on end
         OnEnd();
 
         // Reload the current scene
@@ -37,6 +38,9 @@ public class DeathScreen : Popup
     }
     public void GoToMainMenu()
     {
+        SaveManager.Instance.Save();
+        ClearEvents(true);
+        Time.timeScale = 1.0f;
         SceneManager.LoadScene("MainMenu");
     }
 

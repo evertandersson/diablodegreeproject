@@ -46,7 +46,7 @@ namespace Game
             if (group) group.alpha = Mathf.MoveTowards(group.alpha, isDone ? 0.0f : 1.0f, fadeSpeed * Time.deltaTime);
         }
 
-        protected void ClearEvents()
+        protected void ClearEvents(bool exitToMenu = false)
         {
             // Create a list to hold events to remove
             var eventsToRemove = new List<EventHandler.IEvent>();
@@ -54,10 +54,14 @@ namespace Game
             // Identify events to remove
             foreach (var ev in EventHandler.Main.EventStack)
             {
-                if (ev is not GameManager)
+                if (!exitToMenu)
                 {
-                    eventsToRemove.Add(ev);
+                    if (ev is GameManager)
+                    {
+                        continue;
+                    }
                 }
+                eventsToRemove.Add(ev);
             }
 
             // Remove the identified events from the stack
