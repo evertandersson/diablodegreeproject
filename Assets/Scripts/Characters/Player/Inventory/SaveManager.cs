@@ -141,8 +141,8 @@ namespace Game
                 actionSlots = actionSlotList,
                 equipmentSlots = equipmentList,
 
-                level = PlayerManager.Instance.levelSystem.GetCurrentLevel(),
-                experience = PlayerManager.Instance.levelSystem.GetExperience(),
+                level = playerLevel,
+                experience = playerExperience,
 
                 itemsPickedUp = pickedUpItemsList,
                 doorsOpened = doorsOpenedList,
@@ -329,10 +329,10 @@ namespace Game
 
                 currentSpawnPoint = saveData.spawnPosition;
 
-                Debug.Log($"Loaded Inventory: {inventoryList.serializableList.Count} items");
-                Debug.Log($"Loaded Action Slots: {actionSlotList.serializableList.Count} items");
-                Debug.Log($"Loaded Equipment Slots: {equipmentList.serializableList.Count} items");
-                Debug.Log($"Loaded Level: {playerLevel}, XP: {playerExperience}");
+                //Debug.Log($"Loaded Inventory: {inventoryList.serializableList?.Count} items");
+                //Debug.Log($"Loaded Action Slots: {actionSlotList.serializableList?.Count} items");
+                //Debug.Log($"Loaded Equipment Slots: {equipmentList.serializableList?.Count} items");
+                //Debug.Log($"Loaded Level: {playerLevel}, XP: {playerExperience}");
             }
             else
             {
@@ -398,6 +398,23 @@ namespace Game
             SaveDataToFile();
 
             Debug.Log("Game state has been reset: Inventory, Action Slots, Equipment, Level, and Experience.");
+        }
+
+        public void NewGame()
+        {
+            // Clear Serializable Lists
+            inventoryList.serializableList.Clear();
+            actionSlotList.serializableList.Clear();
+            equipmentList.serializableList.Clear();
+            pickedUpItemsList.serializableList.Clear();
+            doorsOpenedList.serializableList.Clear();
+            skillsUnlockedList.serializableList.Clear();
+            playerLevel = 1;
+            playerExperience = 0;
+            currentSpawnPoint = Vector3.zero;
+
+
+            SaveDataToFile();
         }
 
         private string EncryptDecrypt(string data)

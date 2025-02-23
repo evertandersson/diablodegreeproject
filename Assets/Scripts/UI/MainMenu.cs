@@ -17,6 +17,19 @@ namespace Game
 
         public void OnNewGame()
         {
+            SaveManager.Instance.NewGame();
+
+            // Create GameManager instance 
+            var gameManager = GameManager.Instance;
+
+            EventHandler.Main.RemoveEvent(this);
+            gameManager.EnableGameManager();
+
+            SceneManager.LoadScene("TheDungeon", LoadSceneMode.Single);
+        }
+
+        public void OnLoadGame()
+        {
             // Create GameManager instance 
             var gameManager = GameManager.Instance;
 
