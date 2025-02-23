@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Game
 {
@@ -27,12 +28,13 @@ namespace Game
         private Vector3 currentSpawnPoint;
         private Quaternion currentSpawnRotation;
         private Vector3 spawnOffset = new Vector3(0, 1f, 0);
+        private string currentScene;
 
         public SerializableList skillsUnlockedList = new SerializableList(); // Lists of skills unlocked
         
         public static event Action LoadWorldObjects; // Event triggered when world objects are loaded
 
-        private bool useEncryption = true; // Bool to enable/disable encryption
+        private bool useEncryption = false; // Bool to enable/disable encryption
         private readonly string encryptionCodeWord = "word"; // Simple encryption key
 
         // Singleton setup
@@ -105,15 +107,23 @@ namespace Game
             playerLevel = PlayerManager.Instance.levelSystem.GetCurrentLevel();
             playerExperience = PlayerManager.Instance.levelSystem.GetExperience();
 
-            // Save player position
-            currentSpawnPoint = PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead 
-                ? currentSpawnPoint = GameManager.GetSpawnPositionAtLevel() 
-                : PlayerManager.Instance.transform.position;
-
-            // Save player rotation
-            currentSpawnRotation = PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead
-                ? currentSpawnRotation = Quaternion.identity
-                : PlayerManager.Instance.transform.rotation;
+            // Save player position and rotation
+            if (PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead)
+            {
+                currentSpawnPoint = GameManager.GetSpawnPositionAtLevel(SceneManager.GetActiveScene().name);
+                currentSpawnRotation = Quaternion.identity;
+            }
+            else if (TriggerNextLevel.isTransitioningToNextLevel)
+            {
+                currentSpawnPoint = GameManager.GetSpawnPositionAtLevel(TriggerNextLevel.SceneNameTransitioningTo);
+                currentSpawnRotation = PlayerManager.Instance.transform.rotation;
+                currentScene = TriggerNextLevel.SceneNameTransitioningTo;
+            }
+            else
+            {
+                currentSpawnPoint = PlayerManager.Instance.transform.position;
+                currentSpawnRotation = PlayerManager.Instance.transform.rotation;
+            }
         }
 
         private void SaveSlotsToSerializableList(IEnumerable<InventorySlot> slots, SerializableList targetList)
@@ -155,7 +165,8 @@ namespace Game
                 skillsUnlocked = skillsUnlockedList,
 
                 spawnPosition = currentSpawnPoint,
-                spawnRotation = currentSpawnRotation
+                spawnRotation = currentSpawnRotation,
+                scene = currentScene
             };
 
             string saveJson = JSON.Serialize(saveData).CreatePrettyString(); // Convert to JSON
@@ -228,6 +239,8 @@ namespace Game
                 StartCoroutine(SetCurrentSpawnPoint());
 
             LoadWorldObjects?.Invoke();
+
+            TriggerNextLevel.isTransitioningToNextLevel = false;
         }
 
         private IEnumerator SetCurrentSpawnPoint()
@@ -350,7 +363,6 @@ namespace Game
             Debug.Log("Load completed from player_save.json.");
         }
 
-
         public void SaveReset()
         {
             // Reset Inventory Slots
@@ -425,6 +437,28 @@ namespace Game
             SaveDataToFile();
         }
 
+        public string GetLatestSavedScene()
+        {
+            string filepath = Application.persistentDataPath + "/player_save.json";
+
+            if (File.Exists(filepath))
+            {
+                string saveJson = File.ReadAllText(filepath);
+
+                if (useEncryption)
+                {
+                    saveJson = EncryptDecrypt(saveJson);
+                }
+
+                SaveData saveData = JSON.ParseString(saveJson).Deserialize<SaveData>();
+
+                currentScene = saveData.scene;
+                return currentScene;
+            }
+            else 
+                return "";
+        }
+
         private string EncryptDecrypt(string data)
         {
             string modifiedData = "";
@@ -450,5 +484,6 @@ namespace Game
         public SerializableList skillsUnlocked;
         public Vector3 spawnPosition;
         public Quaternion spawnRotation;
+        public string scene;
     }
 }

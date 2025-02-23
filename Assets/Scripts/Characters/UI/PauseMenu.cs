@@ -59,7 +59,7 @@ namespace Game
             SaveManager.Instance.Save();
             ClearEvents(true);
             Time.timeScale = 1.0f;
-            LevelTransition.Instance.Load("MainMenu", this);
+            LevelTransition.Instance?.Load("MainMenu", this);
         }
     }
 

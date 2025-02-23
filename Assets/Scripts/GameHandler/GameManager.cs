@@ -9,7 +9,8 @@ namespace Game
         private static GameManager _instance;
 
         public static Dictionary<string, Vector3> spawnPositionAtLevel = new Dictionary<string, Vector3>() { 
-            { "TheDungeon", new Vector3(-38, -5, -30) } 
+            { "TheDungeon", new Vector3(-38f, -5f, -30f) },
+            { "TestScene", new Vector3(41f, 0f, -42f) } 
         };
 
         #region Properties
@@ -52,9 +53,9 @@ namespace Game
         }
 
         // Called when restarting a level and wanting to get the spawn pos at this level
-        public static Vector3 GetSpawnPositionAtLevel()
+        public static Vector3 GetSpawnPositionAtLevel(string level)
         {
-            string level = SceneManager.GetActiveScene().name;
+            //string level = SceneManager.GetActiveScene().name;
             Vector3 spawnPos = spawnPositionAtLevel[level];
             return spawnPos;
         }

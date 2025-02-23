@@ -36,7 +36,7 @@ namespace Game
             EventHandler.Main.RemoveEvent(this);
             gameManager.EnableGameManager();
 
-            LevelTransition.Instance.Load("TheDungeon", this);
+            LevelTransition.Instance.Load(SaveManager.Instance.GetLatestSavedScene(), this);
         }
         
         public void OnOptions()

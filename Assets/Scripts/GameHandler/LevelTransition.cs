@@ -38,7 +38,11 @@ public class LevelTransition : MonoBehaviour
 
         yield return new WaitForSeconds(transitionTime);
 
-        SceneManager.LoadScene(levelName, LoadSceneMode.Single);
+        if (levelName == "")
+            SceneManager.LoadScene("TheDungeon", LoadSceneMode.Single);
+        else
+            SceneManager.LoadScene(levelName, LoadSceneMode.Single);
+        
         ev?.OnEnd();
 
         yield return new WaitForSeconds(0.2f);
