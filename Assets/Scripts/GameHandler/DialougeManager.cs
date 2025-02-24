@@ -1,3 +1,4 @@
+using Game;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -69,6 +70,16 @@ public class DialougeManager : EventHandler.GameEventBehaviour
         
         if (expression.animation != "")
             currentNPC.animator.CrossFade(expression.animation, 0.2f);
+    }
+
+    public override void OnUpdate()
+    {
+        base.OnUpdate();
+
+        if (PlayerManager.Instance)
+        {
+            PlayerManager.Instance.OnUpdate();   
+        }
     }
 
     public override void OnEnd()
