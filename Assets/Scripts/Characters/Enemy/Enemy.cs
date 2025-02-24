@@ -106,8 +106,11 @@ namespace Game
         public void Pause(bool pause)
         {
             CharacterAnimator.speed = pause ? 0 : 1;
-            Agent.SetDestination(transform.position);
-            Agent.isStopped = pause;
+            if (Agent.enabled)
+            {
+                Agent.SetDestination(transform.position);
+                Agent.isStopped = pause;
+            }
         }
 
         private void SetBaseStats()
