@@ -34,6 +34,13 @@ namespace Game
             // Moves this popup to the bottom of the hierarchy to be in front of all other popups
             transform.SetAsLastSibling();
 
+            if (PlayerManager.Instance != null)
+            {
+                PlayerManager.Instance.Agent.isStopped = true;
+            }
+
+            GameManager.StopAllEnemies(true);
+
             if (!activePopups.Contains(this))
             {
                 activePopups.Push(this); // Push the popup onto the stack
@@ -111,9 +118,12 @@ namespace Game
                 activePopups.Pop(); // Remove the popup from the stack if it's the top one
             }
 
-
             if (PlayerManager.Instance == null)
                 return;
+
+            GameManager.StopAllEnemies(false);
+
+            PlayerManager.Instance.Agent.isStopped = false;
 
             // Check remaining active popups
             PlayerManager.Instance.CurrentPlayerState = activePopups.Count > 0 ? PlayerManager.State.Inventory : PlayerManager.State.Idle;

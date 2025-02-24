@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Game
 {
@@ -38,7 +39,7 @@ namespace Game
         [HideInInspector] public int isHitTrigger = Animator.StringToHash("IsHit");
         [HideInInspector] public int rangedAttackTrigger = Animator.StringToHash("RangedAttack");
 
-        public EventHandler EnemyEventHandler { get; private set; }
+        public EnemyEventHandler EnemyEventHandler { get; private set; }
         public List<EnemyEvent> Events { get; private set; } 
         public Transform Player => player;
 
@@ -100,6 +101,13 @@ namespace Game
             }
 
             Events = new List<EnemyEvent>(GetComponents<EnemyEvent>());
+        }
+
+        public void Pause(bool pause)
+        {
+            CharacterAnimator.speed = pause ? 0 : 1;
+            Agent.SetDestination(transform.position);
+            Agent.isStopped = pause;
         }
 
         private void SetBaseStats()

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,6 +13,12 @@ namespace Game
             { "TheDungeon", new Vector3(-38f, -5f, -30f) },
             { "TestScene", new Vector3(41f, 0f, -42f) } 
         };
+
+        private PlayerManager playerManager;
+
+        public static Enemy[] allEnemies;
+
+        public static event Action enemyUpdate;
 
         #region Properties
 
@@ -63,6 +70,39 @@ namespace Game
         public override void OnUpdate()
         {
             base.OnUpdate();
+
+            if (playerManager == null) playerManager = PlayerManager.Instance;
+
+
+            if (playerManager)
+            {
+                if (EventHandler.Main.CurrentEvent is GameManager)
+                {
+                    playerManager.OnUpdate();
+                }
+            }
+
+            enemyUpdate?.Invoke();
+        }
+
+        private void FixedUpdate()
+        {
+            if (playerManager)
+            {
+                if (EventHandler.Main.CurrentEvent is GameManager)
+                {
+                    playerManager.OnFixedUpdate();
+                }
+            }
+        }
+
+        public static void StopAllEnemies(bool stop)
+        {
+            allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+            foreach (Enemy enemy in allEnemies)
+            {
+                enemy.Pause(stop);
+            }
         }
 
         public override bool IsDone()
