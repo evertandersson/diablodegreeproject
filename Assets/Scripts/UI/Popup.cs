@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,6 +15,9 @@ namespace Game
 
         public static Stack<Popup> activePopups = new Stack<Popup>(); // A stack that keeps track of which popups are currently active
 
+        public static event Action Pause;
+        public static event Action UnPause;
+
         private void OnEnable()
         {
             group = GetComponent<CanvasGroup>();
@@ -25,6 +29,10 @@ namespace Game
         public override void OnBegin(bool firstTime)
         {
             base.OnBegin(firstTime);
+
+            Pause?.Invoke();
+            GameManager.IsPaused = true;
+            PlayerManager.Instance.CharacterAnimator.speed = 0;
 
             isDone = false;
             gameObject.SetActive(true);
@@ -118,15 +126,19 @@ namespace Game
                 activePopups.Pop(); // Remove the popup from the stack if it's the top one
             }
 
+            if (activePopups.Count == 0)
+            {
+                UnPause?.Invoke();
+                GameManager.IsPaused = false;
+                PlayerManager.Instance.CharacterAnimator.speed = 1;
+            }
+
             if (PlayerManager.Instance == null)
                 return;
 
             GameManager.StopAllEnemies(false);
 
             PlayerManager.Instance.Agent.isStopped = false;
-
-            // Check remaining active popups
-            PlayerManager.Instance.CurrentPlayerState = activePopups.Count > 0 ? PlayerManager.State.Inventory : PlayerManager.State.Idle;
 
             if (PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Idle) SlotManager.Instance.SetFirstInLayer();            
         }   

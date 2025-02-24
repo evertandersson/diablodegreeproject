@@ -10,6 +10,8 @@ public abstract class TriggerCutscene : MonoBehaviour
     protected abstract Action StartCutsceneAction { get; }
     protected abstract Action StopCutsceneAction { get; }
 
+    public static bool IsCutScenePlaying = false;
+
     protected virtual void Awake()
     {
         director = GetComponent<PlayableDirector>();
@@ -31,6 +33,7 @@ public abstract class TriggerCutscene : MonoBehaviour
         if (!isTriggered && other.CompareTag("Player"))
         {
             StartCutsceneAction?.Invoke();
+            IsCutScenePlaying = true;
             director.Play();
             isTriggered = true;
         }
@@ -39,6 +42,7 @@ public abstract class TriggerCutscene : MonoBehaviour
     private void OnCutsceneStopped(PlayableDirector obj)
     {
         Debug.Log("Cutscene has ended!");
+        IsCutScenePlaying = false;
         StopCutsceneAction?.Invoke();
     }
 }

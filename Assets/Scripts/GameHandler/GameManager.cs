@@ -20,6 +20,8 @@ namespace Game
 
         public static event Action enemyUpdate;
 
+        public static bool IsPaused;
+
         #region Properties
 
         public static GameManager Instance
@@ -62,7 +64,6 @@ namespace Game
         // Called when restarting a level and wanting to get the spawn pos at this level
         public static Vector3 GetSpawnPositionAtLevel(string level)
         {
-            //string level = SceneManager.GetActiveScene().name;
             Vector3 spawnPos = spawnPositionAtLevel[level];
             return spawnPos;
         }

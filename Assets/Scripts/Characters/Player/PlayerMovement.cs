@@ -176,7 +176,7 @@ namespace Game
 
         private void OnAnimatorMove()
         {
-            if (playerManager.CurrentPlayerState != PlayerManager.State.Rolling) return;
+            if (playerManager.CurrentPlayerState != PlayerManager.State.Rolling || GameManager.IsPaused) return;
 
             // Apply animator movement (root motion)
             Vector3 movement = playerManager.CharacterAnimator.deltaPosition;

@@ -13,7 +13,6 @@ namespace Game
             base.OnBegin(firstTime);
 
             enemy.Agent.isStopped = true;
-            enemy.Agent.enabled = false;
             enemy.CharacterAnimator.SetTrigger(enemy.golem.rangedAttackTrigger);
 
             for (int i = 0; i < projectileCount; i++)
@@ -41,6 +40,7 @@ namespace Game
         public override void OnUpdate()
         {
             base.OnUpdate();
+            enemy.Agent.isStopped = true;
 
             // If current attack animation is playing
             if (IsAnimationPlaying(enemy.golem.rangedAttackAnim))

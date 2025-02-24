@@ -17,14 +17,13 @@ namespace Game
             }
 
             currentAttackIndex = 0;
-            enemy.Agent.isStopped = true;
             enemy.CharacterAnimator.SetTrigger(enemy.attackTrigger);
         }
 
         public override void OnUpdate()
         {
             base.OnUpdate();
-
+            enemy.Agent.isStopped = true;
             enemy.HandleRotation(PlayerManager.Instance.transform.position);
             HandleAnimationCombo();
         }

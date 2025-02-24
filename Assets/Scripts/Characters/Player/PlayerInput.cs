@@ -305,20 +305,20 @@ namespace Game
         private void OpenInventory(InputAction.CallbackContext context)
         {
             if (CanNotOpenMenu()) return;
-            TogglePopup(ref PlayerManager.Instance.inventory, PlayerManager.State.Inventory);
+            TogglePopup(ref PlayerManager.Instance.inventory);
         }
 
         private void OpenSkillTree(InputAction.CallbackContext context)
         {
             if (CanNotOpenMenu()) return;
-            TogglePopup(ref PlayerManager.Instance.skillTree, PlayerManager.State.Inventory);
+            TogglePopup(ref PlayerManager.Instance.skillTree);
         }
 
         private void OpenPauseMenu(InputAction.CallbackContext context)
         {
-            if (Popup.activePopups.Count == 0)
-                TogglePopup(ref PlayerManager.Instance.pauseMenu, PlayerManager.State.Inventory);
-            else
+            if (Popup.activePopups.Count == 0 && !TriggerCutscene.IsCutScenePlaying)
+                TogglePopup(ref PlayerManager.Instance.pauseMenu);
+            else if (Popup.activePopups.Count > 0)
                 Popup.activePopups.Pop().OnCancel();
         }
 
@@ -326,23 +326,24 @@ namespace Game
         {
             return PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead ||
                 PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Inventory ||
-                EventHandler.Main.CurrentEvent is DialougeManager;
+                EventHandler.Main.CurrentEvent is DialougeManager ||
+                GameManager.IsPaused;
         }
 
         private bool CanNotOpenMenu()
         {
             return PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Dead ||
                 PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Rolling ||
-                EventHandler.Main.CurrentEvent is PauseMenu;
+                EventHandler.Main.CurrentEvent is PauseMenu ||
+                TriggerCutscene.IsCutScenePlaying;
         }
 
-        private void TogglePopup<T>(ref T popupInstance, PlayerManager.State activeState) where T : Popup
+        private void TogglePopup<T>(ref T popupInstance) where T : Popup
         {
             if (EventHandler.Main.CurrentEvent is not T)
             {
                 // Open the popup
                 popupInstance = Popup.Create<T>();
-                PlayerManager.Instance.CurrentPlayerState = activeState;
             }
             else
             {

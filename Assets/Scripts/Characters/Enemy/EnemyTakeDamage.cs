@@ -8,7 +8,6 @@ namespace Game
         {
             base.OnBegin(firstTime);
 
-            enemy.Agent.isStopped = true;
             enemy.CharacterAnimator.SetTrigger(enemy.isHitTrigger);
             enemy.isAggro = true;
         }
@@ -16,6 +15,7 @@ namespace Game
         public override void OnUpdate()
         {
             base.OnUpdate();
+            enemy.Agent.isStopped = true;
 
             if (IsAnimationPlaying(enemy.damageAnim))
             {

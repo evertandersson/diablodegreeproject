@@ -16,14 +16,13 @@ public class JumpAttack : EnemyEvent
 
         initialYPosition = transform.position.y;
 
-        enemy.Agent.isStopped = true;
-        enemy.Agent.enabled = false;
         enemy.CharacterAnimator.SetTrigger(enemy.golem.jumpAttackTrigger);
     }
 
     public override void OnUpdate()
     {
         base.OnUpdate();
+        enemy.Agent.isStopped = true;
 
         // If current attack animation is playing
         if (IsAnimationPlaying(enemy.golem.jumpAttackAnim))

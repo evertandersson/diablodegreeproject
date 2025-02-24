@@ -29,6 +29,8 @@ namespace Game
 
         public float distanceToAttack = 1.5f;
 
+        private float originalAcceleration;
+
         // Animation names:
         [HideInInspector] public int damageAnim = Animator.StringToHash("damage");
         [HideInInspector] public int[] attackAnims = { Animator.StringToHash("Attack1"), Animator.StringToHash("Attack2") };
@@ -101,14 +103,25 @@ namespace Game
             }
 
             Events = new List<EnemyEvent>(GetComponents<EnemyEvent>());
+
+            originalAcceleration = Agent.acceleration;
         }
 
         public void Pause(bool pause)
         {
             CharacterAnimator.speed = pause ? 0 : 1;
+
+
             if (Agent.enabled)
             {
-                Agent.SetDestination(transform.position);
+                if (pause)
+                {
+                    Agent.acceleration = 100f;
+                }
+                else
+                {
+                    Agent.acceleration = originalAcceleration;
+                }
                 Agent.isStopped = pause;
             }
         }
@@ -253,24 +266,24 @@ namespace Game
             }
         }
 
-//        private void OnGUI()
-//        {
-//
-//#if UNITY_EDITOR
-//            const float LINE_HEIGHT = 32.0f;
-//            GUI.color = new Color(0.0f, 0.0f, 0.0f, 0.7f);
-//            Rect r = new Rect(0, 0, 250.0f, LINE_HEIGHT * EnemyEventHandler.EventStack.Count);
-//            GUI.DrawTexture(r, Texture2D.whiteTexture);
-//
-//            Rect line = new Rect(10, 0, r.width - 20, LINE_HEIGHT);
-//            for (int i = 0; i < EnemyEventHandler.EventStack.Count; i++)
-//            {
-//                GUI.color = EnemyEventHandler.EventStack[i] == EnemyEventHandler.CurrentEvent ? Color.green : Color.white;
-//                GUI.Label(line, "#" + i + ": " + EnemyEventHandler.EventStack[i].ToString(), i == 0 ? UnityEditor.EditorStyles.boldLabel : UnityEditor.EditorStyles.label);
-//                line.y += line.height;
-//            }
-//#endif
-//        }
+            private void OnGUI()
+            {
+    
+    #if UNITY_EDITOR
+                const float LINE_HEIGHT = 32.0f;
+                GUI.color = new Color(0.0f, 0.0f, 0.0f, 0.7f);
+                Rect r = new Rect(0, 0, 250.0f, LINE_HEIGHT * EnemyEventHandler.EventStack.Count);
+                GUI.DrawTexture(r, Texture2D.whiteTexture);
+    
+                Rect line = new Rect(10, 0, r.width - 20, LINE_HEIGHT);
+                for (int i = 0; i < EnemyEventHandler.EventStack.Count; i++)
+                {
+                    GUI.color = EnemyEventHandler.EventStack[i] == EnemyEventHandler.CurrentEvent ? Color.green : Color.white;
+                    GUI.Label(line, "#" + i + ": " + EnemyEventHandler.EventStack[i].ToString(), i == 0 ? UnityEditor.EditorStyles.boldLabel : UnityEditor.EditorStyles.label);
+                    line.y += line.height;
+                }
+    #endif
+            }
 
 //        private void OnDrawGizmos()
 //        {
