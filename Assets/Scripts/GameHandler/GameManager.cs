@@ -1,3 +1,4 @@
+using Autodesk.Fbx;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,6 +8,8 @@ namespace Game
     public class GameManager : EventHandler.GameEventBehaviour
     {
         private static GameManager _instance;
+
+        private static Enemy[] allEnemies;
 
         public static Dictionary<string, Vector3> spawnPositionAtLevel = new Dictionary<string, Vector3>() { 
             { "TheDungeon", new Vector3(-38f, -5f, -30f) },
@@ -63,6 +66,22 @@ namespace Game
         public override void OnUpdate()
         {
             base.OnUpdate();
+
+            if (allEnemies == null)
+            {
+                allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+            }
+
+            if (PlayerManager.Instance != null)
+            {
+                PlayerManager.Instance?.OnUpdate();
+                PlayerManager.Instance?.OnFixedUpdate();
+            }
+
+            foreach(Enemy enemy in allEnemies)
+            {
+                enemy.EnemyEventHandler.CurrentEvent?.OnUpdate();
+            }
         }
 
         public override bool IsDone()

@@ -21,7 +21,7 @@ namespace Game
         public override void OnBegin(bool firstTime)
         {
             base.OnBegin(firstTime);
-            Time.timeScale = 0.0f;
+            //Time.timeScale = 0.0f;
             resumeButton.interactable = true;
             restartButton.interactable = true;
             mainMenuButton.interactable = true;
@@ -35,7 +35,7 @@ namespace Game
             resumeButton.interactable = false;
             restartButton.interactable = false;
             mainMenuButton.interactable = false;
-            Time.timeScale = 1.0f;
+            //Time.timeScale = 1.0f;
         }
 
         public override bool IsDone()
@@ -58,7 +58,7 @@ namespace Game
         {
             SaveManager.Instance.Save();
             ClearEvents(true);
-            Time.timeScale = 1.0f;
+            //Time.timeScale = 1.0f;
             LevelTransition.Instance?.Load("MainMenu", this);
         }
     }

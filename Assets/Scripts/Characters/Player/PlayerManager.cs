@@ -347,7 +347,7 @@ namespace Game
             currentMana = Mathf.Clamp(currentMana, 0, maxMana);
         }
 
-        public void Update()
+        public void OnUpdate()
         {
             HandleAttackDelay();
             slotManager.HandleCooldowns();
@@ -399,7 +399,7 @@ namespace Game
             }
         }
 
-        private void FixedUpdate()
+        public void OnFixedUpdate()
         {
             // Handle movement
             if (playerInput.IsMoving()) playerInput.Move();
