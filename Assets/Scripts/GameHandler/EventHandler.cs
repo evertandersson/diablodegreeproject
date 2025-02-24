@@ -1,4 +1,3 @@
-using Game;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,9 +23,9 @@ public class EventHandler : MonoBehaviour
 
     private static EventHandler main; // Singleton instance of the main event handler
 
-    protected List<IEvent> eventStack = new List<IEvent>(); // Stack to store active events
-    protected HashSet<IEvent> startedEvents = new HashSet<IEvent>(); // Tracks started events
-    protected IEvent currentEvent; // Currently active event
+    private List<IEvent> eventStack = new List<IEvent>(); // Stack to store active events
+    private HashSet<IEvent> startedEvents = new HashSet<IEvent>(); // Tracks started events
+    private IEvent currentEvent; // Currently active event
 
     public static EventHandler Main
     {
@@ -42,7 +41,7 @@ public class EventHandler : MonoBehaviour
         }
     }
 
-    private static List<EnemyEventHandler> eventHandlers = new List<EnemyEventHandler>(); // List of all event handlers created, uses eventhandlers for enemy as well
+    private static List<EventHandler> eventHandlers = new List<EventHandler>(); // List of all event handlers created, uses eventhandlers for enemy as well
 
     #region Properties
 
@@ -52,10 +51,10 @@ public class EventHandler : MonoBehaviour
     #endregion
 
     // Creates a new event handler instance and adds it to the list
-    public static EnemyEventHandler CreateEventHandler()
+    public static EventHandler CreateEventHandler()
     {
         GameObject go = new GameObject("EventHandler_" + eventHandlers.Count);
-        EnemyEventHandler newHandler = go.AddComponent<EnemyEventHandler>();
+        EventHandler newHandler = go.AddComponent<EventHandler>();
         eventHandlers.Add(newHandler);
         return newHandler;
     }
@@ -98,7 +97,7 @@ public class EventHandler : MonoBehaviour
     }
 
     // Handles the logic of managing events in the stack
-    protected virtual void UpdateEvents()
+    private void UpdateEvents()
     {
         if (eventStack.Count == 0) return;
 

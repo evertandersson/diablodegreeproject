@@ -38,7 +38,7 @@ namespace Game
         [HideInInspector] public int isHitTrigger = Animator.StringToHash("IsHit");
         [HideInInspector] public int rangedAttackTrigger = Animator.StringToHash("RangedAttack");
 
-        public EnemyEventHandler EnemyEventHandler { get; private set; }
+        public EventHandler EnemyEventHandler { get; private set; }
         public List<EnemyEvent> Events { get; private set; } 
         public Transform Player => player;
 
@@ -89,7 +89,7 @@ namespace Game
             SetBaseStats();
 
             CharacterAnimator = GetComponent<Animator>();
-            EnemyEventHandler = EnemyEventHandler.CreateEventHandler();
+            EnemyEventHandler = EventHandler.CreateEventHandler();
             EnableRagdoll(false);
 
             golem = this as GolemBoss;
