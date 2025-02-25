@@ -97,15 +97,6 @@ namespace Game
             }
         }
 
-        public static void StopAllEnemies(bool stop)
-        {
-            allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
-            foreach (Enemy enemy in allEnemies)
-            {
-                enemy.Pause(stop);
-            }
-        }
-
         public override bool IsDone()
         {
             return false;

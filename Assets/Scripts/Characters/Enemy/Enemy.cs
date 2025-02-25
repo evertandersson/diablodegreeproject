@@ -12,7 +12,7 @@ namespace Game
         [Range(0f, 1f)] public float dropRate;
     }
 
-    public class Enemy : Character, IPooledObject
+    public class Enemy : Character, IPooledObject, IPausable
     {
         [SerializeField] private int experienceOnDeath = 20;
 
@@ -107,25 +107,6 @@ namespace Game
             originalAcceleration = Agent.acceleration;
         }
 
-        public void Pause(bool pause)
-        {
-            CharacterAnimator.speed = pause ? 0 : 1;
-
-
-            if (Agent.enabled)
-            {
-                if (pause)
-                {
-                    Agent.acceleration = 100f;
-                }
-                else
-                {
-                    Agent.acceleration = originalAcceleration;
-                }
-                Agent.isStopped = pause;
-            }
-        }
-
         private void SetBaseStats()
         {
             baseMaxHealth = maxHealth;
@@ -140,6 +121,9 @@ namespace Game
             TriggerCutscene01.StopCutscene01 += StopCutscene;
             TriggerCutscene02.StartCutscene02 += StartCutscene;
             TriggerCutscene02.StopCutscene02 += StopCutscene;
+            
+            Popup.Pause += Pause;
+            Popup.UnPause += UnPause;
         }
 
         protected virtual void OnDisable()
@@ -148,6 +132,9 @@ namespace Game
             TriggerCutscene01.StopCutscene01 -= StopCutscene;
             TriggerCutscene02.StartCutscene02 -= StartCutscene;
             TriggerCutscene02.StopCutscene02 -= StopCutscene;
+            
+            Popup.Pause -= Pause;
+            Popup.UnPause -= UnPause;
         }
 
         private void StartCutscene()
@@ -266,7 +253,36 @@ namespace Game
             }
         }
 
-            private void OnGUI()
+        public void Pause()
+        {
+            Pause(true);
+        }
+
+        public void UnPause()
+        {
+            Pause(false);
+        }
+
+
+        public void Pause(bool pause)
+        {
+            CharacterAnimator.speed = pause ? 0 : 1;
+
+            if (Agent.enabled)
+            {
+                if (pause)
+                {
+                    Agent.acceleration = 100f;
+                }
+                else
+                {
+                    Agent.acceleration = originalAcceleration;
+                }
+                Agent.isStopped = pause;
+            }
+        }
+
+        private void OnGUI()
             {
     
     #if UNITY_EDITOR
@@ -285,20 +301,21 @@ namespace Game
     #endif
             }
 
-//        private void OnDrawGizmos()
-//        {
-//            // Draw the vision range
-//            Gizmos.color = Color.yellow;
-//            Gizmos.DrawWireSphere(transform.position, visionRange);
-//                    // Draw the vision cone
-//            Vector3 forward = transform.forward * visionRange;
-//            Vector3 leftBoundary = Quaternion.Euler(0, -visionAngle, 0) * forward;
-//            Vector3 rightBoundary = Quaternion.Euler(0, visionAngle, 0) * forward;
-//                    Gizmos.color = Color.red;
-//            Gizmos.DrawRay(transform.position, leftBoundary);
-//            Gizmos.DrawRay(transform.position, rightBoundary);
-//        }
-        
+
+        //        private void OnDrawGizmos()
+        //        {
+        //            // Draw the vision range
+        //            Gizmos.color = Color.yellow;
+        //            Gizmos.DrawWireSphere(transform.position, visionRange);
+        //                    // Draw the vision cone
+        //            Vector3 forward = transform.forward * visionRange;
+        //            Vector3 leftBoundary = Quaternion.Euler(0, -visionAngle, 0) * forward;
+        //            Vector3 rightBoundary = Quaternion.Euler(0, visionAngle, 0) * forward;
+        //                    Gizmos.color = Color.red;
+        //            Gizmos.DrawRay(transform.position, leftBoundary);
+        //            Gizmos.DrawRay(transform.position, rightBoundary);
+        //        }
+
 
     }
 }

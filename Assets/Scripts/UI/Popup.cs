@@ -32,7 +32,6 @@ namespace Game
 
             Pause?.Invoke();
             GameManager.IsPaused = true;
-            PlayerManager.Instance.CharacterAnimator.speed = 0;
 
             isDone = false;
             gameObject.SetActive(true);
@@ -41,13 +40,6 @@ namespace Game
 
             // Moves this popup to the bottom of the hierarchy to be in front of all other popups
             transform.SetAsLastSibling();
-
-            if (PlayerManager.Instance != null)
-            {
-                PlayerManager.Instance.Agent.isStopped = true;
-            }
-
-            GameManager.StopAllEnemies(true);
 
             if (!activePopups.Contains(this))
             {
@@ -130,15 +122,11 @@ namespace Game
             {
                 UnPause?.Invoke();
                 GameManager.IsPaused = false;
-                PlayerManager.Instance.CharacterAnimator.speed = 1;
+
             }
 
             if (PlayerManager.Instance == null)
                 return;
-
-            GameManager.StopAllEnemies(false);
-
-            PlayerManager.Instance.Agent.isStopped = false;
 
             if (PlayerManager.Instance.CurrentPlayerState == PlayerManager.State.Idle) SlotManager.Instance.SetFirstInLayer();            
         }   
