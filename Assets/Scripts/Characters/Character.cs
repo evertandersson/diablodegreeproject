@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class Character : MonoBehaviour
+public abstract class Character : MonoBehaviour, IPausable
 {
     [SerializeField]
     public float health;
@@ -79,6 +79,18 @@ public abstract class Character : MonoBehaviour
         health = maxHealth;
         renderers = GetComponentsInChildren<SkinnedMeshRenderer>(true);
         originalColor = renderers[0].material.color;
+    }
+
+    protected virtual void OnEnable()
+    {
+        Popup.Pause += Pause;
+        Popup.UnPause += UnPause;
+    }
+
+    protected virtual void OnDisable()
+    {
+        Popup.Pause -= Pause;
+        Popup.UnPause -= UnPause;
     }
 
     public virtual void TakeDamage(int damage)
@@ -195,4 +207,7 @@ public abstract class Character : MonoBehaviour
     protected abstract void Die();
 
     public abstract void Attack(int attackIndex);
+
+    public abstract void Pause();
+    public abstract void UnPause();
 }

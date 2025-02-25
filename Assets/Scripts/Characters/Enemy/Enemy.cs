@@ -12,7 +12,7 @@ namespace Game
         [Range(0f, 1f)] public float dropRate;
     }
 
-    public class Enemy : Character, IPooledObject, IPausable
+    public class Enemy : Character, IPooledObject
     {
         [SerializeField] private int experienceOnDeath = 20;
 
@@ -115,26 +115,24 @@ namespace Game
             baseExperienceOnDeath = experienceOnDeath;
         }
 
-        protected virtual void OnEnable()
+        protected override void OnEnable()
         {
             TriggerCutscene01.StartCutscene01 += StartCutscene;
             TriggerCutscene01.StopCutscene01 += StopCutscene;
             TriggerCutscene02.StartCutscene02 += StartCutscene;
             TriggerCutscene02.StopCutscene02 += StopCutscene;
-            
-            Popup.Pause += Pause;
-            Popup.UnPause += UnPause;
+
+            base.OnEnable();
         }
 
-        protected virtual void OnDisable()
+        protected override void OnDisable()
         {
             TriggerCutscene01.StartCutscene01 -= StartCutscene;
             TriggerCutscene01.StopCutscene01 -= StopCutscene;
             TriggerCutscene02.StartCutscene02 -= StartCutscene;
             TriggerCutscene02.StopCutscene02 -= StopCutscene;
-            
-            Popup.Pause -= Pause;
-            Popup.UnPause -= UnPause;
+
+            base.OnDisable();
         }
 
         private void StartCutscene()
@@ -253,12 +251,12 @@ namespace Game
             }
         }
 
-        public void Pause()
+        public override void Pause()
         {
             Pause(true);
         }
 
-        public void UnPause()
+        public override void UnPause()
         {
             Pause(false);
         }
@@ -266,20 +264,22 @@ namespace Game
 
         public void Pause(bool pause)
         {
-            CharacterAnimator.speed = pause ? 0 : 1;
+            //if (this == null || gameObject == null) return;
 
-            if (Agent.enabled)
+            if (CharacterAnimator) CharacterAnimator.speed = pause ? 0 : 1;
+
+            if (!gameObject.activeSelf || !Agent.enabled) return;
+
+            if (pause)
             {
-                if (pause)
-                {
-                    Agent.acceleration = 100f;
-                }
-                else
-                {
-                    Agent.acceleration = originalAcceleration;
-                }
-                Agent.isStopped = pause;
+                Agent.acceleration = 100f;
             }
+            else
+            {
+                Agent.acceleration = originalAcceleration;
+            }
+            Agent.isStopped = pause;
+
         }
 
         private void OnGUI()

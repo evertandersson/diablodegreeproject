@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Game
 {
-    public class PlayerManager : Character, IPausable
+    public class PlayerManager : Character
     {
         public enum State
         {
@@ -207,18 +207,6 @@ namespace Game
             //Time.timeScale = 0.2f;
 
 
-        }
-
-        private void OnEnable()
-        {
-            Popup.Pause += Pause;
-            Popup.UnPause += UnPause;
-        }
-
-        private void OnDisable()
-        {
-            Popup.Pause -= Pause;
-            Popup.UnPause -= UnPause;
         }
 
         protected override void Start()
@@ -532,13 +520,13 @@ namespace Game
             Popup.Create<DeathScreen>();
         }
 
-        public void Pause()
+        public override void Pause()
         {
             Agent.isStopped = true;
             CharacterAnimator.speed = 0;
         }
 
-        public void UnPause()
+        public override void UnPause()
         {
             Agent.isStopped = false;
             CharacterAnimator.speed = 1;
