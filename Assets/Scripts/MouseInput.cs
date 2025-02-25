@@ -22,16 +22,12 @@ namespace Game
         Outline highlightedObject = null;
         private bool highlightEnabled = true;
 
-        [SerializeField] private Texture2D cursorTexture;
-        private Vector2 hotspot = Vector2.zero;
-
         [SerializeField] private CinemachineCamera dialougeCamera;
 
         private void Awake()
         {
             followComponent = GetComponent<CinemachineFollow>();
             followOffset = followComponent.FollowOffset;
-            Cursor.SetCursor(cursorTexture, hotspot, CursorMode.Auto);
         }
 
         private void Start()
