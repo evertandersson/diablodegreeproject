@@ -18,11 +18,29 @@ public class DeathScreen : Popup
 
     public override void OnBegin(bool firstTime)
     {
-        base.OnBegin(firstTime);
+        isDone = false;
+        gameObject.SetActive(true);
+        group.interactable = true;
+        group.blocksRaycasts = true;
+
+        // Moves this popup to the bottom of the hierarchy to be in front of all other popups
+        transform.SetAsLastSibling();
+
+        if (!activePopups.Contains(this))
+        {
+            activePopups.Push(this); // Push the popup onto the stack
+        }
 
         SaveManager.Instance.Save(); // Save the game before reloading
 
         StartCoroutine(EnableButtons()); // Wait a second before activating buttons
+    }
+
+    public override void OnUpdate()
+    {
+        base.OnUpdate();
+
+        GameManager.Instance.UpdateEnemies();
     }
 
     public void GoToMainMenu()

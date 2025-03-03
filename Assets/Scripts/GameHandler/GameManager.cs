@@ -83,6 +83,11 @@ namespace Game
                 }
             }
 
+            UpdateEnemies();
+        }
+
+        public void UpdateEnemies()
+        {
             enemyUpdate?.Invoke();
         }
 

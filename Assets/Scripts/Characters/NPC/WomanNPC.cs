@@ -4,6 +4,8 @@ using UnityEngine;
 public class WomanNPC : NPC, Interactable
 {
     public Dialouge dialouge;
+    public Dialouge dialougeAfterBossKill;
+
     private Quaternion originalRotation;
 
     private float rotateSpeed = 2f;
@@ -21,6 +23,12 @@ public class WomanNPC : NPC, Interactable
 
     public void Trigger()
     {
+        if (GolemBoss.isGolemKilled)
+        {
+            DialougeManager.Instance.StartDialouge(dialougeAfterBossKill, this);
+            return;
+        }
+
         DialougeManager.Instance.StartDialouge(dialouge, this);
     }
 

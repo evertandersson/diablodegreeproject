@@ -39814,6 +39814,13 @@ MonoBehaviour:
       animation: 
     - sentence: Come back to me once you have dealt with him.
       animation: Wave
+  dialougeAfterBossKill:
+    name: Mysterious Devil Woman
+    expressions:
+    - sentence: Wow, you killed the Golem! Thats amazing!
+      animation: Wave
+    - sentence: Come on, let's go together and find a way to get out of here.
+      animation: 
 --- !u!136 &628041257
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -72984,15 +72991,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5251107426523682287, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 30
+      value: -38
       objectReference: {fileID: 0}
     - target: {fileID: 5251107426523682287, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.5
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 5251107426523682287, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -9.500002
+      value: -30
       objectReference: {fileID: 0}
     - target: {fileID: 5251107426523682287, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_LocalRotation.w

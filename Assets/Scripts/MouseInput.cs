@@ -55,6 +55,9 @@ namespace Game
 
         void Update()
         {
+            if (GameManager.IsPaused)
+                return;
+
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out hit, float.MaxValue, raycastLayers))
