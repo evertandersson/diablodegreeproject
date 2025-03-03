@@ -118,6 +118,7 @@ MonoBehaviour:
   defense: 2
   bloodSplashEffect: {fileID: 4046362927222971067}
   renderers: []
+  capsuleCollider: {fileID: 0}
   visionAngle: 45
   visionRange: 10
   detectionMask:
@@ -3771,3 +3772,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 1168507747739804472}
   backgroundSlider: {fileID: 1054086171204708133}
+  levelText: {fileID: 0}

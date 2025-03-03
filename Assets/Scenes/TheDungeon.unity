@@ -12979,6 +12979,10 @@ PrefabInstance:
       propertyPath: m_Speed
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 3707500328194862533, guid: 099869b675c413049879137f404ed89e, type: 3}
+      propertyPath: m_WalkableMask
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4099591825037053173, guid: 099869b675c413049879137f404ed89e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.000000063329885
@@ -72858,6 +72862,10 @@ PrefabInstance:
       propertyPath: layerMask.m_Bits
       value: 5120
       objectReference: {fileID: 0}
+    - target: {fileID: 2732687073139964533, guid: e36f78db816620d428e793016e941dd2, type: 3}
+      propertyPath: m_WalkableMask
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 2750767352285356469, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -72984,15 +72992,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5251107426523682287, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 5251107426523682287, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.5
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5251107426523682287, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -14.5
+      value: -10.000002
       objectReference: {fileID: 0}
     - target: {fileID: 5251107426523682287, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_LocalRotation.w
@@ -73048,11 +73056,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5255920869306411699, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_Size
-      value: 0.50688374
+      value: 0.5058794
       objectReference: {fileID: 0}
     - target: {fileID: 5255920869306411699, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_Value
-      value: 1.0000025
+      value: 1.0000008
       objectReference: {fileID: 0}
     - target: {fileID: 5718201063784725279, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_AnchorMax.y
@@ -73132,7 +73140,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6856731701567145737, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -151.08012
+      value: -151.08014
       objectReference: {fileID: 0}
     - target: {fileID: 7264743229538116425, guid: e36f78db816620d428e793016e941dd2, type: 3}
       propertyPath: m_AnchorMax.x
@@ -119778,7 +119786,7 @@ GameObject:
   - component: {fileID: 2044768982}
   - component: {fileID: 2044768981}
   m_Layer: 0
-  m_Name: NavMesh Surface
+  m_Name: PlayerNavMeshSurface
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -119814,7 +119822,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.1
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: a56d4c805670807448f1a2b52317afe6, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: c8c8ca81d255cda479633fa20bc8813f, type: 2}
   m_BuildHeightMesh: 0
 --- !u!4 &2044768982
 Transform:

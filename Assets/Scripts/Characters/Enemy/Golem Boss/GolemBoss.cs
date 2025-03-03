@@ -14,6 +14,7 @@ namespace Game
 
         protected override void OnEnable()
         {
+            Agent.avoidancePriority = 10;
             TriggerCutscene02.StopCutscene02 += StopCutscene;
         }
 
