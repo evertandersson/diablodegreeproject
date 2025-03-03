@@ -14,11 +14,16 @@ namespace Game
 
         protected override void OnEnable()
         {
+            Agent.avoidancePriority = 10;
+            Popup.Pause += Pause;
+            Popup.UnPause += UnPause;
             TriggerCutscene02.StopCutscene02 += StopCutscene;
         }
 
         protected override void OnDisable()
         {
+            Popup.Pause -= Pause;
+            Popup.UnPause -= UnPause;
             TriggerCutscene02.StartCutscene02 -= StopCutscene;
         }
 
