@@ -130,10 +130,7 @@ namespace Game
 
             rollDirection = GetRollDirection();
 
-            if (playerManager.Agent.enabled)
-            {
-                playerManager.Agent.isStopped = true;
-            }
+            if (playerManager.Agent.enabled) playerManager.Agent.isStopped = true;
 
             playerManager.transform.rotation = Quaternion.LookRotation(rollDirection);
             playerManager.CharacterAnimator.SetTrigger(rollTrigger);

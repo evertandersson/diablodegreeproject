@@ -22,8 +22,7 @@ public class JumpAttack : EnemyEvent
     public override void OnUpdate()
     {
         base.OnUpdate();
-        if (enemy.Agent.enabled)
-            enemy.Agent.isStopped = true;
+        enemy.Agent.isStopped = true;
 
         // If current attack animation is playing
         if (IsAnimationPlaying(enemy.golem.jumpAttackAnim))

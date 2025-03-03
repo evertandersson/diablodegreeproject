@@ -522,15 +522,13 @@ namespace Game
 
         public override void Pause()
         {
-            if (Agent.enabled)
-                Agent.isStopped = true;
+            Agent.isStopped = true;
             CharacterAnimator.speed = 0;
         }
 
         public override void UnPause()
         {
-            if (Agent.enabled)
-                Agent.isStopped = false;
+            Agent.isStopped = false;
             CharacterAnimator.speed = 1;
         }
     }

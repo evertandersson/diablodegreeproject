@@ -36,7 +36,7 @@ public abstract class Character : MonoBehaviour, IPausable
     private Color flashColor = Color.red;
     private float flashDuration = 0.1f;
 
-    public CapsuleCollider capsuleCollider;
+    protected CapsuleCollider capsuleCollider;
     private Rigidbody[] rigidbodies;
     private Collider[] colliders;
 
