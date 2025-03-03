@@ -8,6 +8,8 @@ public class JumpAttack : EnemyEvent
 
     public override void OnBegin(bool firstTime)
     {
+        enemy.Agent.enabled = false;
+
         if (!IsCloseToPlayer(enemy.golem.distanceToJumpAttack + 0.5f))
         {
             isDone = true;
@@ -22,7 +24,8 @@ public class JumpAttack : EnemyEvent
     public override void OnUpdate()
     {
         base.OnUpdate();
-        enemy.Agent.isStopped = true;
+        if (enemy.Agent.enabled)
+            enemy.Agent.isStopped = true;
 
         // If current attack animation is playing
         if (IsAnimationPlaying(enemy.golem.jumpAttackAnim))
