@@ -30,6 +30,8 @@ namespace Game
         private Vector3 spawnOffset = new Vector3(0, 1f, 0);
         private string currentScene;
 
+        private bool isGolemKilled = false;
+
         public SerializableList skillsUnlockedList = new SerializableList(); // Lists of skills unlocked
         
         public static event Action LoadWorldObjects; // Event triggered when world objects are loaded
@@ -112,6 +114,7 @@ namespace Game
             {
                 currentSpawnPoint = GameManager.GetSpawnPositionAtLevel(SceneManager.GetActiveScene().name);
                 currentSpawnRotation = Quaternion.identity;
+                currentScene = SceneManager.GetActiveScene().name;
             }
             else if (TriggerNextLevel.isTransitioningToNextLevel)
             {
@@ -123,6 +126,7 @@ namespace Game
             {
                 currentSpawnPoint = PlayerManager.Instance.transform.position;
                 currentSpawnRotation = PlayerManager.Instance.transform.rotation;
+                currentScene = SceneManager.GetActiveScene().name;
             }
         }
 
@@ -166,7 +170,9 @@ namespace Game
 
                 spawnPosition = currentSpawnPoint,
                 spawnRotation = currentSpawnRotation,
-                scene = currentScene
+                scene = currentScene,
+
+                golemKilled = GolemBoss.isGolemKilled
             };
 
             string saveJson = JSON.Serialize(saveData).CreatePrettyString(); // Convert to JSON
@@ -241,6 +247,12 @@ namespace Game
             LoadWorldObjects?.Invoke();
 
             TriggerNextLevel.isTransitioningToNextLevel = false;
+
+            if (isGolemKilled)
+            {
+                GolemBoss golem = FindFirstObjectByType<GolemBoss>();
+                golem?.DisableBoss();
+            }
         }
 
         private IEnumerator SetCurrentSpawnPoint()
@@ -349,6 +361,8 @@ namespace Game
 
                 currentSpawnPoint = saveData.spawnPosition;
                 currentSpawnRotation = saveData.spawnRotation;
+
+                isGolemKilled = saveData.golemKilled;
 
                 Debug.Log($"Loaded Inventory: {inventoryList.serializableList?.Count} items");
                 Debug.Log($"Loaded Action Slots: {actionSlotList.serializableList?.Count} items");
@@ -485,5 +499,8 @@ namespace Game
         public Vector3 spawnPosition;
         public Quaternion spawnRotation;
         public string scene;
+
+        // Boss kills
+        public bool golemKilled;
     }
 }

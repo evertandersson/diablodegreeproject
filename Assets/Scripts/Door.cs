@@ -10,6 +10,9 @@ namespace Game
         [SerializeField] private ItemSO key;
         Renderer doorRenderer;
 
+        Quaternion originalRotation;
+        Quaternion openRotation;
+
         public enum State
         {
             Locked,
@@ -23,6 +26,9 @@ namespace Game
         {
             base.Awake();
             doorRenderer = GetComponent<Renderer>();
+
+            originalRotation = transform.rotation;
+            openRotation = Quaternion.Euler(0, originalRotation.eulerAngles.y - 90f, 0);
         }
 
         protected override void Load()
@@ -88,12 +94,12 @@ namespace Game
             if (state == State.Open)
             {
                 // Rotate to open position (-90 degrees around the Y-axis)
-                targetRotation = Quaternion.Euler(0, -90, 0);
+                targetRotation = openRotation;
             }
             else if (state == State.Closed)
             {
                 // Rotate back to closed position (0 degrees around the Y-axis)
-                targetRotation = Quaternion.Euler(0, 0, 0);
+                targetRotation = originalRotation;
             }
             else
             {
@@ -115,12 +121,33 @@ namespace Game
         {
             if (doorRenderer != null)
             {
-                return doorRenderer.bounds.center; // Center of the door in world space
+                // Vector pointing from the door to the player
+                Vector3 directionToPlayer = (PlayerManager.Instance.transform.position - transform.position).normalized;
+
+                // Get the door's forward direction
+                Vector3 doorForward = transform.forward;
+
+                // Calculate the dot product to determine the relative position of the player
+                float dotProduct = Vector3.Dot(directionToPlayer, doorForward);
+
+                // If the player is on the side of the door that is "in front" of the door (based on the door's forward direction)
+                if (dotProduct > 0)
+                {
+                    // Player is in front of the door, use the center from the doorRenderer
+                    return doorRenderer.bounds.center;
+                }
+                else
+                {
+                    // Player is behind the door, adjust the center to the opposite side
+                    Vector3 adjustedCenter = doorRenderer.bounds.center - doorRenderer.bounds.extents.z * doorForward;
+                    return adjustedCenter;
+                }
             }
 
             // Fallback to the transform position if no Renderer is found
             return transform.position;
         }
+
     }
 
 }

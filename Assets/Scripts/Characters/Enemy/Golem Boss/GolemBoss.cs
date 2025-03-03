@@ -4,6 +4,8 @@ namespace Game
 {
     public class GolemBoss : Enemy
     {
+        public static bool isGolemKilled = false;
+
         public float distanceToJumpAttack = 4f;
 
         [HideInInspector] public int jumpAttackTrigger = Animator.StringToHash("IntroAttack");
@@ -20,6 +22,12 @@ namespace Game
             TriggerCutscene02.StartCutscene02 -= StopCutscene;
         }
 
+        public void DisableBoss()
+        {
+            gameObject.SetActive(false);
+            isGolemKilled = true;
+        }
+
         public override void TakeDamage(int damage)
         {
             if (!IsDead)
@@ -34,6 +42,13 @@ namespace Game
                     Die();
                 }
             }
+        }
+
+        protected override void Die()
+        {
+            base.Die();
+            isGolemKilled = true;
+            SaveManager.Instance.Save();
         }
 
         private void StopCutscene()
