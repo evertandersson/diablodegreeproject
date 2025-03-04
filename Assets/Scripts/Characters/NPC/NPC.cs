@@ -1,6 +1,27 @@
 using UnityEngine;
 
-public class NPC : MonoBehaviour
+namespace Game
 {
-    public Animator animator;
+    public class NPC : Character
+    {
+        public override void Attack(int attackIndex)
+        {
+
+        }
+
+        public override void Pause()
+        {
+
+        }
+
+        public override void UnPause()
+        {
+
+        }
+
+        protected override void Die()
+        {
+
+        }
+    }
 }

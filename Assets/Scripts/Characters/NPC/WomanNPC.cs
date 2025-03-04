@@ -1,50 +1,81 @@
-using Game;
 using UnityEngine;
 
-public class WomanNPC : NPC, Interactable
+namespace Game
 {
-    public Dialouge dialouge;
-    public Dialouge dialougeAfterBossKill;
-
-    private Quaternion originalRotation;
-
-    private float rotateSpeed = 2f;
-
-    private void Start()
+    public class WomanNPC : NPC, Interactable
     {
-        originalRotation = transform.rotation;
-        animator = GetComponent<Animator>();
-    }
+        public Dialouge dialouge;
+        public Dialouge dialougeAfterBossKill;
+        private bool followPlayer;
 
-    public Vector3 GetCenterPoint()
-    {
-        return transform.position;
-    }
+        private Quaternion originalRotation;
 
-    public void Trigger()
-    {
-        if (GolemBoss.isGolemKilled)
+        private float rotateSpeed = 2f;
+
+        protected override void Start()
         {
-            DialougeManager.Instance.StartDialouge(dialougeAfterBossKill, this);
-            return;
+            Initialize();
+            originalRotation = transform.rotation;
+            CharacterAnimator = GetComponent<Animator>();
         }
 
-        DialougeManager.Instance.StartDialouge(dialouge, this);
-    }
-
-    private void Update()
-    {
-        if (DialougeManager.Instance.currentNPC == this)
+        public Vector3 GetCenterPoint()
         {
-            Vector3 direction = (PlayerManager.Instance.transform.position - transform.position).normalized;
-            direction.y = 0;
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotateSpeed * Time.deltaTime);
+            return transform.position;
         }
-        else
+
+        public void Trigger()
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, originalRotation, rotateSpeed * Time.deltaTime);
+            if (GolemBoss.isGolemKilled)
+            {
+                DialougeManager.Instance.StartDialouge(dialougeAfterBossKill, this, OnDialogueComplete);
+                return;
+            }
+
+            DialougeManager.Instance.StartDialouge(dialouge, this);
+        }
+
+        private void OnDialogueComplete()
+        {
+            followPlayer = true;
+        }
+
+        private void Update()
+        {
+            SetFloatRunSpeed();
+
+            // Handle follow player logic here
+            if (followPlayer)
+            {
+                HandleMovement();
+                return;
+            }
+
+            // Handle talk to NPC logic here
+            if (DialougeManager.Instance.currentNPC == this)
+            {
+                Vector3 direction = (PlayerManager.Instance.transform.position - transform.position).normalized;
+                direction.y = 0;
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotateSpeed * Time.deltaTime);
+            }
+            else
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, originalRotation, rotateSpeed * Time.deltaTime);
+            }
+        }
+
+        private void HandleMovement()
+        {
+            if (Vector3.Distance(transform.position, PlayerManager.Instance.transform.position) > 3f)
+            {
+                Agent.isStopped = false;
+                Agent.SetDestination(PlayerManager.Instance.transform.position);
+            }
+            else
+            {
+                Agent.isStopped = true;
+            }
         }
     }
-
 }

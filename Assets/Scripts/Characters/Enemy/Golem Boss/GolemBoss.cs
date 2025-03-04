@@ -11,6 +11,14 @@ namespace Game
         [HideInInspector] public int jumpAttackTrigger = Animator.StringToHash("IntroAttack");
         [HideInInspector] public int jumpAttackAnim = Animator.StringToHash("IntroAttack");
 
+        // DEBUG ONLY
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                isGolemKilled = true;
+            }
+        }
 
         protected override void OnEnable()
         {

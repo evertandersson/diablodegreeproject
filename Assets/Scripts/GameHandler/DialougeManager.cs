@@ -31,7 +31,7 @@ public class DialougeManager : EventHandler.GameEventBehaviour
         expressions = new Queue<Expression>();        
     }
 
-    public void StartDialouge(Dialouge dialouge, NPC npc)
+    public void StartDialouge(Dialouge dialouge, NPC npc, Action onDialougeEnd = null)
     {
         isDone = false;
 
@@ -55,6 +55,8 @@ public class DialougeManager : EventHandler.GameEventBehaviour
         }
 
         DisplayNextSentence();
+
+        endDialouge += onDialougeEnd;
     }
 
     public void DisplayNextSentence()
@@ -69,7 +71,7 @@ public class DialougeManager : EventHandler.GameEventBehaviour
         dialougeText.text = expression.sentence;
         
         if (expression.animation != "")
-            currentNPC.animator.CrossFade(expression.animation, 0.2f);
+            currentNPC.CharacterAnimator.CrossFade(expression.animation, 0.2f);
     }
 
     public override void OnUpdate()
