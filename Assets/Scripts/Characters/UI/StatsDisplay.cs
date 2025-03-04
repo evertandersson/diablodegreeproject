@@ -11,6 +11,8 @@ namespace Game
         [SerializeField] private TextMeshProUGUI manaText;
         [SerializeField] private TextMeshProUGUI manaRegenText;
         [SerializeField] private TextMeshProUGUI damageText;
+        [SerializeField] private TextMeshProUGUI criticalHitChanceText;
+        [SerializeField] private TextMeshProUGUI criticalHitMultiplierText;
         [SerializeField] private TextMeshProUGUI attackSpeedText;
         [SerializeField] private TextMeshProUGUI defenseText;
 
@@ -22,6 +24,8 @@ namespace Game
             manaText.text = PlayerManager.Instance.MaxMana.ToString();
             manaRegenText.text = PlayerManager.Instance.ManaRegen.ToString();
             damageText.text = PlayerManager.Instance.Damage.ToString();
+            criticalHitChanceText.text = PlayerManager.Instance.criticalHitChance.ToString();
+            criticalHitMultiplierText.text = PlayerManager.Instance.criticalHitMultiplier.ToString();
             attackSpeedText.text = PlayerManager.Instance.AttackSpeed.ToString();
             defenseText.text = PlayerManager.Instance.Defense.ToString();
         }
