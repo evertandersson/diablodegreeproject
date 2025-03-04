@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Game
@@ -6,7 +7,11 @@ namespace Game
     {
         public Dialouge dialouge;
         public Dialouge dialougeAfterBossKill;
+
         private bool followPlayer;
+
+        private DoorNPC doorToOpen;
+        private bool isOpeningDoor = false;
 
         private Quaternion originalRotation;
 
@@ -50,6 +55,14 @@ namespace Game
                 HandleMovement();
                 return;
             }
+            if (doorToOpen != null)
+            {
+                if (Vector3.Distance(transform.position, doorToOpen.transform.position) < 2f && isOpeningDoor)
+                {
+                    isOpeningDoor = false;
+                    StartCoroutine(OpenDoor());
+                }
+            }
 
             // Handle talk to NPC logic here
             if (DialougeManager.Instance.currentNPC == this)
@@ -77,5 +90,45 @@ namespace Game
                 Agent.isStopped = true;
             }
         }
+
+        public void SetTargetDoor(DoorNPC doorToOpen)
+        {
+            followPlayer = false;
+            this.doorToOpen = doorToOpen;
+            isOpeningDoor = true;
+            Agent.SetDestination(this.doorToOpen.GetCenterPoint());
+        }
+
+        private IEnumerator OpenDoor()
+        {
+            float openDoorTime = 1f; // Duration of rotation
+            float elapsedTime = 0f;
+
+            Vector3 lookDirection = (doorToOpen.GetCenterPoint() - transform.position).normalized;
+            lookDirection.y = 0;
+            Quaternion lookAt = Quaternion.LookRotation(lookDirection);
+
+            // Stop movement while rotating
+            Agent.isStopped = true;
+
+            while (elapsedTime < openDoorTime)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookAt, elapsedTime / openDoorTime);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            // Ensure exact final rotation
+            transform.rotation = lookAt;
+
+            // Open door
+            doorToOpen.TriggerByNPC();
+
+            // Resume movement
+            followPlayer = true;
+            Agent.isStopped = false;
+            doorToOpen = null;
+        }
+
     }
 }

@@ -64,7 +64,7 @@ namespace Game
         {
             foreach (InventorySlot slot in PlayerManager.Instance.inventory.inventory)
             {
-                if (slot.item != null)
+                if (slot.item != null && key != null)
                 {
                     if (slot.item.name == key.name)
                     {

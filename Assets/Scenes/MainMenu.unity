@@ -3523,6 +3523,10 @@ PrefabInstance:
       propertyPath: cursorTexture
       value: 
       objectReference: {fileID: 2800000, guid: 6de1b158454b9374694eb63d0c1c8148, type: 3}
+    - target: {fileID: 2080988911279735849, guid: aefe37c935ee24241a7d5332fe5798bc, type: 3}
+      propertyPath: GameManagerObject
+      value: 
+      objectReference: {fileID: 7744045965738947303, guid: 0f1d81ff75ea4464da02b73314fd298f, type: 3}
     - target: {fileID: 2347997930333027689, guid: aefe37c935ee24241a7d5332fe5798bc, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 479.00006

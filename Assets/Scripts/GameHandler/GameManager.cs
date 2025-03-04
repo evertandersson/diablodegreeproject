@@ -24,26 +24,14 @@ namespace Game
 
         #region Properties
 
-        public static GameManager Instance
-        {
-            get
-            {
-                // Return the existing instance if it exists
-                if (_instance != null) return _instance;
-
-                // Create a new instance if none exists
-                if (Application.isPlaying)
-                {
-                    GameObject go = new GameObject("GameManager");
-                    DontDestroyOnLoad(go);
-                    _instance = go.AddComponent<GameManager>();
-                }
-
-                return _instance;
-            }
-        }
+        public static GameManager Instance => _instance;
 
         #endregion
+
+        private void Awake()
+        {
+            EnableGameManager();
+        }
 
         public void EnableGameManager()
         { 

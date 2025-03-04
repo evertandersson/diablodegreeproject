@@ -8,6 +8,8 @@ namespace Game
         [SerializeField] private Texture2D cursorTexture;
         private Vector2 hotspot = Vector2.zero;
 
+        [SerializeField] private GameObject GameManagerObject;
+
         private void OnEnable()
         {
             Cursor.SetCursor(cursorTexture, hotspot, CursorMode.Auto);
@@ -24,7 +26,7 @@ namespace Game
             SaveManager.Instance.NewGame();
             
             // Create GameManager instance 
-            var gameManager = GameManager.Instance;
+            GameManager gameManager = Instantiate(GameManagerObject).GetComponent<GameManager>();
 
             EventHandler.Main.RemoveEvent(this);
             gameManager.EnableGameManager();

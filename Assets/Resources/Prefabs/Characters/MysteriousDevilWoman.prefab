@@ -629,6 +629,7 @@ GameObject:
   - component: {fileID: 8156185067484207791}
   - component: {fileID: 7082701490695774627}
   - component: {fileID: 1653096587501707845}
+  - component: {fileID: 2556140869455897082}
   - component: {fileID: 4935983852056845483}
   m_Layer: 11
   m_Name: MysteriousDevilWoman
@@ -702,7 +703,6 @@ MonoBehaviour:
   detectionMask:
     serializedVersion: 2
     m_Bits: 0
-  animator: {fileID: 0}
   dialouge:
     name: Mysterious Devil Woman
     expressions:
@@ -765,6 +765,33 @@ CapsuleCollider:
   m_Height: 3.4719436
   m_Direction: 1
   m_Center: {x: -0, y: 1.2359717, z: 0}
+--- !u!54 &2556140869455897082
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2479332439642628729}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!195 &4935983852056845483
 NavMeshAgent:
   m_ObjectHideFlags: 0
