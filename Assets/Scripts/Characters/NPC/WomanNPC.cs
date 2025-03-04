@@ -17,6 +17,9 @@ namespace Game
 
         private float rotateSpeed = 2f;
 
+        private int blendTreeHash = Animator.StringToHash("Blend Tree");
+        private int openDoorHash = Animator.StringToHash("Opening");
+
         protected override void Start()
         {
             Initialize();
@@ -104,6 +107,8 @@ namespace Game
             float openDoorTime = 1f; // Duration of rotation
             float elapsedTime = 0f;
 
+            CharacterAnimator.CrossFade(openDoorHash, 0.2f);
+
             Vector3 lookDirection = (doorToOpen.GetCenterPoint() - transform.position).normalized;
             lookDirection.y = 0;
             Quaternion lookAt = Quaternion.LookRotation(lookDirection);
@@ -123,6 +128,8 @@ namespace Game
 
             // Open door
             doorToOpen.TriggerByNPC();
+
+            CharacterAnimator.CrossFade(blendTreeHash, 0.2f);
 
             // Resume movement
             followPlayer = true;
