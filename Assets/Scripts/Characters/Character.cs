@@ -31,6 +31,7 @@ public abstract class Character : MonoBehaviour, IPausable
     protected bool isDead = false;
 
     //Components for flash effect:
+    [SerializeField] protected SkinnedMeshRenderer centerMesh;
     [SerializeField] private SkinnedMeshRenderer[] renderers;
     private Color originalColor;
     private Color flashColor = Color.red;
@@ -40,6 +41,7 @@ public abstract class Character : MonoBehaviour, IPausable
     private Rigidbody[] rigidbodies;
     private Collider[] colliders;
 
+    public Vector3 offset = new Vector3(0, 1.2f, 0);
 
     [SerializeField] protected float visionAngle = 45f; // Half of the total field of view
     [SerializeField] public float visionRange = 10f; // Distance the character can see
@@ -93,7 +95,7 @@ public abstract class Character : MonoBehaviour, IPausable
         Popup.UnPause -= UnPause;
     }
 
-    public virtual void TakeDamage(int damage)
+    public virtual void TakeDamage(int damage, bool isCriticalHit = false)
     {
         health -= damage;
         StartCoroutine(FlashRoutine());

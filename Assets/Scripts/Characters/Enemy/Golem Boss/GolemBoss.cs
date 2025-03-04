@@ -33,7 +33,7 @@ namespace Game
             isGolemKilled = true;
         }
 
-        public override void TakeDamage(int damage)
+        public override void TakeDamage(int damage, bool isCriticalHit = false)
         {
             if (!IsDead)
             {

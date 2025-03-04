@@ -63,6 +63,10 @@ namespace Game
         [Header("Rolling")]
         public float rollSpeed = 1;
 
+        [Header("Critical hit stats")]
+        public float criticalHitChance = 0.5f;
+        public float criticalHitMultiplier = 1.5f;
+
         [HideInInspector] public bool isInteracting;
         public bool isAttacking;
         private bool canAttack = true;
@@ -408,7 +412,7 @@ namespace Game
             currentObject = obj;
         }
 
-        public override void TakeDamage(int damage)
+        public override void TakeDamage(int damage, bool isCriticalHit = false)
         {
             base.TakeDamage(damage);
             if (bloodSplashEffect)

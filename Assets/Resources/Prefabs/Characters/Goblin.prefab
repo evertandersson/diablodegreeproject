@@ -6425,7 +6425,9 @@ MonoBehaviour:
   damage: 20
   defense: 2
   bloodSplashEffect: {fileID: 379797797015765918}
+  centerMesh: {fileID: 7502613339143370742}
   renderers: []
+  offset: {x: 0, y: 1.2, z: 0}
   visionAngle: 45
   visionRange: 10
   detectionMask:

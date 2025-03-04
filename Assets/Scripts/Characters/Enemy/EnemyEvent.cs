@@ -14,8 +14,6 @@ namespace Game
         protected Vector3 targetPosition;
         protected float elapsedTime = 0f;
 
-        protected Vector3 offset = new Vector3(0, 1.2f, 0);
-
         float animationCheckDelay = 0.2f; // Delay for checking animations
         float animationTimer = 0;
         protected bool isAttackAnimationPlaying = false; // Cached result for animation check
@@ -112,7 +110,7 @@ namespace Game
         {
             RaycastHit hit;
 
-            if (Physics.Raycast(enemy.transform.position + offset, transform.forward, out hit, enemy.detectionMask))
+            if (Physics.Raycast(enemy.transform.position + enemy.offset, transform.forward, out hit, enemy.detectionMask))
             {
                 if (hit.transform.CompareTag("Player"))
                 {

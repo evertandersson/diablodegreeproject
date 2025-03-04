@@ -6,6 +6,7 @@ public static class StatsCalculator
     public static int CalculateAbilityDamage(AttackTypeSO attackType)
     {
         int damage = Mathf.RoundToInt(PlayerManager.Instance.Damage * attackType.damageMultiplier);
+
         return damage;
     }
 
@@ -13,6 +14,18 @@ public static class StatsCalculator
     {
         float damage = parentDamage - target.Defense;
         damage = Mathf.Clamp(damage, 0, Mathf.Infinity);
+
+        if (target is not PlayerManager)
+        {
+            float criticalHit = Random.Range(0f, 1f);
+            if (criticalHit > PlayerManager.Instance.criticalHitChance) 
+            {
+                damage *= PlayerManager.Instance.criticalHitMultiplier;
+                target.TakeDamage(Mathf.RoundToInt(damage), true);
+                return;
+            }
+        }
+
         target.TakeDamage(Mathf.RoundToInt(damage));
     }
 

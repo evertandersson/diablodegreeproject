@@ -11,7 +11,6 @@ namespace Game
         public float rollTimer = 0;
 
         private Vector3 rollDirection; // To store the roll direction
-        private Vector3 offset = new Vector3(0, 1.2f, 0);
 
         // Buffer variables:
         private Vector3 bufferedDestination;

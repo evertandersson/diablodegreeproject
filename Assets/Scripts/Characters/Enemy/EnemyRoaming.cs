@@ -31,7 +31,7 @@ namespace Game
                 return;
 
             // If the enemy can see the player, switch to FollowTarget event
-            if (enemy.CanSeeTarget(PlayerManager.Instance.transform, offset))
+            if (enemy.CanSeeTarget(PlayerManager.Instance.transform, enemy.offset))
             {
                 isDone = true;
 

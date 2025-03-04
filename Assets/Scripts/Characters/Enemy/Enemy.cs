@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -168,13 +169,15 @@ namespace Game
 
         }
 
-        public override void TakeDamage(int damage)
+        public override void TakeDamage(int damage, bool isCriticalHit = false)
         {
             if (!IsDead)
             {
                 health -= damage;
                 healthBar.SetHealth(health);
+                DamagePopup.Create(GetCenterPoint(), damage, isCriticalHit);
                 StartCoroutine(FlashRoutine());
+                StartCoroutine(ScaleEnemy());
                 bloodSplashEffect.Play();
 
                 if (health <= 0)
@@ -186,6 +189,45 @@ namespace Game
                     SetNewEvent<EnemyTakeDamage>(); // Add damage event to the stack
                 }
             }
+        }
+
+        private IEnumerator ScaleEnemy()
+        {
+            Vector3 originalScale = transform.localScale;
+            float scaleTotalTime = 0.2f; // Quick effect
+            float halfTime = scaleTotalTime * 0.5f;
+            float timer = 0f;
+            float maxScaleFactor = 1.2f; // 20% increase
+
+            while (timer < halfTime)
+            {
+                timer += Time.deltaTime;
+                float scaleFactor = Mathf.Lerp(1f, maxScaleFactor, timer / halfTime);
+                transform.localScale = originalScale * scaleFactor;
+                yield return null;
+            }
+
+            timer = 0f;
+            while (timer < halfTime)
+            {
+                timer += Time.deltaTime;
+                float scaleFactor = Mathf.Lerp(maxScaleFactor, 1f, timer / halfTime);
+                transform.localScale = originalScale * scaleFactor;
+                yield return null;
+            }
+
+            transform.localScale = originalScale;
+        }
+
+        public Vector3 GetCenterPoint()
+        {
+            if (centerMesh != null)
+            {
+                return centerMesh.bounds.center;
+            }
+
+            // Fallback to the transform position if no Renderer is found
+            return transform.position;
         }
 
         public override void EnableRagdoll(bool enable)
