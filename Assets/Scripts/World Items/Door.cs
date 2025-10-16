@@ -62,7 +62,7 @@ namespace Game
 
         private void CheckIfPlayerHasKey()
         {
-            foreach (InventorySlot slot in PlayerManager.Instance.inventory.inventorySlots)
+            foreach (Slot slot in PlayerManager.Instance.inventory.inventorySlots)
             {
                 if (slot.item != null && key != null)
                 {

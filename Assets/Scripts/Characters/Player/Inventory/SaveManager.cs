@@ -209,33 +209,43 @@ namespace Game
             ClearSlots(PlayerManager.Instance.actionSlotManager.actionSlots);
             ClearSlots(EquipmentManager.Instance.equipmentSlots);
 
-            LoadSlots(PlayerManager.Instance.inventory.inventorySlots, inventoryList);
+            // Load Action Slots first
             LoadSlots(PlayerManager.Instance.actionSlotManager.actionSlots, actionSlotList);
-            LoadEquipmentSlots(EquipmentManager.Instance.equipmentSlots);
 
-            // Ensure LevelSystem exists
-            if (PlayerManager.Instance.levelSystem == null)
+            // Remove any items that are in action slots from inventoryList
+            var actionItems = new HashSet<string>();
+            foreach (var slot in PlayerManager.Instance.actionSlotManager.actionSlots)
             {
-                PlayerManager.Instance.levelSystem = new LevelSystem();
+                if (slot.item != null)
+                    actionItems.Add(slot.item.name);
             }
 
-            // Apply Level and XP from save data
+            var filteredInventoryList = new SerializableList();
+            foreach (var item in inventoryList.serializableList)
+            {
+                if (!actionItems.Contains(item.name))
+                    filteredInventoryList.serializableList.Add(item);
+            }
+
+            // Load filtered inventory
+            LoadSlots(PlayerManager.Instance.inventory.inventorySlots, filteredInventoryList);
+
+            LoadEquipmentSlots(EquipmentManager.Instance.equipmentSlots);
+
+            // Level, XP, UI, etc.
+            if (PlayerManager.Instance.levelSystem == null)
+                PlayerManager.Instance.levelSystem = new LevelSystem();
+
             LevelSystem levelSystem = PlayerManager.Instance.levelSystem;
 
             if (playerLevel != 0)
             {
-                levelSystem.SetLevel(playerLevel); // Set Level 
-                levelSystem.AddExperience(playerExperience); // Add Experience 
+                levelSystem.SetLevel(playerLevel);
+                levelSystem.AddExperience(playerExperience);
             }
 
-            // Debugging Loaded Values
-            Debug.Log($"Applied Level: {levelSystem.GetCurrentLevel()}, XP: {levelSystem.GetExperience()}");
-
-            // Update the UI
             PlayerManager.Instance.SetStats();
             PlayerManager.Instance.progressBar.SetLevelSystem(levelSystem);
-            
-            Debug.Log(PlayerManager.Instance.Level);
 
             levelSystem.OnLevelChanged += PlayerManager.Instance.UpgradeLevel;
 
@@ -254,6 +264,7 @@ namespace Game
                 golem?.DisableBoss();
             }
         }
+
 
         private IEnumerator SetCurrentSpawnPoint()
         {
@@ -296,7 +307,7 @@ namespace Game
 
                 slots[i].item = obj;
                 slots[i].itemAmount = count;
-                slots[i].CheckIfItemNull();
+                slots[i].UpdateUI();
 
                 Debug.Log($"Loaded item '{obj.name}' with count {count} into slot {i}.");
             }

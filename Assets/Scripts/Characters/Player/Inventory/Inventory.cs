@@ -33,8 +33,6 @@ namespace Game
                 slot.UpdateUI();
             }
 
-  
-
             // Setup the other slot systems
             PlayerManager.Instance.actionSlotManager.GetActionSlots();
             PlayerManager.Instance.actionSlotManager.SetUpSlots();

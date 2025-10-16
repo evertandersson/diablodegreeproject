@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using UnityEngine;
 
 namespace Game
 {
@@ -6,38 +6,49 @@ namespace Game
     {
         public bool CanTransfer(Slot from, Slot to)
         {
-            return from is EquipmentSlot eqSlot && to is InventorySlot;
+            if (from is not EquipmentSlot eqSlot || to is not InventorySlot)
+                return false;
+
+            if (eqSlot.item is not EquipmentSO)
+                return false;
+
+            return true;
         }
 
         public void ExecuteTransfer(Slot from, Slot to)
         {
             var eqSlot = (EquipmentSlot)from;
             var invSlot = (InventorySlot)to;
-
-            // Store reference before clearing
             var oldEquipment = eqSlot.item as EquipmentSO;
 
-            // If the target slot has an equipment item, ensure same type
-            if (invSlot.item is EquipmentSO newEquipment)
+            if (oldEquipment == null)
+                return;
+
+            PlayerManager.Instance.SetEquipment(oldEquipment, -1);
+
+            // Handle swapping
+            if (invSlot.item != null)
             {
-                if (newEquipment.equipmentType != eqSlot.equipmentType)
+                if (invSlot.item is EquipmentSO newEquipment &&
+                    newEquipment.equipmentType == eqSlot.equipmentType)
                 {
+                    // Swap items
+                    (invSlot.item, eqSlot.item) = (eqSlot.item, invSlot.item);
+                    (invSlot.itemAmount, eqSlot.itemAmount) = (eqSlot.itemAmount, invSlot.itemAmount);
+
+                    // Equip new stats after swap
+                    PlayerManager.Instance.SetEquipment((EquipmentSO)eqSlot.item, 1);
+                }
+                else
+                {
+                    PlayerManager.Instance.SetEquipment(oldEquipment, 1);
+                    Debug.Log("Cannot swap equipment with non-equipment item or mismatched type.");
                     return;
                 }
             }
-
-            // Unequip old stats before removing
-            if (oldEquipment != null)
-                PlayerManager.Instance.SetEquipment(oldEquipment, -1);
-
-            // Perform swap or move
-            if (invSlot.item != null)
-            {
-                (to.item, from.item) = (from.item, to.item);
-                (to.itemAmount, from.itemAmount) = (from.itemAmount, to.itemAmount);
-            }
             else
             {
+                // Move equipment to inventory if target is empty
                 invSlot.item = eqSlot.item;
                 invSlot.itemAmount = eqSlot.itemAmount;
                 eqSlot.RemoveItem();
@@ -45,6 +56,8 @@ namespace Game
 
             invSlot.UpdateUI();
             eqSlot.UpdateUI();
+
+            Debug.Log($"Unequipped {oldEquipment.name} into inventory.");
         }
     }
 }

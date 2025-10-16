@@ -7,9 +7,7 @@ namespace Game
     {
         public bool CanTransfer(Slot from, Slot to)
         {
-            return
-                from is ActionSlot
-                && to is InventorySlot;
+            return from is ActionSlot && to is InventorySlot;
         }
 
         public void ExecuteTransfer(Slot from, Slot to)
