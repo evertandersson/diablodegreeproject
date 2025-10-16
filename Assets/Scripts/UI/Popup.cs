@@ -128,7 +128,7 @@ namespace Game
             if (PlayerManager.Instance == null)
                 return;
 
-            if (EventHandler.Main.CurrentEvent is GameManager) SlotManager.Instance.SetFirstInLayer();            
+            if (EventHandler.Main.CurrentEvent is GameManager) ActionSlotManager.Instance.SetFirstInLayer();            
         }   
 
         public override bool IsDone()

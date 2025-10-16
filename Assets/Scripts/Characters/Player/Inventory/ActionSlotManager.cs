@@ -4,9 +4,9 @@ using UnityEngine.InputSystem;
 
 namespace Game
 {
-    public class SlotManager : MonoBehaviour
+    public class ActionSlotManager : MonoBehaviour
     {
-        public static SlotManager Instance;
+        public static ActionSlotManager Instance;
 
         public ActionSlot[] actionSlots;
         [SerializeField] private RectTransform actionPanel;
@@ -16,6 +16,7 @@ namespace Game
         private void Awake()
         {
             Instance = this;
+            GetActionSlots();
 
             SetFirstInLayer();
 

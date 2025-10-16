@@ -101,8 +101,8 @@ namespace Game
             equipmentList.serializableList.Clear();
 
             // Store inventory, action slots, and equipment in save lists
-            SaveSlotsToSerializableList(PlayerManager.Instance.inventory.inventory, inventoryList);
-            SaveSlotsToSerializableList(PlayerManager.Instance.slotManager.actionSlots, actionSlotList);
+            SaveSlotsToSerializableList(PlayerManager.Instance.inventory.inventorySlots, inventoryList);
+            SaveSlotsToSerializableList(PlayerManager.Instance.actionSlotManager.actionSlots, actionSlotList);
             SaveSlotsToSerializableList(EquipmentManager.Instance.equipmentSlots, equipmentList);
 
             // Save level and xp
@@ -130,7 +130,7 @@ namespace Game
             }
         }
 
-        private void SaveSlotsToSerializableList(IEnumerable<InventorySlot> slots, SerializableList targetList)
+        private void SaveSlotsToSerializableList(IEnumerable<Slot> slots, SerializableList targetList)
         {
             foreach (var slot in slots)
             {
@@ -205,12 +205,12 @@ namespace Game
 
         private void ImportSaveData()
         {
-            ClearSlots(PlayerManager.Instance.inventory.inventory);
-            ClearSlots(PlayerManager.Instance.slotManager.actionSlots);
+            ClearSlots(PlayerManager.Instance.inventory.inventorySlots);
+            ClearSlots(PlayerManager.Instance.actionSlotManager.actionSlots);
             ClearSlots(EquipmentManager.Instance.equipmentSlots);
 
-            LoadSlots(PlayerManager.Instance.inventory.inventory, inventoryList);
-            LoadSlots(PlayerManager.Instance.slotManager.actionSlots, actionSlotList);
+            LoadSlots(PlayerManager.Instance.inventory.inventorySlots, inventoryList);
+            LoadSlots(PlayerManager.Instance.actionSlotManager.actionSlots, actionSlotList);
             LoadEquipmentSlots(EquipmentManager.Instance.equipmentSlots);
 
             // Ensure LevelSystem exists
@@ -265,7 +265,7 @@ namespace Game
         }
 
 
-        private void ClearSlots(IEnumerable<InventorySlot> slots)
+        private void ClearSlots(IEnumerable<Slot> slots)
         {
             foreach (var slot in slots)
             {
@@ -274,7 +274,7 @@ namespace Game
             }
         }
 
-        private void LoadSlots(IList<InventorySlot> slots, SerializableList targetList)
+        private void LoadSlots(IList<Slot> slots, SerializableList targetList)
         {
             for (int i = 0; i < targetList.serializableList.Count; i++)
             {
@@ -380,14 +380,14 @@ namespace Game
         public void SaveReset()
         {
             // Reset Inventory Slots
-            foreach (InventorySlot itemSlot in PlayerManager.Instance.inventory.inventory)
+            foreach (InventorySlot itemSlot in PlayerManager.Instance.inventory.inventorySlots)
             {
                 itemSlot.item = null;
                 itemSlot.itemAmount = 0;
             }
 
             // Reset Action Slots
-            foreach (ActionSlot actionSlot in PlayerManager.Instance.slotManager.actionSlots)
+            foreach (ActionSlot actionSlot in PlayerManager.Instance.actionSlotManager.actionSlots)
             {
                 actionSlot.item = null;
                 actionSlot.itemAmount = 0;

@@ -11,7 +11,7 @@ namespace Game
         SecondHandWeapon
     }
 
-    public class EquipmentSlot : InventorySlot
+    public class EquipmentSlot : Slot
     {
         public EquipmentType equipmentType;
     }

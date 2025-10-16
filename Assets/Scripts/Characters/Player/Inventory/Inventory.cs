@@ -1,85 +1,76 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Game;
 
-public class Inventory : Popup
+namespace Game
 {
-    [SerializeField]
-    public List<InventorySlot> inventory = new List<InventorySlot>();
-
-    [SerializeField] private Transform inventoryPanel;  
-    [SerializeField] private Transform actionPanel;     
-
-    private void Start()
+    public class Inventory : Popup
     {
-        SetUpInventory();
-    }
+        [SerializeField] private Transform inventoryPanel;
+        [SerializeField] private Transform actionPanel;
 
+        public List<Slot> inventorySlots { get; private set; } = new();
 
-    private void SetUpInventory()
-    {
-        inventory = new List<InventorySlot>();
-
-        // Add only slots tagged as "InventorySlot"
-        foreach (var slot in inventoryPanel.GetComponentsInChildren<InventorySlot>())
+        private void Start()
         {
-            if (slot is not EquipmentSlot)
-            {
-                inventory.Add(slot);
-            }
+            SetUpInventory();
         }
 
-        PlayerManager.Instance.slotManager.GetActionSlots();
-        PlayerManager.Instance.slotManager.SetUpSlots();
-
-        SaveManager.Instance.Load();
-    }
-
-    public bool AddItemToInventory(ItemSO item)
-    {
-        ActionSlot[] actionSlots = PlayerManager.Instance.slotManager.actionSlots;
-        for (int i = 0; i < actionSlots.Length; i++)
+        private void SetUpInventory()
         {
-            if (actionSlots[i].item != null)
+            inventorySlots.Clear();
+
+            foreach (var slot in inventoryPanel.GetComponentsInChildren<InventorySlot>())
             {
-                if (actionSlots[i].item.itemName == item.itemName && actionSlots[i].item.isStackable)
+                inventorySlots.Add(slot);
+            }
+            foreach (var slot in actionPanel.GetComponentsInChildren<ActionSlot>())
+            {
+                inventorySlots.Add(slot);
+            }
+
+            foreach (var slot in inventorySlots)
+            {
+                slot.UpdateUI();
+            }
+
+  
+
+            // Setup the other slot systems
+            PlayerManager.Instance.actionSlotManager.GetActionSlots();
+            PlayerManager.Instance.actionSlotManager.SetUpSlots();
+
+            SaveManager.Instance.Load();
+        }
+
+        /// <summary>
+        /// Tries to add an item to an empty slot or stack it if possible.
+        /// </summary>
+        public bool AddItemToInventory(ItemSO item)
+        {
+            // Try to stack with existing items first
+            foreach (var slot in inventorySlots)
+            {
+                if (slot.item != null && slot.item.itemName == item.itemName && slot.item.isStackable)
                 {
-                    actionSlots[i].itemAmount++;
-                    actionSlots[i].UpdateItemAmountText();
-                    Debug.Log("Item stacked succesfully");
-                    return true; // Item stacked successfully
+                    slot.itemAmount++;
+                    slot.UpdateUI();
+                    Debug.Log($"Stacked {item.itemName}");
+                    return true;
                 }
             }
-        }
 
-        InventorySlot inventorySlot = null;
-        for (int i = 0; i < inventory.Count; i++)
-        {
-            if (inventory[i].item == null)
+            foreach (var slot in inventorySlots)
             {
-                if (inventorySlot == null)
-                    inventorySlot = inventory[i];
+                if (slot.item == null)
+                {
+                    slot.SetItem(item);
+                    Debug.Log($"Added new item: {item.itemName}");
+                    return true;
+                }
             }
-            else if (inventory[i].item.isStackable && inventory[i].item.itemName == item.itemName)
-            {
-                inventory[i].itemAmount++;
-                inventory[i].UpdateItemAmountText();
-                Debug.Log("Item stacked succesfully");
-                return true; // Item stacked successfully
-            }
-        }
 
-        if (inventorySlot != null)
-        {
-            inventorySlot.item = item;
-            inventorySlot.artwork.texture = item.itemIcon;
-            inventorySlot.itemAmount++;
-            inventorySlot.UpdateItemAmountText();
-            Debug.Log("Item added succesfully");
-            return true; // Item added successfully
+            Debug.LogWarning("Inventory full!");
+            return false;
         }
-
-        Debug.Log("Inventory full");
-        return false; // Inventory is full
     }
 }

@@ -15,6 +15,11 @@ namespace Game
             canvasGroup = GetComponent<CanvasGroup>();
             equipmentSlots = GetComponentsInChildren<EquipmentSlot>(true);
 
+            foreach (EquipmentSlot slot in equipmentSlots)
+            {
+                slot.UpdateUI();
+            }
+
             Instance = this;
         }
 

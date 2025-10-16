@@ -37,7 +37,7 @@ namespace Game
         [SerializeField]
         private State currentPlayerState;
 
-        public SlotManager slotManager;
+        public ActionSlotManager actionSlotManager;
         public Inventory inventory;
         private StatsDisplay statsDisplay;
         public SkillTreeManager skillTree;
@@ -352,7 +352,7 @@ namespace Game
         public void OnUpdate()
         {
             HandleAttackDelay();
-            slotManager.HandleCooldowns();
+            actionSlotManager.HandleCooldowns();
             playerAnimator.HandleAnimations(IsAttacking);
 
             attackIndicator.enabled = IsAttacking;
@@ -427,10 +427,10 @@ namespace Game
             if (CanAttack)
             {
                 // Check if the index is valid
-                if (attackIndex >= 0 && attackIndex < slotManager.actionSlots.Length)
+                if (attackIndex >= 0 && attackIndex < actionSlotManager.actionSlots.Length)
                 {
                     // Get the item from the corresponding action slot
-                    ActionItemSO actionItem = slotManager.actionSlots[attackIndex].item as ActionItemSO;
+                    ActionItemSO actionItem = actionSlotManager.actionSlots[attackIndex].item as ActionItemSO;
 
                     if (actionItem != null && actionItem.timerCooldown >= actionItem.cooldown)
                     {
@@ -464,8 +464,8 @@ namespace Game
                         if (actionItem is PotionSO potionSO)
                         {
                             potionSO.PerformAction(CharacterAnimator);
-                            slotManager.actionSlots[attackIndex].itemAmount -= 1;
-                            slotManager.actionSlots[attackIndex].UpdateItemAmountText();
+                            actionSlotManager.actionSlots[attackIndex].itemAmount -= 1;
+                            actionSlotManager.actionSlots[attackIndex].UpdateItemAmountText();
                         }
                     }
                 }
@@ -479,7 +479,7 @@ namespace Game
 
         public void UpdateActionSlots()
         {
-            slotManager.SetUpSlots(); // Refresh UI slots
+            actionSlotManager.SetUpSlots(); // Refresh UI slots
         }
 
 

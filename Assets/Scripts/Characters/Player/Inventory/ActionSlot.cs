@@ -1,18 +1,19 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Game
 {
-    public class ActionSlot : InventorySlot, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class ActionSlot : Slot, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         public TextMeshProUGUI indexText;
         public Image cooldownImage;
 
-        public override void CheckIfItemNull()
+        public override void UpdateUI()
         {
-            base.CheckIfItemNull();
+            base.UpdateUI();
+
             artwork.raycastTarget = true;
             amountText.raycastTarget = true;
             cooldownImage.raycastTarget = true;
